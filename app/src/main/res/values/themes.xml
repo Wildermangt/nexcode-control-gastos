@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- La interfaz se dibuja con Compose; este tema solo fija el fondo de
+         ventana y el color de los iconos del sistema para que no haya un
+         parpadeo al abrir la app. Fondo blanco = iconos de barra oscuros. -->
+    <style name="Theme.Nexcode" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/nexcode_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

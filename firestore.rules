@@ -1,0 +1,36 @@
+rules_version = '2';
+
+// Reglas de seguridad de la replica en la nube.
+//
+// Se pegan en la consola de Firebase, en Firestore Database -> Reglas.
+// SIN ellas la base queda abierta a cualquiera que descubra el identificador
+// del proyecto, que es el fallo mas repetido en los proyectos con Firebase.
+//
+// El modelo es simple a proposito: cada usuario alcanza unicamente su propio
+// subarbol, y nadie mas. Como la sesion es anonima, ese subarbol lo identifica
+// el uid que Firebase asigna a la instalacion.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- Datos del usuario -------------------------------------------
+    // Un usuario lee y escribe solo bajo usuarios/{su propio uid}.
+    match /usuarios/{uid}/{documento=**} {
+      allow read, write: if request.auth != null
+                         && request.auth.uid == uid;
+    }
+
+    // ---- Administracion ----------------------------------------------
+    // Quien tenga el permiso `admin` puede leer todo, para atender fallos y
+    // peticiones de soporte. El permiso NO se puede pedir desde la aplicacion:
+    // se asigna a mano desde el servidor, asi que un usuario no puede
+    // otorgarselo a si mismo.
+    //
+    // Es deliberado que sea solo lectura: administrar no deberia poder alterar
+    // los movimientos de nadie sin dejar rastro.
+    match /{documento=**} {
+      allow read: if request.auth != null
+                  && request.auth.token.admin == true;
+    }
+  }
+}

@@ -1,0 +1,1018 @@
+<title>Pilares Kotlin de Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:      #FBFCFE;
+    --panel:      #F2F5FA;
+    --ink:        #101A2B;
+    --ink-soft:   #4A5B72;
+    --ink-faint:  #7C8CA3;
+    --rule:       #D6DEE9;
+    --rule-soft:  #E6ECF4;
+    --accent:     #104080;
+    --accent-2:   #0C8A5E;
+    --accent-warn:#B05A00;
+    --code-bg:    #F1F4F9;
+
+    --measure: 68ch;
+    --gutter: 5.5rem;
+
+    --f-serif: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --f-sans:  "IBM Plex Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+    --f-mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0B121D;
+      --panel:      #141D2B;
+      --ink:        #E4EBF5;
+      --ink-soft:   #A3B2C6;
+      --ink-faint:  #74849A;
+      --rule:       #24334A;
+      --rule-soft:  #1B2739;
+      --accent:     #6FB2EC;
+      --accent-2:   #45CF9C;
+      --accent-warn:#E0A55A;
+      --code-bg:    #111A27;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0B121D;
+    --panel:      #141D2B;
+    --ink:        #E4EBF5;
+    --ink-soft:   #A3B2C6;
+    --ink-faint:  #74849A;
+    --rule:       #24334A;
+    --rule-soft:  #1B2739;
+    --accent:     #6FB2EC;
+    --accent-2:   #45CF9C;
+    --accent-warn:#E0A55A;
+    --code-bg:    #111A27;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-serif);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: calc(var(--measure) + var(--gutter) + 4rem);
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  .masthead { border-bottom: 2px solid var(--ink); padding-bottom: 1.6rem; }
+
+  .eyebrow {
+    font-family: var(--f-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+
+  h1 {
+    font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+    line-height: 1.14;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    font-size: 1.12rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 1.8rem;
+    max-width: 56ch;
+  }
+
+  .byline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.1rem 2rem;
+    font-family: var(--f-sans);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .byline strong { display: block; color: var(--ink); font-weight: 600; }
+  .byline span { display: block; }
+
+  .abstract {
+    margin: 2.6rem 0 0;
+    padding: 1.4rem 1.6rem;
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+  }
+  .abstract p { margin: 0; font-size: 0.96rem; line-height: 1.6; }
+  .abstract .label {
+    font-family: var(--f-sans);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  section { margin-top: 3.4rem; }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: var(--gutter) minmax(0, 1fr);
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+    margin-bottom: 1.4rem;
+  }
+  .sec-num {
+    font-family: var(--f-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    padding-top: 0.35rem;
+  }
+  .sec-head h2 {
+    font-size: 1.28rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--f-serif);
+    font-size: 1.04rem;
+    font-weight: 600;
+    font-style: italic;
+    margin: 2rem 0 0.6rem;
+  }
+
+  .body { max-width: var(--measure); }
+  @media (min-width: 900px) { .body { margin-left: var(--gutter); } }
+
+  p { margin: 0 0 1rem; }
+  .body > p { text-align: justify; hyphens: auto; }
+  strong { font-weight: 600; }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 0.85em;
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  pre {
+    font-family: var(--f-mono);
+    font-size: 0.775rem;
+    line-height: 1.62;
+    background: var(--code-bg);
+    border: 1px solid var(--rule-soft);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    margin: 1.2rem 0;
+  }
+  @media (min-width: 900px) { pre { margin-left: var(--gutter); } }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  pre.err { border-left-color: var(--accent-warn); }
+  .cmt { color: var(--ink-faint); }
+  .kw  { color: var(--accent); }
+  .ok  { color: var(--accent-2); font-weight: 600; }
+  .bad { color: var(--accent-warn); }
+
+  .caption-code {
+    font-family: var(--f-sans);
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    margin: -0.7rem 0 1.6rem;
+    padding-left: 0.2rem;
+  }
+  @media (min-width: 900px) { .caption-code { margin-left: var(--gutter); } }
+  .caption-code b { color: var(--ink); font-weight: 600; }
+
+  ul, ol { margin: 0 0 1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.45rem; }
+  li::marker { color: var(--ink-faint); }
+
+  figure { margin: 2rem 0; max-width: 100%; }
+  @media (min-width: 900px) { figure { margin-left: var(--gutter); } }
+  .fig-frame {
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    padding: 1.4rem 1rem;
+    overflow-x: auto;
+  }
+  figure svg { display: block; width: 100%; max-width: 100%; height: auto; color: var(--ink); }
+  figcaption {
+    font-family: var(--f-sans);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-top: 0.7rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  figcaption b { color: var(--ink); font-weight: 600; letter-spacing: 0.03em; }
+
+  .table-wrap { overflow-x: auto; margin: 1.8rem 0; }
+  @media (min-width: 900px) { .table-wrap { margin-left: var(--gutter); } }
+  .tbl-cap {
+    font-family: var(--f-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: 0.6rem;
+  }
+  .tbl-cap b { color: var(--accent); font-weight: 600; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--f-sans);
+    font-size: 0.81rem;
+    line-height: 1.45;
+  }
+  thead th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 0.55rem 0.7rem;
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 0.52rem 0.7rem;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: 1.5px solid var(--ink); }
+  td.name { color: var(--ink); font-weight: 500; }
+  td.mono, .mono { font-family: var(--f-mono); font-size: 0.94em; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  .callout {
+    margin: 1.6rem 0;
+    padding: 1rem 1.2rem;
+    background: var(--panel);
+    border-left: 3px solid var(--accent-2);
+    font-size: 0.95rem;
+  }
+  @media (min-width: 900px) { .callout { margin-left: var(--gutter); } }
+  .callout p { margin: 0; }
+  .callout .lead {
+    font-family: var(--f-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .colophon {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--f-sans);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Proyecto Integrador · Secciones 12 a 16</p>
+    <h1>Pilares Kotlin de Nexcode</h1>
+    <p class="subtitle">Estructuras y ciclos, programación orientada a objetos, manejo de excepciones, seguridad contra nulos y proceso de depuración</p>
+
+    <div class="byline">
+      <div>
+        <strong>Autores</strong>
+        <span>Jeferson Wilderman González Tenjo</span>
+        <span>José Leandro Ocampo Camacho</span>
+      </div>
+      <div>
+        <strong>Programa</strong>
+        <span>Ingeniería de Sistemas</span>
+        <span>Universidad de San Buenaventura</span>
+      </div>
+      <div>
+        <strong>Asignatura</strong>
+        <span>Optativa II — Desarrollo Móvil</span>
+        <span>Sexto semestre, 2026</span>
+      </div>
+      <div>
+        <strong>Producto</strong>
+        <span>Nexcode 1.0 · <span class="mono">com.nexcode.gastos</span></span>
+        <span>Kotlin 2.3.21 · Android</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="abstract">
+    <p><span class="label">Nota metodológica —</span> Cada afirmación de estas cinco secciones está respaldada por código del repositorio en el estado de la entrega. Los fragmentos se transcriben literalmente, indicando su archivo de origen; las cifras provienen de conteos ejecutados sobre el código fuente. Las secciones continúan la numeración de figuras y tablas del capítulo de arquitectura (Sección 11).</p>
+  </div>
+
+  <!-- ============ 12 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">12</span>
+      <h2>Aplicación de estructuras, arreglos y ciclos</h2>
+    </div>
+
+    <div class="body">
+      <p>Nexcode trabaja con dos estructuras de datos principales. La <strong>lista</strong> (<code>List</code>) representa secuencias ordenadas —los movimientos de un mes, los pagos fijos del bolsillo, las categorías disponibles— y la <strong>tabla asociativa</strong> (<code>Map</code>) representa búsquedas por clave, sobre todo el índice de categorías por identificador que evita recorrer la lista completa cada vez que una fila de la interfaz necesita saber a qué categoría pertenece.</p>
+
+      <p>El recorrido de esas estructuras se resolvió con <strong>funciones de orden superior</strong> en lugar de ciclos <code>for</code> manuales. La razón no es estética: un ciclo manual mezcla en un mismo bloque el recorrido, el filtrado, la acumulación y la construcción del resultado, mientras que la versión declarativa nombra cada operación por separado y hace visible la intención. Los ciclos explícitos se reservan para el caso contrario —generar una colección que no existe— y el apartado C reúne los dos que hay en todo el proyecto. La Tabla VII lista las funciones empleadas.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla VII.</b> Funciones de orden superior utilizadas y su propósito</p>
+      <table>
+        <thead>
+          <tr><th>Función</th><th>Qué hace en el proyecto</th><th>Ejemplo de uso</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name mono">filter</td><td>Selecciona un subconjunto</td><td>Separar gastos de ingresos</td></tr>
+          <tr><td class="name mono">groupBy</td><td>Convierte una lista en un mapa por clave</td><td>Agrupar movimientos por categoría y por fecha</td></tr>
+          <tr><td class="name mono">map</td><td>Transforma cada elemento</td><td>Entidades de Room a modelos de dominio</td></tr>
+          <tr><td class="name mono">sumOf</td><td>Acumula un total numérico</td><td>Sumar los centavos de una categoría</td></tr>
+          <tr><td class="name mono">fold</td><td>Acumula con un valor inicial y lógica propia</td><td>Saldo neto del día ignorando transferencias</td></tr>
+          <tr><td class="name mono">sortedByDescending</td><td>Ordena por un criterio</td><td>Categorías de mayor a menor gasto</td></tr>
+          <tr><td class="name mono">sortedWith</td><td>Ordena por varios criterios encadenados</td><td>Pagos fijos: activos primero, luego por vencimiento</td></tr>
+          <tr><td class="name mono">associateBy</td><td>Construye un mapa indexado</td><td>Índice de categorías por identificador</td></tr>
+          <tr><td class="name mono">count</td><td>Cuenta los elementos que cumplen una condición</td><td>Pagos vencidos y pagos que vencen hoy</td></tr>
+          <tr><td class="name mono">forEach</td><td>Ejecuta una acción por elemento</td><td>Sembrar los datos iniciales</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>A. Caso representativo: reparto del gasto por categoría</h3>
+    <div class="body">
+      <p>La función que alimenta el gráfico de dona concentra la mayoría de estas operaciones. Recibe una lista de movimientos y un mapa de categorías, y devuelve una lista ordenada de resúmenes. Nótese que no aparece ningún ciclo explícito:</p>
+    </div>
+
+    <pre><code>fun summarize(
+    transactions: List&lt;Transaction&gt;,
+    categoriesById: Map&lt;Long, Category&gt;
+): List&lt;CategorySummary&gt; {
+    val expenses = transactions.filter { it.type is TransactionType.Expense }
+    if (expenses.isEmpty()) return emptyList()
+
+    val grandTotal: Long = expenses.sumOf { it.amount.cents }
+    if (grandTotal == 0L) return emptyList()
+
+    return expenses
+        .groupBy { it.categoryId }                       <span class="cmt">// Map&lt;Long?, List&lt;Transaction&gt;&gt;</span>
+        .map { (categoryId, items) -&gt;
+            val total = items.sumOf { it.amount.cents }
+            CategorySummary(
+                category = categoryId?.let { categoriesById[it] },   <span class="cmt">// safe call</span>
+                total = Money(total),
+                transactionCount = items.size,
+                percentage = total.toFloat() / grandTotal.toFloat()
+            )
+        }
+        .sortedByDescending { it.total.cents }
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 1.</b> <span class="mono">domain/usecase/analytics/GetCategorySummaryUseCase.kt</span> — cinco operaciones encadenadas: filtrar, sumar, agrupar, transformar y ordenar.</p>
+
+    <div class="body">
+      <p>La cadena se lee de arriba abajo como una frase: <em>de los movimientos, tomar los gastos, agruparlos por categoría, convertir cada grupo en un resumen y ordenarlos de mayor a menor</em>. Un ciclo <code>for</code> equivalente necesitaría un acumulador mutable, una condición interna y una estructura auxiliar, y sería más difícil de probar de forma aislada. Esta función es pura —no consulta la base de datos— y por eso tiene cinco pruebas unitarias propias.</p>
+    </div>
+
+    <h3>B. Acumulación con lógica propia</h3>
+    <div class="body">
+      <p>Cuando la acumulación no es una suma simple se recurre a <code>fold</code>, que recibe un valor inicial y decide en cada paso qué hacer. El saldo neto de un día debe ignorar las transferencias entre cuentas propias, porque no alteran el patrimonio total:</p>
+    </div>
+
+    <pre><code>private fun netTotal(transactions: List&lt;Transaction&gt;): Money =
+    transactions.fold(Money.ZERO) { acc, transaction -&gt;
+        when (transaction.type) {
+            is TransactionType.Transfer -&gt; acc          <span class="cmt">// no altera el saldo</span>
+            else -&gt; acc + transaction.signedAmount
+        }
+    }</code></pre>
+    <p class="caption-code"><b>Fragmento 2.</b> <span class="mono">app/presentation/home/HomeScreen.kt</span> — acumulación con regla de negocio incorporada.</p>
+
+    <h3>C. Los dos ciclos explícitos del proyecto</h3>
+    <div class="body">
+      <p>Hay dos lugares en los que un ciclo sí es la herramienta correcta, y comparten un mismo rasgo: en ninguno de los dos se recorre una colección que ya existe, sino que se construye una que todavía no existe. El primero busca la próxima fecha en que caerá un día de la semana determinado. El recorrido va sobre fechas generadas y termina por una condición, así que se acotó deliberadamente con <code>repeat(7)</code> para que sea imposible que no termine:</p>
+    </div>
+
+    <pre><code>private fun nextWeekly(after: LocalDate, dayOfWeek: Int): LocalDate {
+    var candidata = after.masDias(1)
+    <span class="cmt">// Ciclo acotado: como maximo siete intentos.</span>
+    repeat(7) {
+        if (candidata.dayOfWeek.isoDayNumber == dayOfWeek) return candidata
+        candidata = candidata.masDias(1)
+    }
+    return candidata
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 3.</b> <span class="mono">domain/model/RecurringFrequency.kt</span> — ciclo con cota superior demostrable: en siete días siempre aparece cualquier día de la semana.</p>
+
+    <div class="body">
+      <p>El segundo construye el eje de meses de la analítica del gasto, y es el que mejor separa las dos herramientas, porque las usa a las dos seguidas y por motivos opuestos. La agregación de los movimientos —una colección que ya existe— se resuelve con <code>groupBy</code>; la serie de meses —que no existe en ninguna parte— se genera con un <code>for</code> sobre el calendario:</p>
+    </div>
+
+    <pre><code><span class="cmt">// Recorrido de una coleccion que YA existe: funcion de orden superior.</span>
+val porMes: Map&lt;MesDelAnio, List&lt;Transaction&gt;&gt; =
+    transactions.groupBy { MesDelAnio.de(it.dateTime) }
+
+<span class="cmt">// CICLO EXPLICITO. Aqui no se recorre una coleccion: se GENERA una.</span>
+<span class="cmt">// La cota superior es demostrable: exactamente `meses` vueltas.</span>
+val serie = ArrayList&lt;PuntoMensual&gt;(meses)
+var cursor: LocalDate = hoy.primerDiaDelMes().menosMeses(meses - 1)
+
+for (i in 0 until meses) {
+    val mes = MesDelAnio.de(cursor)
+    <span class="cmt">// orEmpty(): un mes sin movimientos vale una lista vacia, no null.</span>
+    val delMes = porMes[mes].orEmpty()
+    val balance = balanceCalculator.calculate(delMes)
+
+    serie.add(
+        PuntoMensual(
+            mes = mes,
+            ingresos = balance.income,
+            gastos = balance.expense,
+            movimientos = delMes.size
+        )
+    )
+    cursor = cursor.masMeses(1)
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 4.</b> <span class="mono">domain/usecase/analytics/AnalizarTendenciaUseCase.kt</span> — las dos herramientas juntas: <span class="mono">groupBy</span> para recorrer lo que hay, <span class="mono">for</span> para generar lo que falta.</p>
+
+    <div class="body">
+      <p>La razón por la que el ciclo no puede sustituirse aquí por otra cadena de funciones merece detenerse, porque es el argumento que justifica la excepción. Un <code>groupBy</code> devuelve únicamente los meses que tienen movimientos: si el usuario no gastó nada en julio, julio no aparece en el mapa. La serie quedaría con cuatro meses donde debe haber seis, las barras del gráfico se correrían de sitio y la comparación con el mes anterior compararía contra el mes equivocado. Y el mes vacío es justamente el dato que más dice. Por eso el ciclo recorre el calendario y consulta los datos, y no al revés: el eje del análisis lo fija el tiempo, no lo que haya en la base de datos.</p>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Criterio adoptado</span>
+      <p>Se usan funciones de orden superior para recorrer colecciones existentes y ciclos explícitos únicamente cuando se generan valores nuevos. En este último caso el ciclo lleva siempre una cota superior demostrable: siete intentos en el Fragmento 3, tantas vueltas como meses pida la ventana en el Fragmento 4.</p>
+    </div>
+  </section>
+
+  <!-- ============ 13 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">13</span>
+      <h2>Aplicación de POO</h2>
+    </div>
+
+    <div class="body">
+      <p>Los cuatro pilares de la programación orientada a objetos están presentes en el dominio de Nexcode, aunque Kotlin ofrece para algunos de ellos mecanismos más precisos que los de Java. La Tabla VIII resume dónde se materializa cada uno.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla VIII.</b> Pilares de la POO y su materialización en el proyecto</p>
+      <table>
+        <thead>
+          <tr><th>Pilar</th><th>Mecanismo de Kotlin</th><th>Clase representativa</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Encapsulamiento</td><td>Bloque <span class="mono">init</span> con <span class="mono">require</span>; propiedades <span class="mono">val</span></td><td class="mono">Transaction · Category</td></tr>
+          <tr><td class="name">Abstracción</td><td>Interfaces de repositorio</td><td class="mono">TransactionRepository</td></tr>
+          <tr><td class="name">Herencia</td><td><span class="mono">sealed class</span> con subtipos</td><td class="mono">TransactionType · NexcodeException</td></tr>
+          <tr><td class="name">Polimorfismo</td><td>Comportamiento propio por subtipo</td><td class="mono">TransactionType.applySign()</td></tr>
+          <tr><td class="name">Objetos de valor</td><td><span class="mono">value class</span></td><td class="mono">Money</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>A. Encapsulamiento: objetos que no pueden nacer inválidos</h3>
+    <div class="body">
+      <p>En lugar de validar desde fuera antes de construir un objeto, cada modelo protege sus propias invariantes en el constructor. Si alguna condición no se cumple, la instancia no llega a existir:</p>
+    </div>
+
+    <pre><code>data class Transaction(
+    val id: Long = 0L,
+    val accountId: Long,
+    val categoryId: Long? = null,
+    val type: TransactionType,
+    val amount: Money,
+    val dateTime: LocalDateTime,
+    val title: String,
+    val note: String? = null
+) {
+    init {
+        require(amount.isPositive) { "El monto debe ser mayor que cero" }
+        require(title.isNotBlank()) { "El titulo no puede estar vacio" }
+        require(accountId &gt; 0L) { "La transaccion debe pertenecer a una cuenta valida" }
+    }
+
+    <span class="cmt">/** Monto con signo contable: -50.000 para un gasto. */</span>
+    val signedAmount: Money get() = type.applySign(amount)
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 5.</b> <span class="mono">domain/model/Transaction.kt</span> — atributos inmutables, invariantes verificadas en la construcción y un método derivado.</p>
+
+    <div class="body">
+      <p>Todos los atributos se declaran <code>val</code>, es decir, de solo lectura. Modificar una transacción no muta el objeto sino que produce uno nuevo mediante <code>copy()</code>, lo que elimina toda una familia de errores por estado compartido. Una decisión de diseño relacionada es que <strong>el monto es siempre positivo y el signo contable lo aporta el tipo</strong>: guardar montos negativos para los gastos es una fuente clásica de errores de cuadre.</p>
+    </div>
+
+    <h3>B. Herencia y polimorfismo mediante jerarquías selladas</h3>
+    <div class="body">
+      <p>El tipo de movimiento es una jerarquía de herencia: una clase base abstracta con tres subclases. Al declararla <code>sealed</code>, el compilador conoce la lista completa de subtipos, de modo que una expresión <code>when</code> sobre ella es exhaustiva y no necesita rama <code>else</code>. Si mañana se agregara un cuarto tipo de movimiento, el compilador señalaría todos los lugares donde falta contemplarlo.</p>
+    </div>
+
+    <pre><code>sealed class TransactionType(
+    val code: String,
+    val sign: Int
+) {
+    data object Income   : TransactionType(code = "INCOME",   sign = +1)
+    data object Expense  : TransactionType(code = "EXPENSE",  sign = -1)
+    data class  Transfer(val targetAccountId: Long)
+                         : TransactionType(code = "TRANSFER", sign =  0)
+
+    <span class="cmt">/** Aplica el signo contable al monto. */</span>
+    fun applySign(amount: Money): Money = Money(amount.cents * sign)
+
+    fun defaultTitle(): String = when (this) {
+        is Income   -&gt; "Ingreso"
+        is Expense  -&gt; "Gasto"
+        is Transfer -&gt; "Transferencia"
+    } <span class="cmt">// sin `else`: la sealed class garantiza exhaustividad</span>
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 6.</b> <span class="mono">domain/model/TransactionType.kt</span> — herencia sellada. <span class="mono">Income</span> y <span class="mono">Expense</span> son objetos únicos porque no llevan datos propios; <span class="mono">Transfer</span> es una clase porque necesita la cuenta destino.</p>
+
+    <div class="body">
+      <p>El polimorfismo se manifiesta en que <code>applySign</code> produce un resultado distinto según el subtipo sin necesidad de condicionales: cada subclase aporta su propio <code>sign</code> al constructor de la clase base. La Fig. 5 muestra las dos jerarquías selladas del proyecto.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 330" role="img" aria-label="Diagrama de las dos jerarquías selladas: TransactionType con los subtipos Income, Expense y Transfer; y NexcodeException, que hereda de Exception, con los subtipos InvalidAmountException, BlankFieldException, AccountNotFoundException y CategoryNotFoundException.">
+          <defs>
+            <marker id="tri5" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+              <path d="M 0 0 L 12 6 L 0 12 z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            </marker>
+            <marker id="tri5g" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+              <path d="M 0 0 L 12 6 L 0 12 z" fill="none" stroke="#0C8A5E" stroke-width="1.4"/>
+            </marker>
+          </defs>
+
+          <!-- IZQUIERDA: TransactionType -->
+          <rect x="40" y="24" width="300" height="52" rx="5" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <text x="56" y="45" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-style="italic" fill="#0C8A5E">«sealed class»</text>
+          <text x="56" y="64" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="#0C8A5E">TransactionType(code, sign)</text>
+
+          <rect x="40" y="150" width="88" height="46" rx="5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="54" y="170" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor">Income</text>
+          <text x="54" y="186" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.65">sign = +1</text>
+
+          <rect x="146" y="150" width="88" height="46" rx="5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="160" y="170" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor">Expense</text>
+          <text x="160" y="186" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.65">sign = −1</text>
+
+          <rect x="252" y="150" width="88" height="46" rx="5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="266" y="170" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor">Transfer</text>
+          <text x="266" y="186" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.65">sign = 0</text>
+
+          <line x1="84" y1="150" x2="84" y2="112" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="190" y1="150" x2="190" y2="112" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="296" y1="150" x2="296" y2="112" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="84" y1="112" x2="296" y2="112" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="190" y1="112" x2="190" y2="82" stroke="#0C8A5E" stroke-width="1.4" marker-end="url(#tri5g)"/>
+
+          <text x="40" y="232" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.75">Cada subtipo aporta su propio signo</text>
+          <text x="40" y="248" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.75">contable: eso es el polimorfismo aquí.</text>
+          <text x="40" y="276" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity="0.6">applySign(m) = Money(m.cents * sign)</text>
+
+          <!-- DERECHA: NexcodeException -->
+          <rect x="420" y="24" width="300" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3"/>
+          <text x="436" y="46" font-family="IBM Plex Mono, monospace" font-size="12" fill="currentColor" opacity="0.75">java.lang.Exception</text>
+
+          <rect x="420" y="92" width="300" height="34" rx="5" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <text x="436" y="114" font-family="IBM Plex Mono, monospace" font-size="12" fill="#0C8A5E">«sealed» NexcodeException</text>
+
+          <line x1="570" y1="92" x2="570" y2="64" stroke="currentColor" stroke-width="1.3" marker-end="url(#tri5)"/>
+
+          <rect x="420" y="168" width="300" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="436" y="187" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">InvalidAmountException</text>
+
+          <rect x="420" y="204" width="300" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="436" y="223" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">BlankFieldException</text>
+
+          <rect x="420" y="240" width="300" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="436" y="259" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">AccountNotFoundException</text>
+
+          <rect x="420" y="276" width="300" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <text x="436" y="295" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">CategoryNotFoundException</text>
+
+          <line x1="404" y1="182" x2="404" y2="290" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="404" y1="182" x2="416" y2="182" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="404" y1="218" x2="416" y2="218" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="404" y1="254" x2="416" y2="254" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="404" y1="290" x2="416" y2="290" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="404" y1="182" x2="404" y2="126" stroke="#0C8A5E" stroke-width="1.4" marker-end="url(#tri5g)"/>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 5.</b> Las dos jerarquías de herencia del dominio. A la izquierda, <span class="mono">TransactionType</span>, cuyos subtipos aportan el signo contable. A la derecha, <span class="mono">NexcodeException</span>, que hereda de <span class="mono">Exception</span> y agrupa los cuatro errores de negocio; al ser sellada, el conjunto de errores posibles del dominio es cerrado y conocido en compilación.</figcaption>
+    </figure>
+
+    <h3>C. Objetos de valor: el dinero como tipo propio</h3>
+    <div class="body">
+      <p>Un importe no es un número cualquiera: no tiene sentido multiplicar dos importes entre sí, y sumar pesos con centavos por descuido produce errores silenciosos. Por eso el dinero se modela como una clase propia que envuelve un entero de centavos y expone únicamente las operaciones que tienen sentido, mediante sobrecarga de operadores:</p>
+    </div>
+
+    <pre><code>@JvmInline
+value class Money(val cents: Long) : Comparable&lt;Money&gt; {
+    val isPositive: Boolean get() = cents &gt; 0
+
+    operator fun plus(other: Money): Money  = Money(cents + other.cents)
+    operator fun minus(other: Money): Money = Money(cents - other.cents)
+    operator fun unaryMinus(): Money        = Money(-cents)
+
+    override fun compareTo(other: Money): Int = cents.compareTo(other.cents)
+
+    <span class="cmt">/** Formato colombiano en pesos enteros: 1.250.000 */</span>
+    fun format(withSign: Boolean = false): String { <span class="cmt">/* ... */</span> }
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 7.</b> <span class="mono">domain/model/Money.kt</span> — el modificador <span class="mono">value</span> hace que el compilador reemplace la clase por un <span class="mono">Long</span> en tiempo de ejecución: se obtiene seguridad de tipos sin costo de memoria.</p>
+  </section>
+
+  <!-- ============ 14 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">14</span>
+      <h2>Manejo de excepciones</h2>
+    </div>
+
+    <div class="body">
+      <p>La estrategia adoptada parte de una regla: <strong>las excepciones no cruzan hacia la capa de presentación</strong>. Una pantalla no debe envolver llamadas en bloques <code>try</code>; debe recibir un estado y pintarlo. Para lograrlo, el manejo de errores se organiza en tres niveles sucesivos.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 300" role="img" aria-label="Los tres niveles de manejo de errores: el texto del usuario pasa por la conversión que lanza una excepción tipada, el caso de uso la atrapa y la traduce a un resultado sellado, y la pantalla muestra el mensaje; las invariantes del modelo actúan como última barrera.">
+          <defs>
+            <marker id="ah6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="ah6w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#B05A00"/>
+            </marker>
+          </defs>
+
+          <rect x="24" y="52" width="150" height="58" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="38" y="76" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">El usuario escribe</text>
+          <text x="38" y="94" font-family="IBM Plex Mono, monospace" font-size="12" fill="currentColor">"cien mil"</text>
+
+          <rect x="222" y="52" width="170" height="58" rx="5" fill="none" stroke="#B05A00" stroke-width="1.6"/>
+          <text x="236" y="72" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#B05A00">NIVEL 1 · conversión</text>
+          <text x="236" y="90" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">Money.parse()</text>
+          <text x="236" y="104" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.65">try / catch</text>
+
+          <rect x="440" y="52" width="180" height="58" rx="5" fill="none" stroke="#B05A00" stroke-width="1.6"/>
+          <text x="454" y="72" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#B05A00">NIVEL 2 · traducción</text>
+          <text x="454" y="90" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">AddTransactionUseCase</text>
+          <text x="454" y="104" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.65">6 bloques catch</text>
+
+          <rect x="440" y="196" width="180" height="58" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="454" y="220" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">La pantalla muestra</text>
+          <text x="454" y="238" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="#B05A00">"No es un monto válido"</text>
+
+          <rect x="222" y="196" width="170" height="58" rx="5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/>
+          <text x="236" y="216" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.8">NIVEL 3 · invariantes</text>
+          <text x="236" y="234" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor">init { require(...) }</text>
+          <text x="236" y="248" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.65">última barrera</text>
+
+          <line x1="174" y1="81" x2="216" y2="81" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah6)"/>
+          <line x1="392" y1="81" x2="434" y2="81" stroke="#B05A00" stroke-width="1.6" marker-end="url(#ah6w)"/>
+          <text x="396" y="72" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="#B05A00">throw</text>
+
+          <line x1="530" y1="110" x2="530" y2="190" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah6)"/>
+          <text x="540" y="152" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity="0.8">AddTransactionResult</text>
+          <text x="540" y="166" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.65">.InvalidAmount</text>
+
+          <path d="M 392 225 L 420 225 L 420 152 L 434 152" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ah6)"/>
+
+          <text x="24" y="164" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">Ninguna excepción</text>
+          <text x="24" y="179" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">llega a la pantalla:</text>
+          <text x="24" y="194" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">solo llegan estados.</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 6.</b> Recorrido de un error desde el teclado hasta el mensaje en pantalla. La excepción existe únicamente entre los niveles 1 y 2; a partir de ahí el error viaja como un valor de un tipo sellado. El nivel 3 son las invariantes del modelo, que actúan si algo llegara a escapar de las validaciones anteriores.</figcaption>
+    </figure>
+
+    <h3>A. Nivel 1: conversión de texto a número</h3>
+    <div class="body">
+      <p>El punto más frágil de la aplicación es la conversión del texto que escribe el usuario a un valor numérico. Se resuelve con un <code>try</code> que captura las dos excepciones que la biblioteca estándar puede lanzar y las convierte en una excepción propia del dominio, conservando la causa original:</p>
+    </div>
+
+    <pre><code>return try {
+    Money(
+        BigDecimal(normalized)
+            .movePointRight(2)
+            .setScale(0, RoundingMode.HALF_UP)
+            .toLong()
+    )
+} catch (e: NumberFormatException) {
+    throw InvalidAmountException("\"" + raw + "\" no es un monto valido", e)
+} catch (e: ArithmeticException) {
+    throw InvalidAmountException("El monto \"" + raw + "\" excede el limite permitido", e)
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 8.</b> <span class="mono">domain/model/Money.kt</span> — la excepción original viaja como <span class="mono">cause</span>, de modo que no se pierde información para la depuración.</p>
+
+    <h3>B. Nivel 2: traducción a resultados</h3>
+    <div class="body">
+      <p>El caso de uso envuelve toda su lógica en un único bloque <code>try</code> y declara seis capturas ordenadas de la más específica a la más general. Cada una produce una variante distinta del resultado:</p>
+    </div>
+
+    <pre><code><span class="cmt">// MANEJO DE EXCEPCIONES: de la mas especifica a la mas general.</span>
+} catch (e: InvalidAmountException) {
+    AddTransactionResult.InvalidAmount(e.message ?: "Monto invalido")
+} catch (e: BlankFieldException) {
+    AddTransactionResult.MissingField(e.fieldName)
+} catch (e: AccountNotFoundException) {
+    AddTransactionResult.NotFound(e.message ?: "Cuenta no encontrada")
+} catch (e: CategoryNotFoundException) {
+    AddTransactionResult.NotFound(e.message ?: "Categoria no encontrada")
+} catch (e: IllegalArgumentException) {
+    <span class="cmt">// Disparada por los require() del modelo de dominio.</span>
+    AddTransactionResult.MissingField(e.message ?: "Datos incompletos")
+} catch (e: Exception) {
+    <span class="cmt">// Red de seguridad: fallo de Room, disco lleno, etc.</span>
+    AddTransactionResult.Failure(
+        "No se pudo guardar la transaccion: " + (e.message ?: "error desconocido")
+    )
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 9.</b> <span class="mono">domain/usecase/transaction/AddTransactionUseCase.kt</span> — el orden importa: <span class="mono">IllegalArgumentException</span> va antes que <span class="mono">Exception</span>, y la captura general queda de última como red de seguridad.</p>
+
+    <div class="body">
+      <p>La Tabla IX relaciona cada situación de error con lo que finalmente ve el usuario.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla IX.</b> Correspondencia entre errores, resultados y mensajes</p>
+      <table>
+        <thead>
+          <tr><th>Situación</th><th>Excepción</th><th>Resultado</th><th>Mensaje en pantalla</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Campo de monto vacío</td><td class="mono">InvalidAmountException</td><td class="mono">InvalidAmount</td><td>El monto no puede estar vacío</td></tr>
+          <tr><td class="name">Texto no numérico</td><td class="mono">InvalidAmountException</td><td class="mono">InvalidAmount</td><td>«cien mil» no es un monto válido</td></tr>
+          <tr><td class="name">Monto negativo o cero</td><td class="mono">InvalidAmountException</td><td class="mono">InvalidAmount</td><td>El monto debe ser mayor que cero</td></tr>
+          <tr><td class="name">Cuenta inexistente</td><td class="mono">AccountNotFoundException</td><td class="mono">NotFound</td><td>No existe la cuenta con id N</td></tr>
+          <tr><td class="name">Transferencia a la misma cuenta</td><td class="mono">BlankFieldException</td><td class="mono">MissingField</td><td>Falta un dato: cuenta destino</td></tr>
+          <tr><td class="name">Fallo de la base de datos</td><td class="mono">Exception</td><td class="mono">Failure</td><td>No se pudo guardar la transacción</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Verificación en dispositivo</span>
+      <p>El camino completo se comprobó en el emulador: al pulsar «Guardar» con el campo de monto vacío, el volcado de la interfaz mostró el nodo de texto <span class="mono">"El monto no puede estar vacio"</span>, confirmando que el mensaje nace en el dominio y llega intacto a la pantalla sin que ninguna excepción se propague.</p>
+    </div>
+  </section>
+
+  <!-- ============ 15 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">15</span>
+      <h2>Seguridad contra valores nulos</h2>
+    </div>
+
+    <div class="body">
+      <p>Kotlin distingue en el sistema de tipos entre una referencia que puede ser nula (<code>String?</code>) y una que no (<code>String</code>). El compilador impide llamar a un método sobre la primera sin haber comprobado antes su contenido, lo que elimina en tiempo de compilación la excepción de puntero nulo.</p>
+
+      <p>En Nexcode la nulabilidad no se usa por comodidad sino que <strong>modela hechos del negocio</strong>. Un movimiento puede no tener categoría, porque la política <code>ON DELETE SET NULL</code> del esquema deja huérfanos los movimientos cuando se borra una categoría; una nota es opcional porque el usuario no está obligado a escribirla; un presupuesto mensual puede no existir. La Tabla X recoge los campos opcionales y su justificación.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla X.</b> Campos opcionales del dominio y su razón de ser</p>
+      <table>
+        <thead>
+          <tr><th>Campo</th><th>Tipo</th><th>Por qué puede ser nulo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name mono">Transaction.categoryId</td><td class="mono">Long?</td><td>La base anula la clave al borrar la categoría</td></tr>
+          <tr><td class="name mono">Transaction.note</td><td class="mono">String?</td><td>La nota es opcional para el usuario</td></tr>
+          <tr><td class="name mono">Category.parentId</td><td class="mono">Long?</td><td>Nulo significa «categoría raíz»</td></tr>
+          <tr><td class="name mono">Category.monthlyBudget</td><td class="mono">Money?</td><td>No toda categoría tiene presupuesto</td></tr>
+          <tr><td class="name mono">RecurringPayment.lastPaidDate</td><td class="mono">LocalDate?</td><td>Un pago nuevo aún no se ha pagado nunca</td></tr>
+          <tr><td class="name mono">AdviceRequest.userQuestion</td><td class="mono">String?</td><td>El usuario puede pedir análisis sin preguntar nada</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>A. Operadores empleados</h3>
+    <div class="body">
+      <p>La Tabla XI resume los operadores de seguridad ante nulos utilizados, con el número de apariciones contadas sobre la capa de dominio.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XI.</b> Operadores de seguridad ante nulos en la capa de dominio</p>
+      <table>
+        <thead>
+          <tr><th>Operador</th><th>Función</th><th>Apariciones</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name mono">?:</td><td>Elvis: valor alternativo cuando la expresión es nula</td><td class="num">42</td></tr>
+          <tr><td class="name mono">?.trim()</td><td>Llamada segura: solo se ejecuta si no es nulo</td><td class="num">9</td></tr>
+          <tr><td class="name mono">takeIf { }</td><td>Convierte en nulo lo que no cumple la condición</td><td class="num">8</td></tr>
+          <tr><td class="name mono">?.let { }</td><td>Ejecuta un bloque solo si hay valor</td><td class="num">6</td></tr>
+          <tr><td class="name mono">orEmpty()</td><td>Convierte una cadena nula en cadena vacía</td><td class="num">2</td></tr>
+          <tr><td class="name mono">isNullOrBlank()</td><td>Comprueba nulo y vacío en una sola llamada</td><td class="num">1</td></tr>
+          <tr><td class="name mono">!!</td><td><em>Aserción no nula (descartada por política)</em></td><td class="num">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Política del proyecto</span>
+      <p>El operador <span class="mono">!!</span> no se usa en ninguna de las 6 548 líneas del proyecto. Ese operador desactiva la comprobación del compilador y reintroduce exactamente el fallo que el sistema de tipos evita; cada caso en que fue tentador se resolvió con Elvis o con una llamada segura.</p>
+    </div>
+
+    <h3>B. Caso representativo: cadena de respaldos</h3>
+    <div class="body">
+      <p>El fragmento más ilustrativo está en el caso de uso de registro. El título del movimiento se resuelve con una cadena de tres niveles: lo que escribió el usuario, si no está en blanco; en su defecto el nombre de la categoría; y si tampoco hay categoría, el título por defecto del tipo de movimiento. La expresión no puede producir nulo:</p>
+    </div>
+
+    <pre><code><span class="cmt">// 2. Cuenta: Elvis con throw como valor de la expresion.</span>
+val account = accountRepository.findById(input.accountId)
+    ?: throw AccountNotFoundException(input.accountId)
+
+<span class="cmt">// 3. Categoria: safe call. Si categoryId es null NO se consulta la base.</span>
+val category: Category? = input.categoryId?.let { id -&gt;
+    categoryRepository.findById(id) ?: throw CategoryNotFoundException(id)
+}
+
+<span class="cmt">// 4. Titulo: cadena de Elvis con tres niveles de respaldo.</span>
+val title: String = input.rawTitle?.trim()?.takeIf { it.isNotBlank() }
+    ?: category?.name
+    ?: input.type.defaultTitle()
+
+<span class="cmt">// 5. Nota opcional: "   " se normaliza a null, no a cadena vacia.</span>
+val note: String? = input.rawNote?.trim()?.takeIf { it.isNotBlank() }</code></pre>
+    <p class="caption-code"><b>Fragmento 10.</b> <span class="mono">domain/usecase/transaction/AddTransactionUseCase.kt</span> — cuatro usos distintos de la seguridad ante nulos en doce líneas.</p>
+
+    <div class="body">
+      <p>Tres detalles merecen comentario. Primero, <code>?: throw</code> aprovecha que en Kotlin <code>throw</code> es una expresión, lo que permite obtener un valor no nulo o interrumpir en una sola línea. Segundo, la llamada segura sobre <code>categoryId</code> evita una consulta innecesaria a la base de datos cuando no hay categoría. Tercero, la combinación <code>?.trim()?.takeIf { it.isNotBlank() }</code> normaliza a nulo una nota compuesta solo de espacios, de modo que la base de datos nunca almacena cadenas en blanco que después obliguen a comprobar dos condiciones distintas.</p>
+
+      <p>Del lado de la lectura, los modelos exponen propiedades derivadas que entregan a la interfaz un valor siempre seguro, como <code>val displayNote: String get() = note ?: "Sin nota"</code>. La pantalla no comprueba nulos: recibe texto listo para pintar.</p>
+    </div>
+  </section>
+
+  <!-- ============ 16 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">16</span>
+      <h2>Proceso de depuración</h2>
+    </div>
+
+    <div class="body">
+      <p>Durante el desarrollo se registraron cinco fallos representativos, documentados en la Tabla XII con su síntoma, causa raíz y solución. Se incluyen deliberadamente tanto errores de configuración como errores de lógica y un falso positivo, porque el proceso de depuración incluye descartar hipótesis equivocadas.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XII.</b> Registro de depuración</p>
+      <table>
+        <thead>
+          <tr><th>N.º</th><th>Síntoma</th><th>Causa raíz</th><th>Solución</th><th>Detectado por</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="num">1</td>
+            <td class="name">Falla el procesador de anotaciones de Room</td>
+            <td>Room no admite los metadatos de Kotlin 2.4</td>
+            <td>Fijar Kotlin 2.3.21 con Room 2.8.4</td>
+            <td>Compilador</td>
+          </tr>
+          <tr>
+            <td class="num">2</td>
+            <td class="name"><span class="mono">Cannot access 'RoomDatabase'</span></td>
+            <td>La capa de presentación tocaba Room directamente</td>
+            <td>Encapsular el ensamblaje en <span class="mono">DataProvider</span></td>
+            <td>Compilador</td>
+          </tr>
+          <tr>
+            <td class="num">3</td>
+            <td class="name">«25.000» se guardaba como 25 pesos</td>
+            <td>Regla de parseo ambigua con el punto</td>
+            <td>Regla del separador de miles por tres dígitos</td>
+            <td>Prueba unitaria</td>
+          </tr>
+          <tr>
+            <td class="num">4</td>
+            <td class="name">Falla la compilación en el análisis estático</td>
+            <td><span class="mono">windowLightNavigationBar</span> exige API 27</td>
+            <td>Separar el atributo en <span class="mono">values-v27/</span></td>
+            <td>Lint</td>
+          </tr>
+          <tr>
+            <td class="num">5</td>
+            <td class="name">La app «se cerraba» al deslizar</td>
+            <td>Falso positivo: gesto «atrás» del sistema</td>
+            <td>Repetir la prueba lejos del borde</td>
+            <td>Inspección visual</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>A. Fallo 3: el error de lógica que atrapó una prueba</h3>
+    <div class="body">
+      <p>Es el caso más instructivo porque no produjo ningún mensaje de error: la aplicación funcionaba y guardaba un valor incorrecto. Al escribir <code>25.000</code> —veinticinco mil pesos en notación colombiana— el sistema almacenaba 25 pesos, porque la regla original interpretaba un punto único como separador decimal.</p>
+
+      <p>El fallo se detectó al escribir la prueba unitaria del caso de uso de registro, antes de que ningún usuario tocara la aplicación. La corrección consistió en formalizar la regla de notación:</p>
+    </div>
+
+    <pre><code>val lastComma = text.lastIndexOf(',')
+val lastDot   = text.lastIndexOf('.')
+val digitsAfterLastDot = if (lastDot &gt;= 0) text.length - lastDot - 1 else -1
+
+val normalized = when {
+    <span class="cmt">// Hay coma: la coma manda como decimal y los puntos son miles.</span>
+    lastComma &gt;= 0 -&gt; text.replace(".", "").replace(',', '.')
+    <span class="cmt">// Solo puntos, el ultimo con 3 digitos detras: separador de miles.</span>
+    lastDot &gt;= 0 &amp;&amp; digitsAfterLastDot == 3 -&gt; text.replace(".", "")
+    <span class="cmt">// Resto de casos: el punto es el separador decimal.</span>
+    else -&gt; text
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 11.</b> <span class="mono">domain/model/Money.kt</span> — regla de desambiguación entre separador decimal y separador de miles.</p>
+
+    <div class="body">
+      <p>Junto con la corrección se incorporó una prueba de regresión que fija el comportamiento para el futuro:</p>
+    </div>
+
+    <pre><code>@Test
+fun `parse trata el punto con tres digitos como separador de miles`() {
+    assertEquals(2_500_000L, Money.parse("25.000").cents)
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 12.</b> <span class="mono">domain/test/MoneyTest.kt</span> — la prueba documenta la regla y evita que el fallo regrese.</p>
+
+    <h3>B. Fallo 2: el compilador como detector de fallas de arquitectura</h3>
+    <div class="body">
+      <p>Al conectar la interfaz con la base de datos, el módulo de presentación dejó de compilar con un mensaje que a primera vista parecía un problema de dependencias:</p>
+    </div>
+
+    <pre class="err"><code>e: AppContainer.kt:45:44 <span class="bad">Cannot access 'androidx.room.RoomDatabase'</span>
+   which is a supertype of 'NexcodeDatabase'.
+   Check your module classpath for missing or conflicting dependencies.</code></pre>
+
+    <div class="body">
+      <p>El diagnóstico correcto no era agregar Room como dependencia de la capa de presentación —eso habría hecho desaparecer el error y, con él, la separación de capas— sino reconocer que el mensaje señalaba una fuga arquitectónica: la presentación estaba construyendo la base de datos. La solución fue mover ese ensamblaje al interior de la capa de datos, tras la fábrica <code>DataProvider</code>. El error desapareció y la arquitectura quedó más estricta que antes.</p>
+    </div>
+
+    <h3>C. Fallo 5: descartar un falso positivo</h3>
+    <div class="body">
+      <p>Al probar el borrado por deslizamiento mediante automatización, la aplicación desaparecía de la pantalla y quedaba visible otra aplicación. La hipótesis inicial fue un fallo grave en el componente de deslizamiento. La inspección de la captura mostró que la aplicación visible era otro proyecto del mismo equipo, lo que descartaba un cierre por error: el gesto de prueba, iniciado en el borde derecho de la pantalla, había activado el gesto «atrás» del sistema operativo. Al repetir el mismo gesto lejos del borde, el borrado funcionó correctamente. El fallo estaba en el método de prueba, no en el código.</p>
+    </div>
+
+    <h3>D. Herramientas empleadas</h3>
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XIII.</b> Herramientas de depuración utilizadas</p>
+      <table>
+        <thead>
+          <tr><th>Herramienta</th><th>Uso en el proyecto</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Compilador de Kotlin</td><td>Detección de incompatibilidades y de violaciones de capa</td></tr>
+          <tr><td class="name">Pruebas unitarias (JUnit)</td><td>19 pruebas del dominio; detectaron el fallo 3</td></tr>
+          <tr><td class="name">Lint de Android</td><td>Análisis estático; detectó el fallo 4</td></tr>
+          <tr><td class="name">Logcat</td><td>Verificación de ausencia de excepciones fatales tras cada instalación</td></tr>
+          <tr><td class="name"><span class="mono">uiautomator dump</span></td><td>Comprobación del texto real en pantalla, sin depender de la vista</td></tr>
+          <tr><td class="name">Capturas del emulador</td><td>Verificación visual del comportamiento y descarte del fallo 5</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Observación</span>
+      <p>Cuatro de los cinco fallos fueron detectados por herramientas automáticas —compilador, pruebas y análisis estático— antes de ejecutar la aplicación. El único que exigió inspección manual resultó ser un falso positivo. Esto respalda una decisión tomada al inicio del proyecto: invertir en pruebas del dominio que corren en la máquina virtual de Java, porque su ciclo de retroalimentación se mide en segundos y no en minutos de emulador.</p>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Secciones 12 a 16 del informe del Proyecto Integrador · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Todos los fragmentos de código, cifras y salidas de consola fueron extraídos del repositorio del proyecto en el estado de la entrega. Continúa la numeración de figuras y tablas de la Sección 11 (Arquitectura de la solución).
+  </p>
+
+</div>

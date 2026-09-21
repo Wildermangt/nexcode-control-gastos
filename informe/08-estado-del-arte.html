@@ -1,0 +1,573 @@
+<title>Estado del arte de Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:      #FBFCFE;
+    --panel:      #F2F5FA;
+    --ink:        #101A2B;
+    --ink-soft:   #4A5B72;
+    --ink-faint:  #7C8CA3;
+    --rule:       #D6DEE9;
+    --rule-soft:  #E6ECF4;
+    --accent:     #104080;
+    --accent-2:   #0C8A5E;
+    --accent-warn:#B05A00;
+    --code-bg:    #F1F4F9;
+
+    --measure: 68ch;
+    --gutter: 5.5rem;
+
+    --f-serif: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --f-sans:  "IBM Plex Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+    --f-mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0B121D;
+      --panel:      #141D2B;
+      --ink:        #E4EBF5;
+      --ink-soft:   #A3B2C6;
+      --ink-faint:  #74849A;
+      --rule:       #24334A;
+      --rule-soft:  #1B2739;
+      --accent:     #6FB2EC;
+      --accent-2:   #45CF9C;
+      --accent-warn:#E0A55A;
+      --code-bg:    #111A27;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0B121D;
+    --panel:      #141D2B;
+    --ink:        #E4EBF5;
+    --ink-soft:   #A3B2C6;
+    --ink-faint:  #74849A;
+    --rule:       #24334A;
+    --rule-soft:  #1B2739;
+    --accent:     #6FB2EC;
+    --accent-2:   #45CF9C;
+    --accent-warn:#E0A55A;
+    --code-bg:    #111A27;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-serif);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: calc(var(--measure) + var(--gutter) + 4rem);
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  .masthead { border-bottom: 2px solid var(--ink); padding-bottom: 1.6rem; }
+
+  .eyebrow {
+    font-family: var(--f-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+
+  h1 {
+    font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+    line-height: 1.14;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    font-size: 1.12rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 1.8rem;
+    max-width: 56ch;
+  }
+
+  .byline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.1rem 2rem;
+    font-family: var(--f-sans);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .byline strong { display: block; color: var(--ink); font-weight: 600; }
+  .byline span { display: block; }
+
+  .abstract {
+    margin: 2.6rem 0 0;
+    padding: 1.4rem 1.6rem;
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+  }
+  .abstract p { margin: 0; font-size: 0.96rem; line-height: 1.6; }
+  .abstract .label {
+    font-family: var(--f-sans);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  section { margin-top: 3.4rem; }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: var(--gutter) minmax(0, 1fr);
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+    margin-bottom: 1.4rem;
+  }
+  .sec-num {
+    font-family: var(--f-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    padding-top: 0.35rem;
+  }
+  .sec-head h2 {
+    font-size: 1.28rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--f-serif);
+    font-size: 1.04rem;
+    font-weight: 600;
+    font-style: italic;
+    margin: 2rem 0 0.6rem;
+  }
+
+  .body { max-width: var(--measure); }
+  @media (min-width: 900px) { .body { margin-left: var(--gutter); } }
+
+  p { margin: 0 0 1rem; }
+  .body > p { text-align: justify; hyphens: auto; }
+  strong { font-weight: 600; }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 0.85em;
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  ul, ol { margin: 0 0 1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.45rem; }
+  li::marker { color: var(--ink-faint); }
+
+  figure { margin: 2rem 0; max-width: 100%; }
+  @media (min-width: 900px) { figure { margin-left: var(--gutter); } }
+  .fig-frame {
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    padding: 1.4rem 1rem;
+    overflow-x: auto;
+  }
+  figure svg { display: block; width: 100%; max-width: 100%; height: auto; color: var(--ink); }
+  figcaption {
+    font-family: var(--f-sans);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-top: 0.7rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  figcaption b { color: var(--ink); font-weight: 600; letter-spacing: 0.03em; }
+
+  .table-wrap { overflow-x: auto; margin: 1.8rem 0; }
+  @media (min-width: 900px) { .table-wrap { margin-left: var(--gutter); } }
+  .tbl-cap {
+    font-family: var(--f-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: 0.6rem;
+  }
+  .tbl-cap b { color: var(--accent); font-weight: 600; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--f-sans);
+    font-size: 0.81rem;
+    line-height: 1.45;
+  }
+  thead th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 0.55rem 0.7rem;
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  thead th.c { text-align: center; }
+  tbody td {
+    padding: 0.52rem 0.7rem;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  tbody td.c { text-align: center; }
+  tbody tr:last-child td { border-bottom: 1.5px solid var(--ink); }
+  tbody tr.self td { background: var(--panel); color: var(--ink); }
+  td.name { color: var(--ink); font-weight: 500; }
+  .mono { font-family: var(--f-mono); font-size: 0.94em; }
+  .yes { color: var(--accent-2); font-weight: 600; }
+  .no  { color: var(--ink-faint); }
+  .part { color: var(--accent-warn); font-weight: 600; }
+
+  .callout {
+    margin: 1.6rem 0;
+    padding: 1rem 1.2rem;
+    background: var(--panel);
+    border-left: 3px solid var(--accent-2);
+    font-size: 0.95rem;
+  }
+  @media (min-width: 900px) { .callout { margin-left: var(--gutter); } }
+  .callout p { margin: 0; }
+  .callout p + p { margin-top: 0.7rem; }
+  .callout .lead {
+    font-family: var(--f-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+  .callout.warn { border-left-color: var(--accent-warn); }
+  .callout.warn .lead { color: var(--accent-warn); }
+
+  .refs { font-size: 0.86rem; }
+  .refs ol { padding-left: 0; list-style: none; counter-reset: ref 6; }
+  .refs li {
+    counter-increment: ref;
+    padding-left: 2.8rem;
+    position: relative;
+    margin-bottom: 0.7rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+  .refs li::before {
+    content: "[" counter(ref) "]";
+    position: absolute;
+    left: 0;
+    font-family: var(--f-sans);
+    font-size: 0.78rem;
+    color: var(--accent);
+  }
+
+  .colophon {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--f-sans);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Proyecto Integrador · Sección 8</p>
+    <h1>Estado del arte de Nexcode</h1>
+    <p class="subtitle">Revisión de las aplicaciones de control de gastos personales existentes y delimitación del aporte del proyecto</p>
+
+    <div class="byline">
+      <div>
+        <strong>Autores</strong>
+        <span>Jeferson Wilderman González Tenjo</span>
+        <span>José Leandro Ocampo Camacho</span>
+      </div>
+      <div>
+        <strong>Programa</strong>
+        <span>Ingeniería de Sistemas</span>
+        <span>Universidad de San Buenaventura</span>
+      </div>
+      <div>
+        <strong>Asignatura</strong>
+        <span>Optativa II — Desarrollo Móvil</span>
+        <span>Sexto semestre, 2026</span>
+      </div>
+      <div>
+        <strong>Alcance de la revisión</strong>
+        <span>10 aplicaciones · agosto de 2026</span>
+        <span>Fuentes públicas de los fabricantes</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="abstract">
+    <p><span class="label">Nota metodológica —</span> La revisión se realizó en agosto de 2026 sobre información pública de los fabricantes y de los repositorios de las aplicaciones de código abierto. Se compararon diez soluciones seleccionadas por su presencia en el mercado latinoamericano, por representar un enfoque metodológico distinto o por ser referentes técnicos de código abierto. La comparación se limita a características verificables en la documentación pública; no se realizaron mediciones de rendimiento ni pruebas de usabilidad.</p>
+  </div>
+
+  <!-- ============ 8 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">8</span>
+      <h2>Estado del arte</h2>
+    </div>
+
+    <div class="body">
+      <p>El control de gastos personales es un dominio maduro: existen decenas de aplicaciones consolidadas, algunas con más de una década en el mercado. Por ello, la revisión no busca demostrar la ausencia de soluciones —sería falso— sino identificar cómo se distribuyen las que existen, qué compromisos impone cada familia y en qué punto de ese espacio se ubica el presente proyecto.</p>
+    </div>
+
+    <h3>A. Familias de soluciones identificadas</h3>
+    <div class="body">
+      <p>Las aplicaciones revisadas se agrupan en cuatro familias, definidas por el compromiso principal que asumen entre automatización, costo y control de los datos.</p>
+
+      <p><strong>Registro manual local.</strong> Monefy [7], Money Manager [8] y Bluecoins [9] almacenan la información en el dispositivo y exigen que el usuario introduzca cada movimiento. A cambio funcionan sin conexión, sin cuenta de usuario y sin costo recurrente. La velocidad de registro es su criterio de diseño dominante: Monefy resuelve el ingreso de un gasto en tres toques, y esa cifra explica buena parte de su adopción, porque una aplicación de gastos que exige quince segundos por movimiento se abandona en pocos días.</p>
+
+      <p><strong>Agregación bancaria.</strong> Mobills [10], Wallet [11] y Spendee [12] intentan eliminar el registro manual conectándose a las entidades financieras del usuario. El modelo funciona bien donde existe una infraestructura de <em>open banking</em> consolidada, pero en Colombia la cobertura es parcial e inestable, de modo que en la práctica el usuario termina registrando manualmente una fracción considerable de sus movimientos. Estas aplicaciones requieren además cuenta de usuario y almacenan los datos en servidores del proveedor.</p>
+
+      <p><strong>Metodología presupuestal.</strong> YNAB [13] y Actual Budget [14] no se presentan como registradores de gastos sino como implementaciones de un método —el presupuesto de base cero o «de sobres»—. Su propuesta de valor es la disciplina que imponen, no la comodidad. YNAB opera bajo suscripción en dólares, lo que constituye una barrera relevante para un estudiante colombiano; Actual Budget es de código abierto y gratuito, pero traslada al usuario la responsabilidad del despliegue.</p>
+
+      <p><strong>Código abierto autoalojado o de referencia.</strong> Firefly III [15] es la solución más completa del conjunto revisado y también la de mayor exigencia técnica: requiere un servidor propio, base de datos y mantenimiento. Ivy Wallet [16], por su parte, no destaca por cobertura funcional sino por ser un referente de construcción: una aplicación Android escrita en Kotlin con Jetpack Compose cuyo código puede estudiarse, y que sirvió como referencia de dirección visual para este proyecto.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XIV.</b> Soluciones revisadas y su modelo de operación</p>
+      <table>
+        <thead>
+          <tr><th>Aplicación</th><th>Familia</th><th>Datos</th><th>Costo</th><th>Código</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Monefy</td><td>Registro manual local</td><td>Dispositivo</td><td>Gratuito con compras</td><td>Cerrado</td></tr>
+          <tr><td class="name">Money Manager</td><td>Registro manual local</td><td>Dispositivo</td><td>Gratuito con compras</td><td>Cerrado</td></tr>
+          <tr><td class="name">Bluecoins</td><td>Registro manual local</td><td>Dispositivo</td><td>Gratuito con compras</td><td>Cerrado</td></tr>
+          <tr><td class="name">Mobills</td><td>Agregación bancaria</td><td>Nube del proveedor</td><td>Freemium</td><td>Cerrado</td></tr>
+          <tr><td class="name">Wallet (BudgetBakers)</td><td>Agregación bancaria</td><td>Nube del proveedor</td><td>Freemium</td><td>Cerrado</td></tr>
+          <tr><td class="name">Spendee</td><td>Agregación bancaria</td><td>Nube del proveedor</td><td>Freemium</td><td>Cerrado</td></tr>
+          <tr><td class="name">YNAB</td><td>Metodología presupuestal</td><td>Nube del proveedor</td><td>Suscripción</td><td>Cerrado</td></tr>
+          <tr><td class="name">Actual Budget</td><td>Metodología presupuestal</td><td>Autoalojado</td><td>Gratuito</td><td>Abierto</td></tr>
+          <tr><td class="name">Firefly III</td><td>Autoalojado</td><td>Servidor propio</td><td>Gratuito</td><td>Abierto</td></tr>
+          <tr><td class="name">Ivy Wallet</td><td>Referente técnico</td><td>Dispositivo</td><td>Gratuito</td><td>Abierto</td></tr>
+          <tr class="self"><td class="name">Nexcode <em>(este proyecto)</em></td><td>Registro manual local</td><td>Dispositivo</td><td>Gratuito</td><td>Abierto</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>B. Posicionamiento comparado</h3>
+    <div class="body">
+      <p>La Fig. 7 sitúa las soluciones revisadas en dos ejes que resumen el compromiso descrito: la autonomía que conservan el usuario y sus datos, y la amplitud funcional. El resultado desmiente cualquier pretensión de haber encontrado un nicho vacío.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 470" role="img" aria-label="Mapa de posicionamiento de diez aplicaciones de control de gastos según autonomía del usuario y amplitud funcional. Firefly III, Actual Budget y YNAB ocupan la zona de mayor cobertura pero menor autonomía; Bluecoins ocupa el cuadrante de alta autonomía y alta cobertura; Nexcode se ubica en la zona de alta autonomía y cobertura media.">
+          <defs>
+            <marker id="axarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <!-- ejes -->
+          <line x1="120" y1="400" x2="712" y2="400" stroke="currentColor" stroke-width="1.4" marker-end="url(#axarrow)" opacity="0.8"/>
+          <line x1="120" y1="400" x2="120" y2="34" stroke="currentColor" stroke-width="1.4" marker-end="url(#axarrow)" opacity="0.8"/>
+
+          <!-- divisiones de cuadrante -->
+          <line x1="416" y1="40" x2="416" y2="400" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity="0.28"/>
+          <line x1="120" y1="220" x2="706" y2="220" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity="0.28"/>
+
+          <!-- rótulos de eje -->
+          <text x="128" y="424" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.7">Requiere cuenta o servidor</text>
+          <text x="706" y="424" text-anchor="end" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.7">Funciona solo en el dispositivo</text>
+          <text x="128" y="443" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.85">AUTONOMÍA DEL USUARIO Y SUS DATOS →</text>
+
+          <text x="104" y="46" text-anchor="end" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.7">Amplia</text>
+          <text x="104" y="396" text-anchor="end" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.7">Básica</text>
+          <text x="30" y="230" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.85" transform="rotate(-90 30 230)">↑ COBERTURA FUNCIONAL</text>
+
+          <!-- puntos: izquierda (nube/servidor) -->
+          <circle cx="180" cy="70" r="5" fill="currentColor"/>
+          <text x="192" y="74" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Firefly III</text>
+
+          <circle cx="248" cy="118" r="5" fill="currentColor"/>
+          <text x="260" y="122" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Actual Budget</text>
+
+          <circle cx="196" cy="166" r="5" fill="currentColor"/>
+          <text x="208" y="170" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">YNAB</text>
+
+          <circle cx="286" cy="200" r="5" fill="currentColor"/>
+          <text x="298" y="204" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Mobills</text>
+
+          <circle cx="212" cy="252" r="5" fill="currentColor"/>
+          <text x="224" y="256" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Wallet</text>
+
+          <circle cx="316" cy="292" r="5" fill="currentColor"/>
+          <text x="328" y="296" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Spendee</text>
+
+          <!-- puntos: derecha (local) -->
+          <circle cx="588" cy="104" r="5" fill="currentColor"/>
+          <text x="600" y="108" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Bluecoins</text>
+
+          <circle cx="536" cy="186" r="5" fill="currentColor"/>
+          <text x="548" y="190" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Money Manager</text>
+
+          <circle cx="518" cy="292" r="5" fill="currentColor"/>
+          <text x="530" y="296" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Ivy Wallet</text>
+
+          <circle cx="646" cy="344" r="5" fill="currentColor"/>
+          <text x="658" y="348" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Monefy</text>
+
+          <!-- Nexcode destacado -->
+          <circle cx="620" cy="268" r="8" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <circle cx="620" cy="268" r="3.5" fill="#0C8A5E"/>
+          <text x="636" y="264" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="#0C8A5E">Nexcode</text>
+          <text x="636" y="279" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="#0C8A5E" opacity="0.9">este proyecto</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 7.</b> Mapa de posicionamiento de las soluciones revisadas. El cuadrante superior derecho —máxima autonomía con amplia cobertura— ya está ocupado por Bluecoins. Nexcode se ubica en la zona de alta autonomía y cobertura media, junto a Ivy Wallet y por encima de Monefy, sin superar en funcionalidad a las soluciones consolidadas.</figcaption>
+    </figure>
+
+    <h3>C. Cobertura funcional comparada</h3>
+    <div class="body">
+      <p>La Tabla XV contrasta ocho características relevantes para el caso de estudio. Se incluye a Nexcode en la última fila con su estado real en el momento de la entrega, incluidas sus ausencias.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XV.</b> Cobertura funcional comparada</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Característica</th>
+            <th class="c">Monefy</th>
+            <th class="c">Bluecoins</th>
+            <th class="c">Mobills</th>
+            <th class="c">Firefly III</th>
+            <th class="c">Ivy Wallet</th>
+            <th class="c">Nexcode</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Registro rápido de gastos</td>
+            <td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c part">Parcial</td><td class="c yes">Sí</td><td class="c yes">Sí</td>
+          </tr>
+          <tr>
+            <td class="name">Gráfico por categoría</td>
+            <td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td>
+          </tr>
+          <tr>
+            <td class="name">Recordatorio de pagos fijos</td>
+            <td class="c no">No</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c no">No</td><td class="c yes">Sí</td>
+          </tr>
+          <tr>
+            <td class="name">Presupuesto por categoría</td>
+            <td class="c part">Parcial</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c no">No</td>
+          </tr>
+          <tr>
+            <td class="name">Notificaciones del sistema</td>
+            <td class="c no">No</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c no">No</td><td class="c no">No</td>
+          </tr>
+          <tr>
+            <td class="name">Exportar datos</td>
+            <td class="c part">Parcial</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c no">No</td>
+          </tr>
+          <tr>
+            <td class="name">Funciona sin cuenta ni servidor</td>
+            <td class="c yes">Sí</td><td class="c yes">Sí</td><td class="c no">No</td><td class="c no">No</td><td class="c yes">Sí</td><td class="c yes">Sí</td>
+          </tr>
+          <tr class="self">
+            <td class="name">Asistente financiero conversacional</td>
+            <td class="c no">No</td><td class="c no">No</td><td class="c part">Parcial</td><td class="c no">No</td><td class="c no">No</td><td class="c part">Parcial</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="body">
+      <p>La lectura de la tabla es deliberadamente incómoda para el proyecto: Nexcode no supera a Bluecoins ni a Mobills en ninguna característica, y carece de tres que ellas sí ofrecen —presupuesto por categoría, notificaciones del sistema y exportación de datos—. Su asistente financiero funciona hoy mediante un motor de reglas local, con la integración a un agente conversacional remoto preparada pero no conectada.</p>
+    </div>
+
+    <h3>D. Vacío identificado</h3>
+    <div class="body">
+      <p>Del análisis anterior se desprende que <strong>el vacío no es funcional</strong>. Quien busque hoy una aplicación de control de gastos encuentra alternativas maduras para casi cualquier combinación de necesidades. Sin embargo, la revisión sí permite identificar dos limitaciones transversales que afectan específicamente al usuario objetivo de este proyecto —un estudiante universitario colombiano— y una tercera que atañe al contexto académico en que se desarrolla.</p>
+
+      <p><strong>Primera.</strong> La automatización que justifica las aplicaciones de agregación bancaria no se materializa en Colombia. El usuario paga el costo del modelo —cuenta obligatoria, datos financieros en servidores de terceros, funciones de pago— sin recibir a cambio la ventaja principal, porque la conexión con las entidades locales es parcial. En ese escenario, una aplicación de registro manual y datos locales no es una solución inferior sino una elección coherente.</p>
+
+      <p><strong>Segunda.</strong> Las soluciones de código abierto que ofrecen control total sobre los datos exigen infraestructura propia. Firefly III requiere servidor, base de datos y mantenimiento; Actual Budget requiere un despliegue o una sincronización configurada. Para un usuario que solo quiere saber en qué se le fue el mes, ese costo de entrada es prohibitivo.</p>
+
+      <p><strong>Tercera.</strong> Ninguna de las aplicaciones revisadas fue concebida como objeto de estudio. Las cerradas no exponen su código; las abiertas, aunque legibles, tienen una historia de desarrollo extensa que dificulta usarlas para ilustrar decisiones de diseño puntuales. Para un proyecto integrador cuyo propósito es demostrar el dominio de un lenguaje y de una arquitectura, la construcción propia no es una duplicación de esfuerzo sino el objetivo mismo.</p>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Delimitación del aporte</span>
+      <p>Nexcode no pretende competir en cobertura funcional con las aplicaciones revisadas. Su aporte se ubica en la intersección de tres condiciones que ninguna de ellas satisface simultáneamente para el caso de estudio: <strong>operar sin cuenta ni servidor</strong>, <strong>incluir el bolsillo de recordatorios de pagos fijos</strong> —ausente en las alternativas gratuitas y locales más simples— y <strong>exponer una arquitectura verificable</strong>, documentada y comprobable en tiempo de compilación, tal como se demuestra en la Sección 11.</p>
+      <p>Formulado con precisión: el resultado del proyecto no es una aplicación mejor que las existentes, sino una aplicación equivalente en su nicho cuya construcción es auditable.</p>
+    </div>
+
+    <h3>E. Referentes técnicos adoptados</h3>
+    <div class="body">
+      <p>Dos de las soluciones revisadas influyeron directamente en decisiones del proyecto. De <strong>Monefy</strong> se adoptó el criterio de velocidad de registro: el formulario de Nexcode se alcanza con un solo toque desde la pantalla principal y exige un único campo obligatorio, el monto, porque el título se deduce de la categoría cuando el usuario no lo escribe. De <strong>Ivy Wallet</strong> se tomó la referencia de dirección visual y la confirmación de que Kotlin con Jetpack Compose es una combinación viable para este tipo de aplicación.</p>
+
+      <p>La identidad visual final, sin embargo, no proviene de ninguna de las aplicaciones revisadas sino del sistema de diseño de <em>NEXCODE Banca digital</em>, el otro producto desarrollado por el equipo en la misma asignatura, con el fin de que ambas aplicaciones se reconozcan como parte de una misma familia.</p>
+    </div>
+  </section>
+
+  <!-- ============ REFERENCIAS ============ -->
+  <section class="refs">
+    <div class="sec-head">
+      <span class="sec-num"></span>
+      <h2>Referencias de esta sección</h2>
+    </div>
+
+    <div class="body">
+      <ol>
+        <li>Aimlogic, "Monefy — Budget & Expense Manager". [En línea]. Disponible en: https://monefy.me</li>
+        <li>Realbyte Inc., "Money Manager Expense &amp; Budget". [En línea]. Disponible en: https://www.realbyteapps.com</li>
+        <li>Rammig Software, "Bluecoins Finance &amp; Budget". [En línea]. Disponible en: https://www.bluecoinsapp.com</li>
+        <li>Mobills, "Mobills — Control financiero". [En línea]. Disponible en: https://www.mobills.com.co</li>
+        <li>BudgetBakers, "Wallet by BudgetBakers". [En línea]. Disponible en: https://budgetbakers.com</li>
+        <li>Spendee, "Spendee — Money Tracker". [En línea]. Disponible en: https://www.spendee.com</li>
+        <li>You Need A Budget LLC, "YNAB — You Need A Budget". [En línea]. Disponible en: https://www.ynab.com</li>
+        <li>Actual Budget, "Actual — A local-first personal finance app". [En línea]. Disponible en: https://actualbudget.org</li>
+        <li>J. F. Grigg, "Firefly III — A free and open source personal finance manager". [En línea]. Disponible en: https://www.firefly-iii.org</li>
+        <li>Ivy Apps, "Ivy Wallet — Open source money manager". [En línea]. Disponible en: https://github.com/Ivy-Apps/ivy-wallet</li>
+      </ol>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Sección 8 del informe del Proyecto Integrador — Estado del arte · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Continúa la numeración de figuras y tablas de las secciones 11 y 12–16. Las referencias de esta sección continúan la numeración iniciada en la Sección 11.
+  </p>
+
+</div>

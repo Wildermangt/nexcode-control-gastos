@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Nexcode</string>
+
+    <string name="nav_gastos">Gastos</string>
+    <string name="nav_bolsillo">Bolsillo</string>
+    <string name="nav_asistente">Mensajes</string>
+    <string name="nav_perfil">Perfil</string>
+
+    <string name="cd_agregar">Agregar transaccion</string>
+    <string name="cd_volver">Volver</string>
+    <string name="cd_logo">Logo de NEXCODE CORPORATION</string>
+</resources>

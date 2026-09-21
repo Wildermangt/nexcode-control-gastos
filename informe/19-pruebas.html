@@ -1,0 +1,510 @@
+<title>Pruebas de Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:#FBFCFE; --panel:#F2F5FA; --ink:#101A2B; --ink-soft:#4A5B72; --ink-faint:#7C8CA3;
+    --rule:#D6DEE9; --rule-soft:#E6ECF4; --accent:#104080; --accent-2:#0C8A5E; --accent-warn:#B05A00;
+    --code-bg:#F1F4F9;
+    --measure:68ch; --gutter:5.5rem;
+    --f-serif:"Source Serif 4","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --f-sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif;
+    --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+      --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+      --code-bg:#111A27;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+    --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+    --code-bg:#111A27;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-serif); font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased; }
+  .sheet { max-width:calc(var(--measure) + var(--gutter) + 4rem); margin:0 auto; padding:4rem 2rem 6rem; }
+  .masthead { border-bottom:2px solid var(--ink); padding-bottom:1.6rem; }
+  .eyebrow { font-family:var(--f-sans); font-size:0.7rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin:0 0 0.9rem; }
+  h1 { font-size:clamp(1.9rem,4.2vw,2.7rem); line-height:1.14; font-weight:700; letter-spacing:-0.015em; margin:0 0 0.5rem; text-wrap:balance; }
+  .subtitle { font-size:1.12rem; color:var(--ink-soft); font-style:italic; margin:0 0 1.8rem; max-width:56ch; }
+  .byline { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1.1rem 2rem; font-family:var(--f-sans); font-size:0.82rem; line-height:1.5; color:var(--ink-soft); }
+  .byline strong { display:block; color:var(--ink); font-weight:600; }
+  .byline span { display:block; }
+  .abstract { margin:2.6rem 0 0; padding:1.4rem 1.6rem; background:var(--panel); border-left:3px solid var(--accent); }
+  .abstract p { margin:0; font-size:0.96rem; line-height:1.6; }
+  .abstract .label { font-family:var(--f-sans); font-weight:600; letter-spacing:0.04em; }
+  section { margin-top:3.4rem; }
+  .sec-head { display:grid; grid-template-columns:var(--gutter) minmax(0,1fr); align-items:baseline; border-top:1px solid var(--rule); padding-top:1rem; margin-bottom:1.4rem; }
+  .sec-num { font-family:var(--f-sans); font-size:0.76rem; font-weight:600; letter-spacing:0.12em; color:var(--accent); padding-top:0.35rem; }
+  .sec-head h2 { font-size:1.28rem; font-weight:600; letter-spacing:0.03em; text-transform:uppercase; margin:0; text-wrap:balance; }
+  h3 { font-family:var(--f-serif); font-size:1.04rem; font-weight:600; font-style:italic; margin:2rem 0 0.6rem; }
+  .body { max-width:var(--measure); }
+  @media (min-width:900px) { .body { margin-left:var(--gutter); } }
+  p { margin:0 0 1rem; }
+  .body > p { text-align:justify; hyphens:auto; }
+  strong { font-weight:600; }
+  code { font-family:var(--f-mono); font-size:0.85em; background:var(--code-bg); padding:0.1em 0.35em; border-radius:3px; }
+  pre { font-family:var(--f-mono); font-size:0.775rem; line-height:1.62; background:var(--code-bg); border:1px solid var(--rule-soft); border-left:3px solid var(--accent); padding:1rem 1.1rem; overflow-x:auto; margin:1.2rem 0; }
+  @media (min-width:900px) { pre { margin-left:var(--gutter); } }
+  pre code { background:none; padding:0; font-size:inherit; }
+  .cmt { color:var(--ink-faint); }
+  .ok { color:var(--accent-2); font-weight:600; }
+  .bad { color:var(--accent-warn); }
+  .caption-code { font-family:var(--f-sans); font-size:0.76rem; color:var(--ink-soft); margin:-0.7rem 0 1.6rem; }
+  @media (min-width:900px) { .caption-code { margin-left:var(--gutter); } }
+  .caption-code b { color:var(--ink); font-weight:600; }
+  figure { margin:2rem 0; max-width:100%; }
+  @media (min-width:900px) { figure { margin-left:var(--gutter); } }
+  .fig-frame { background:var(--panel); border:1px solid var(--rule-soft); padding:1.4rem 1rem; overflow-x:auto; }
+  figure svg { display:block; width:100%; max-width:100%; height:auto; color:var(--ink); }
+  figcaption { font-family:var(--f-sans); font-size:0.78rem; line-height:1.5; color:var(--ink-soft); margin-top:0.7rem; padding-top:0.6rem; border-top:1px solid var(--rule); }
+  figcaption b { color:var(--ink); font-weight:600; letter-spacing:0.03em; }
+  .table-wrap { overflow-x:auto; margin:1.8rem 0; }
+  @media (min-width:900px) { .table-wrap { margin-left:var(--gutter); } }
+  .tbl-cap { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); text-align:center; margin-bottom:0.6rem; }
+  .tbl-cap b { color:var(--accent); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-family:var(--f-sans); font-size:0.79rem; line-height:1.45; }
+  thead th { text-align:left; font-weight:600; color:var(--ink); padding:0.55rem 0.7rem; border-top:1.5px solid var(--ink); border-bottom:1px solid var(--ink); }
+  thead th.c { text-align:center; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--rule-soft); color:var(--ink-soft); vertical-align:top; }
+  tbody td.c { text-align:center; }
+  tbody tr:last-child td { border-bottom:1.5px solid var(--ink); }
+  td.name { color:var(--ink); font-weight:500; }
+  td.id { font-family:var(--f-mono); color:var(--accent); font-weight:500; white-space:nowrap; }
+  .mono { font-family:var(--f-mono); font-size:0.94em; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; color:var(--ink); }
+  .pass { color:var(--accent-2); font-weight:600; }
+  .callout { margin:1.6rem 0; padding:1rem 1.2rem; background:var(--panel); border-left:3px solid var(--accent-2); font-size:0.95rem; }
+  @media (min-width:900px) { .callout { margin-left:var(--gutter); } }
+  .callout p { margin:0; }
+  .callout p + p { margin-top:0.7rem; }
+  .callout .lead { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-2); display:block; margin-bottom:0.35rem; }
+  .callout.warn { border-left-color:var(--accent-warn); }
+  .callout.warn .lead { color:var(--accent-warn); }
+  .colophon { margin-top:4rem; padding-top:1.2rem; border-top:1px solid var(--rule); font-family:var(--f-sans); font-size:0.74rem; color:var(--ink-faint); line-height:1.6; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Proyecto Integrador · Sección 19</p>
+    <h1>Pruebas de Nexcode</h1>
+    <p class="subtitle">Estrategia de verificación en tres niveles, casos ejecutados y evidencia obtenida sobre dispositivo</p>
+
+    <div class="byline">
+      <div>
+        <strong>Autores</strong>
+        <span>Jeferson Wilderman González Tenjo</span>
+        <span>José Leandro Ocampo Camacho</span>
+      </div>
+      <div>
+        <strong>Programa</strong>
+        <span>Ingeniería de Sistemas</span>
+        <span>Universidad de San Buenaventura</span>
+      </div>
+      <div>
+        <strong>Entorno de prueba</strong>
+        <span>Emulador Pixel 6 · API 35</span>
+        <span>JDK 21 · Node.js</span>
+      </div>
+      <div>
+        <strong>Resultado global</strong>
+        <span>82 ejecuciones unitarias sin fallos</span>
+        <span>17 casos de sistema superados</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="abstract">
+    <p><span class="label">Resumen —</span> La verificación de Nexcode se organizó en tres niveles: pruebas unitarias automatizadas sobre la capa de dominio, verificación de integración a través de la base de datos real, y pruebas de sistema ejecutadas sobre un dispositivo emulado con evidencia recogida por instrumentación. Las 41 pruebas unitarias se ejecutan en dos plataformas —JVM y JavaScript— lo que suma 82 ejecuciones por ciclo. Los 17 casos de prueba de sistema cubren los flujos completos de registro, edición, borrado, pago de un recordatorio, notificación y consulta por voz, y se ejecutaron sobre dos dispositivos con versiones distintas de Android: un emulador con API 35 y un teléfono físico con API 30, los dos extremos del rango soportado. Se documenta además un defecto de lógica detectado por una prueba unitaria antes de que llegara al usuario.</p>
+  </div>
+
+  <!-- ============ 19 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">19</span>
+      <h2>Pruebas de funcionamiento</h2>
+    </div>
+
+    <div class="body">
+      <p>La arquitectura descrita en la Sección 11 condiciona la estrategia de pruebas y la simplifica. Como la capa de dominio no depende de Android, sus reglas de negocio se verifican en la máquina virtual de Java sin arrancar un emulador, y el ciclo de retroalimentación se mide en segundos. Lo que sí requiere dispositivo son los comportamientos que dependen del sistema operativo: la persistencia real, los gestos y las notificaciones.</p>
+
+      <p>De ahí los tres niveles de la Tabla XIX, cada uno con su alcance y su costo de ejecución.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XIX.</b> Niveles de verificación aplicados</p>
+      <table>
+        <thead>
+          <tr><th>Nivel</th><th>Qué verifica</th><th>Herramienta</th><th>Requiere dispositivo</th><th>Duración</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Unitario</td>
+            <td>Reglas de negocio y cálculos del dominio</td>
+            <td class="mono">kotlin.test</td>
+            <td class="c">No</td>
+            <td>Segundos</td>
+          </tr>
+          <tr>
+            <td class="name">Integración</td>
+            <td>Persistencia real y actualización reactiva</td>
+            <td>App sobre Room</td>
+            <td class="c">Sí</td>
+            <td>Minutos</td>
+          </tr>
+          <tr>
+            <td class="name">Sistema</td>
+            <td>Flujos completos, gestos y notificaciones</td>
+            <td><span class="mono">adb</span> · <span class="mono">uiautomator</span></td>
+            <td class="c">Sí</td>
+            <td>Minutos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>A. Nivel unitario</h3>
+    <div class="body">
+      <p>Las 41 pruebas viven en el conjunto <code>commonTest</code> del módulo de dominio, lo que significa que se compilan y ejecutan dos veces: una para JVM y otra para Node.js. Cada ciclo de verificación produce por tanto 82 ejecuciones. La Tabla XX detalla los casos.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XX.</b> Casos de prueba unitarios</p>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Caso</th><th>Qué comprueba</th><th class="c">JVM</th><th class="c">JS</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="id">U-01</td><td class="name">Formato colombiano con miles</td><td><span class="mono">"12.500,50"</span> → 12 501 pesos</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-02</td><td class="name">Punto como separador decimal</td><td><span class="mono">"12500.50"</span> → 12 501 pesos</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-03</td><td class="name">Punto con tres dígitos es miles</td><td><span class="mono">"25.000"</span> → 25 000 pesos</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-04</td><td class="name">Símbolo de peso y espacios</td><td><span class="mono">" $ 5000 "</span> se normaliza</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-05</td><td class="name">Monto nulo</td><td>Lanza <span class="mono">InvalidAmountException</span></td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-06</td><td class="name">Texto no numérico</td><td><span class="mono">"mil pesos"</span> es rechazado</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-07</td><td class="name">Redondeo hacia arriba</td><td><span class="mono">"12,60"</span> → 13 pesos</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-08</td><td class="name">Redondeo hacia abajo</td><td><span class="mono">"12,40"</span> → 12 pesos</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-09</td><td class="name">Límite superior</td><td>Rechaza montos de diez cifras</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-10</td><td class="name">Suma sin pérdida</td><td>10.000 + 20.000 + 5.500 da exactamente 35.500</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-11</td><td class="name">Formato sin decimales</td><td>125 000 000 → <span class="mono">"1.250.000"</span></td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-12</td><td class="name">Formato de un dato heredado</td><td>125 000 050 → <span class="mono">"1.250.001"</span></td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-13</td><td class="name">Registro de gasto válido</td><td>Se guarda con el monto correcto</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-14</td><td class="name">Uso del reloj inyectado</td><td>La fecha guardada es la del reloj fijo</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-15</td><td class="name">Monto no numérico en el caso de uso</td><td>Devuelve <span class="mono">InvalidAmount</span></td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-16</td><td class="name">Monto negativo</td><td>Devuelve <span class="mono">InvalidAmount</span></td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-17</td><td class="name">Cuenta inexistente</td><td>Devuelve <span class="mono">NotFound</span></td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-18</td><td class="name">Título vacío</td><td>Toma el nombre de la categoría</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-19</td><td class="name">Nota en blanco</td><td>Se guarda como nulo, no como cadena vacía</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-20</td><td class="name">Agrupación por categoría</td><td>Suma correcta y conteo de movimientos</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-21</td><td class="name">Orden por gasto</td><td>De mayor a menor</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-22</td><td class="name">Porcentajes</td><td>Suman 1 con tolerancia de 0,0001</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-23</td><td class="name">Movimientos sin categoría</td><td>Se agrupan bajo «Sin categoria»</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-24</td><td class="name">Exclusión de ingresos</td><td>No entran en el reparto de gastos</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-25</td><td class="name">Cupo fijado por texto</td><td><span class="mono">"250.000"</span> queda como saldo de la cuenta</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-26</td><td class="name">Aumento sobre el cupo actual</td><td>100.000 + 50.000 da 150.000</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-27</td><td class="name">Disminución del cupo</td><td>100.000 − 30.000 da 70.000</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-28</td><td class="name">Resta mayor que el cupo</td><td>El saldo queda en cero, nunca en negativo</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-29</td><td class="name">Texto no numérico en el cupo</td><td>Devuelve <span class="mono">InvalidAmount</span></td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-30</td><td class="name">Cupo vacío</td><td>Devuelve <span class="mono">InvalidAmount</span> y no toca la cuenta</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-31</td><td class="name">Cuenta inexistente al ajustar</td><td>Devuelve <span class="mono">NotFound</span></td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-32</td><td class="name">Aumento por encima del límite</td><td>Se rechaza y el saldo permanece igual</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-33</td><td class="name">Ventana completa de la serie</td><td>Seis meses, terminando en el mes en curso</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-34</td><td class="name">Meses sin movimientos</td><td>Aparecen en cero, no como huecos de la serie</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-35</td><td class="name">Ingresos y gastos por mes</td><td>Se separan y el saldo del mes cuadra</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-36</td><td class="name">Promedio de meses cerrados</td><td>Excluye el mes en curso y los meses vacíos</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-37</td><td class="name">Variación frente al mes anterior</td><td>200.000 → 250.000 da un 25 %</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-38</td><td class="name">Mes anterior sin gasto</td><td>Devuelve nulo en vez de dividir por cero</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-39</td><td class="name">Proyección al cierre del mes</td><td>150.000 en 15 días proyecta 310.000 a 31 días</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-40</td><td class="name">Aviso de exceso sobre el promedio</td><td><span class="mono">superaraElPromedio</span> se activa</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+          <tr><td class="id">U-41</td><td class="name">Historial vacío</td><td>La serie existe pero no hay datos que analizar</td><td class="c pass">OK</td><td class="c pass">OK</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <pre><code>$ ./gradlew :domain:jvmTest :domain:jsNodeTest
+
+<span class="ok">jvmTest    · MoneyTest ........................ 12 pruebas, 0 fallos
+jvmTest    · AnalizarTendenciaUseCaseTest .....  9 pruebas, 0 fallos
+jvmTest    · UpdateAccountBalanceUseCaseTest ..  8 pruebas, 0 fallos
+jvmTest    · AddTransactionUseCaseTest ........  7 pruebas, 0 fallos
+jvmTest    · GetCategorySummaryUseCaseTest ....  5 pruebas, 0 fallos
+jsNodeTest · MoneyTest ........................ 12 pruebas, 0 fallos
+jsNodeTest · AnalizarTendenciaUseCaseTest .....  9 pruebas, 0 fallos
+jsNodeTest · UpdateAccountBalanceUseCaseTest ..  8 pruebas, 0 fallos
+jsNodeTest · AddTransactionUseCaseTest ........  7 pruebas, 0 fallos
+jsNodeTest · GetCategorySummaryUseCaseTest ....  5 pruebas, 0 fallos</span>
+
+BUILD SUCCESSFUL</code></pre>
+    <p class="caption-code"><b>Salida 1.</b> Ejecución de la batería unitaria en las dos plataformas.</p>
+
+    <div class="body">
+      <p>Conviene señalar una decisión de diseño que hizo posible el caso <strong>U-14</strong>. Mientras el caso de uso llamaba directamente a <code>LocalDateTime.now()</code> era imposible verificar la fecha guardada, porque el valor esperado cambiaba en cada ejecución. Al inyectar el reloj como una dependencia (Sección 17), la prueba pasó a ser determinista. La testabilidad no fue un añadido posterior: fue consecuencia de una decisión arquitectónica.</p>
+    </div>
+
+    <h3>B. Defecto detectado en el nivel unitario</h3>
+    <div class="body">
+      <p>El caso <strong>U-03</strong> merece registro aparte porque no se escribió para confirmar un comportamiento sino porque lo descubrió. Al redactar la prueba del caso de uso de registro con el valor <code>"25.000"</code>, la aserción falló: el sistema guardaba <strong>25 pesos</strong> en lugar de veinticinco mil.</p>
+
+      <p>La causa era una regla de análisis ambigua que interpretaba todo punto único como separador decimal. El defecto no producía ningún error visible —la aplicación funcionaba y guardaba un valor incorrecto—, de modo que solo una aserción sobre el valor esperado podía detectarlo. La corrección y la prueba de regresión quedan documentadas en la Sección 16.</p>
+    </div>
+
+    <h3>C. Cambio posterior: la aplicación opera en pesos enteros</h3>
+    <div class="body">
+      <p>Concluida la primera ronda de verificación se adoptó una decisión que afecta a todos los importes: la aplicación <strong>dejó de manejar centavos</strong>. El motivo es de contexto y no técnico —en Colombia el centavo no circula, y ningún usuario escribe «$ 25.000,00»—, pero la forma de aplicarlo sí fue una decisión técnica con consecuencias verificables.</p>
+
+      <p>La alternativa sencilla habría sido ocultar los decimales únicamente en la presentación. Se descartó porque introduce una discrepancia silenciosa: el usuario escribiría 25.000,50, la pantalla mostraría 25.001 y la base guardaría un tercer valor. En su lugar el redondeo se trasladó al análisis del texto, dentro del propio dominio, de modo que <strong>lo que el usuario escribe es exactamente lo que queda almacenado</strong>. Los casos <strong>U-07</strong> y <strong>U-08</strong> fijan ese comportamiento en las dos direcciones del redondeo, y <strong>U-12</strong> comprueba que un dato guardado antes del cambio se sigue mostrando de forma coherente.</p>
+
+      <p>El almacenamiento interno se mantuvo en centavos deliberadamente. Cambiarlo habría exigido una tercera migración de esquema sobre datos existentes —con riesgo real de pérdida— a cambio de ningún beneficio observable, y habría cerrado la puerta a una moneda que sí use fracciones. La representación interna y la unidad de trabajo del usuario son dos decisiones separadas, y conviene que sigan siéndolo.</p>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Observación</span>
+      <p>Un defecto que no lanza excepción y no rompe la interfaz es invisible para la prueba manual. Los doce casos de <span class="mono">Money</span> existen precisamente porque el análisis de texto a número es el punto donde un error se convierte en un dato incorrecto y silencioso en la base de datos.</p>
+    </div>
+
+    <h3>D. Nivel de sistema</h3>
+    <div class="body">
+      <p>Los casos de sistema se ejecutaron sobre <strong>dos dispositivos distintos</strong>, elegidos para cubrir los extremos del rango que la aplicación declara soportar: un emulador Pixel 6 con Android API 35 y un teléfono Motorola Moto G Power con Android 11 (API 30). La duplicidad no es redundante: entre esas dos versiones cambia el comportamiento del sistema operativo en un punto que el código debe contemplar, como se detalla tras la tabla.</p>
+
+      <p>La evidencia no se recogió por inspección visual sino por instrumentación: <code>uiautomator dump</code> entrega el árbol de la interfaz con el texto real en pantalla, <code>dumpsys notification</code> el contenido efectivo de las notificaciones publicadas y <code>logcat</code> la traza de los servicios del sistema. La Tabla XXI recoge los diecisiete casos.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXI.</b> Casos de prueba de sistema sobre dispositivo</p>
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Caso</th><th>Resultado esperado</th><th>Obtenido</th><th class="c">Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id">S-01</td>
+            <td class="name">Primer arranque</td>
+            <td>Siembra de 10 cuentas, 10 categorías, 10 movimientos y 10 pagos fijos</td>
+            <td>Datos visibles en las cuatro secciones</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-02</td>
+            <td class="name">Registrar un gasto</td>
+            <td><span class="mono">"25.000"</span> se guarda como $ 25.000</td>
+            <td>Saldo actualizado y fila creada bajo «Hoy»</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-03</td>
+            <td class="name">Guardar con monto vacío</td>
+            <td>Mensaje de error, sin registro creado</td>
+            <td>Texto <span class="mono">"El monto no puede estar vacio"</span> en el árbol de la interfaz</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-04</td>
+            <td class="name">Título vacío</td>
+            <td>Se usa el nombre de la categoría</td>
+            <td>Movimiento titulado «Comida»</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-05</td>
+            <td class="name">Editar un movimiento</td>
+            <td>$ 12.000 → $ 45.500 con recálculo en cadena</td>
+            <td>Saldo 1.138.900 → 1.105.400; gastos 261.100 → 294.600; ahorro 81% → 78%</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-06</td>
+            <td class="name">Recálculo del gráfico</td>
+            <td>La dona refleja el movimiento editado</td>
+            <td>«Comida» entra al reparto con 15%</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-07</td>
+            <td class="name">Eliminar deslizando</td>
+            <td>El movimiento desaparece de la lista</td>
+            <td>Fila retirada; lista reordenada con animación</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-08</td>
+            <td class="name">Pagar un recordatorio</td>
+            <td>Se crea el gasto y avanza la fecha</td>
+            <td>Movimiento «Energia» de $ 120.000 creado; contador «hoy» 1 → 0; insignia 2 → 1</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-09</td>
+            <td class="name">Permiso de notificaciones</td>
+            <td>Se solicita en el primer arranque en Android 13 o superior</td>
+            <td>Diálogo mostrado en API 35; en API 30 no se solicita y la notificación sale igual</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-10</td>
+            <td class="name">Notificación de vencimientos</td>
+            <td>Aviso con los pagos vencidos y de hoy</td>
+            <td>«3 pagos fijos por atender · Suman $ 1.005.000» con detalle por pago</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-11</td>
+            <td class="name">Navegación desde la notificación</td>
+            <td>Abre el Bolsillo, no el Inicio</td>
+            <td>Pantalla «Bolsillo de recordatorios» en primer plano</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-12</td>
+            <td class="name">Asistente financiero por texto</td>
+            <td>Analiza el mes y entrega consejos</td>
+            <td>«Comida concentra el 100% de tus gastos» y dos consejos más</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-13</td>
+            <td class="name">Permiso de micrófono</td>
+            <td>Se solicita al tocar el botón de voz por primera vez</td>
+            <td>Diálogo «Allow Nexcode to record audio?» mostrado</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-14</td>
+            <td class="name">Estado de escucha</td>
+            <td>La pantalla indica que el micrófono está abierto</td>
+            <td>Tarjeta «Escuchando… / Habla ahora» con el micrófono latiendo</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-15</td>
+            <td class="name">Reintento sin paquete de idioma</td>
+            <td>Un fallo del motor local no aborta la consulta</td>
+            <td>Error 12 registrado y escucha activa en el segundo intento</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-16</td>
+            <td class="name">Liberación de los motores</td>
+            <td>Al salir de la pantalla se cierran reconocedor y sintetizador</td>
+            <td>Registro: «Disconnected from TTS engine» y «RecognitionService#onDestroy»</td>
+            <td class="c pass">OK</td>
+          </tr>
+          <tr>
+            <td class="id">S-17</td>
+            <td class="name">Consulta hablada de extremo a extremo</td>
+            <td>Se dicta una pregunta y el asistente responde en pantalla y en voz alta</td>
+            <td>«cuánto llevo ahorrado» transcrito al campo; respuesta mostrada y leída con voz local</td>
+            <td class="c pass">OK</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Lo que aportó el segundo dispositivo</span>
+      <p>El caso <span class="mono">S-09</span> se comporta de forma distinta en cada versión y por eso justifica la doble ejecución. El permiso <span class="mono">POST_NOTIFICATIONS</span> no existe antes de Android 13: en el emulador con API 35 el sistema muestra el diálogo de autorización, mientras que en el teléfono con API 30 la solicitud se omite y la notificación se publica igualmente. Son dos caminos de código distintos gobernados por una comprobación de versión, y probar solo uno habría dejado el otro sin verificar. Es el argumento práctico a favor de no confiar la verificación a un único dispositivo.</p>
+    </div>
+
+    <div class="body">
+      <p>El caso <strong>S-03</strong> es el que cierra el ciclo del manejo de excepciones descrito en la Sección 14. La evidencia recogida no es una captura de pantalla sino el nodo de texto real del árbol de la interfaz, lo que demuestra que el mensaje nace en el dominio y llega intacto a la vista sin que ninguna excepción se propague:</p>
+    </div>
+
+    <pre><code>$ adb shell uiautomator dump /sdcard/ui.xml &amp;&amp; adb shell cat /sdcard/ui.xml
+
+&lt;node index="10" <span class="ok">text="El monto no puede estar vacio"</span>
+      class="android.widget.TextView"
+      package="com.nexcode.gastos"
+      bounds="[53,1655][545,1718]" /&gt;</code></pre>
+    <p class="caption-code"><b>Salida 2.</b> Caso S-03 — el mensaje del dominio, capturado del árbol de vistas del dispositivo.</p>
+
+    <pre><code>$ adb shell dumpsys notification --noredact
+
+NotificationRecord(pkg=com.nexcode.gastos id=1001 importance=4
+    channel=recordatorios_pagos_fijos category=reminder)
+    <span class="ok">android.title = "3 pagos fijos por atender"
+    android.text  = "Suman $ 1.005.000"</span>
+        Arriendo · $ 850.000 · vencido hace 3 dias
+        Energia · $ 120.000 · vence hoy
+        Pasajes de la semana · $ 35.000 · vence hoy</code></pre>
+    <p class="caption-code"><b>Salida 3.</b> Caso S-10 — contenido efectivo de la notificación publicada por el trabajo en segundo plano.</p>
+
+    <div class="body">
+      <p>El caso <strong>S-15</strong> comprueba una recuperación y no un camino feliz: el dispositivo de prueba carece del paquete de español para reconocimiento sin conexión, de modo que el primer intento falla siempre. La evidencia de que el reintento funciona es la secuencia del registro seguida del estado de la pantalla:</p>
+    </div>
+
+    <pre><code>$ adb logcat | grep ReconocedorDeVoz
+<span class="bad">W ReconocedorDeVoz: Error de reconocimiento: codigo 12</span>
+
+$ adb shell uiautomator dump &amp;&amp; adb shell cat /sdcard/window_dump.xml
+<span class="ok">text="Escuchando..."   text="Habla ahora"</span></code></pre>
+    <p class="caption-code"><b>Salida 4.</b> Caso S-15 — el motor local falla por falta de paquete de idioma y el reintento en línea deja el micrófono escuchando.</p>
+
+    <div class="body">
+      <p>El caso <strong>S-17</strong> es el único que no podía ejecutarse sobre el emulador, porque requiere una entrada de micrófono real. Se ejecutó sobre el teléfono físico dictando la pregunta «cuánto llevo ahorrado». La evidencia no es la captura de pantalla —que solo probaría que apareció un texto— sino la traza de los dos servicios del sistema implicados, que demuestra que el reconocimiento y la síntesis se ejecutaron de verdad:</p>
+    </div>
+
+    <pre><code>$ adb logcat | grep -E "RecognitionService|GoogleTTSService"
+
+<span class="ok">RecognitionService#onStartOfSpeech</span>
+<span class="ok">RecognitionService#onEndOfSpeech</span>
+RecognitionService#onEndRecognitionSession
+<span class="ok">GoogleTTSServiceImpl: Synthesis request for locale spa-USA and name es-US-language</span>
+GoogleTTSServiceImpl: TTS dispatch: es-us-x-esc-seanet-<span class="ok">embedded</span></code></pre>
+    <p class="caption-code"><b>Salida 5.</b> Caso S-17 sobre el teléfono físico — el reconocedor abre y cierra la sesión de escucha, y el sintetizador atiende la petición de lectura. El sufijo <span class="mono">embedded</span> indica que la voz se generó en el propio dispositivo, sin conexión.</p>
+
+    <div class="body">
+      <p>La respuesta obtenida fue: «Sobre “cuánto llevo ahorrado”: Este mes ingresaste 1.400.000 y gastaste 261.100. Tu saldo es +1.138.900». El asistente cita la pregunta transcrita, lo que permite al usuario detectar de inmediato un error de reconocimiento sin necesidad de volver a dictarla.</p>
+
+      <p>La traza deja también constancia de una <strong>degradación aceptada</strong>: el sintetizador resolvió a <code>es-US</code> y no a <code>es-CO</code> ni <code>es-ES</code>, porque el dispositivo no tenía instalada ninguna de esas dos voces. El código solicita la variante colombiana y Android entrega la voz castellana más próxima disponible en lugar de fallar. El resultado es correcto en idioma y comprensible, con un acento que no es el local.</p>
+    </div>
+
+    <h3>E. Verificación de ausencia de fallos</h3>
+    <div class="body">
+      <p>Además de comprobar lo que debe ocurrir, tras cada instalación se verificó que no ocurriera lo que no debe. Se inspeccionó el registro del sistema en busca de excepciones fatales y se ejecutó el análisis estático sobre el proyecto completo. La Tabla XXII resume estas comprobaciones transversales.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXII.</b> Comprobaciones transversales</p>
+      <table>
+        <thead>
+          <tr><th>Comprobación</th><th>Instrumento</th><th>Resultado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Ausencia de excepciones fatales</td><td class="mono">adb logcat</td><td class="pass">0 coincidencias de FATAL EXCEPTION</td></tr>
+          <tr><td class="name">Análisis estático</td><td class="mono">./gradlew lint</td><td class="pass">Sin errores</td></tr>
+          <tr><td class="name">Construcción completa</td><td class="mono">./gradlew build</td><td class="pass">BUILD SUCCESSFUL</td></tr>
+          <tr><td class="name">Aislamiento de capas</td><td>Compilador de Kotlin</td><td class="pass">Violación deliberada rechazada</td></tr>
+          <tr><td class="name">Portabilidad del dominio</td><td class="mono">:domain:jsNodeTest</td><td class="pass">24/24 en Node.js</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <span class="lead">Falso positivo registrado</span>
+      <p>Durante el caso S-07 la aplicación desapareció de la pantalla y quedó visible otra aplicación, lo que sugirió un fallo grave en el componente de deslizamiento. La inspección de la evidencia mostró que el gesto de prueba, iniciado en el borde derecho de la pantalla, había activado el gesto «atrás» del sistema operativo. Repetido lejos del borde, el borrado funcionó correctamente. <strong>El defecto estaba en el método de prueba, no en el código</strong>; se documenta porque descartar hipótesis forma parte del proceso de verificación.</p>
+    </div>
+
+    <h3>F. Cobertura y limitaciones</h3>
+    <div class="body">
+      <p>La cobertura no es uniforme por diseño, y conviene declarar dónde es fuerte y dónde no. La capa de dominio —donde vive la lógica que puede producir datos incorrectos— está cubierta por pruebas automatizadas que se ejecutan en cada construcción. Las capas de datos y presentación se verificaron mediante casos de sistema manuales sobre dispositivo.</p>
+
+      <p>La única limitación que quedaba pendiente en una versión anterior de esta sección —la imposibilidad de comprobar la conversión efectiva de voz a texto sobre un emulador sin micrófono— <strong>quedó resuelta con la ejecución del caso S-17 sobre el teléfono físico</strong>. Se deja constancia del recorrido porque ilustra un principio: una limitación declarada es una tarea pendiente identificada, no una excusa, y el instrumento adecuado para levantarla no fue más código sino el dispositivo correcto.</p>
+
+      <p>Las limitaciones reconocidas son tres. <strong>No hay pruebas instrumentadas automatizadas</strong>: los diecisiete casos de la Tabla XXI se ejecutaron de forma manual asistida por <code>adb</code>, de modo que no forman parte del ciclo de integración continua y deben repetirse a mano. <strong>No hay pruebas de la capa de datos con base en memoria</strong>, que verificarían los DAO y la migración de esquema de forma automatizada. Y <strong>no se midió la cobertura de código</strong>; las cifras presentadas son de casos ejecutados, no de porcentaje de líneas alcanzadas.</p>
+
+      <p>El trabajo futuro más rentable en este frente sería incorporar Espresso o Compose UI Test para convertir los casos S-02 a S-08 en pruebas automatizadas, y una base Room en memoria para probar la migración 1→2 sin dispositivo.</p>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Sección 19 del informe del Proyecto Integrador — Pruebas de funcionamiento · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Continúa la numeración de figuras y tablas de las secciones 8, 11, 12–16 y 17. Todas las salidas de consola se obtuvieron ejecutando los comandos indicados sobre el proyecto, el emulador Pixel 6 con API 35 y el teléfono Motorola Moto G Power con API 30.
+  </p>
+
+</div>

@@ -1,0 +1,617 @@
+<title>Multiplataforma en Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:      #FBFCFE;
+    --panel:      #F2F5FA;
+    --ink:        #101A2B;
+    --ink-soft:   #4A5B72;
+    --ink-faint:  #7C8CA3;
+    --rule:       #D6DEE9;
+    --rule-soft:  #E6ECF4;
+    --accent:     #104080;
+    --accent-2:   #0C8A5E;
+    --accent-warn:#B05A00;
+    --code-bg:    #F1F4F9;
+
+    --measure: 68ch;
+    --gutter: 5.5rem;
+
+    --f-serif: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --f-sans:  "IBM Plex Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+    --f-mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0B121D;
+      --panel:      #141D2B;
+      --ink:        #E4EBF5;
+      --ink-soft:   #A3B2C6;
+      --ink-faint:  #74849A;
+      --rule:       #24334A;
+      --rule-soft:  #1B2739;
+      --accent:     #6FB2EC;
+      --accent-2:   #45CF9C;
+      --accent-warn:#E0A55A;
+      --code-bg:    #111A27;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0B121D;
+    --panel:      #141D2B;
+    --ink:        #E4EBF5;
+    --ink-soft:   #A3B2C6;
+    --ink-faint:  #74849A;
+    --rule:       #24334A;
+    --rule-soft:  #1B2739;
+    --accent:     #6FB2EC;
+    --accent-2:   #45CF9C;
+    --accent-warn:#E0A55A;
+    --code-bg:    #111A27;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-serif);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: calc(var(--measure) + var(--gutter) + 4rem);
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  .masthead { border-bottom: 2px solid var(--ink); padding-bottom: 1.6rem; }
+
+  .eyebrow {
+    font-family: var(--f-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+
+  h1 {
+    font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+    line-height: 1.14;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    font-size: 1.12rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 1.8rem;
+    max-width: 56ch;
+  }
+
+  .byline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.1rem 2rem;
+    font-family: var(--f-sans);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .byline strong { display: block; color: var(--ink); font-weight: 600; }
+  .byline span { display: block; }
+
+  .abstract {
+    margin: 2.6rem 0 0;
+    padding: 1.4rem 1.6rem;
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+  }
+  .abstract p { margin: 0; font-size: 0.96rem; line-height: 1.6; }
+  .abstract .label {
+    font-family: var(--f-sans);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  section { margin-top: 3.4rem; }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: var(--gutter) minmax(0, 1fr);
+    align-items: baseline;
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+    margin-bottom: 1.4rem;
+  }
+  .sec-num {
+    font-family: var(--f-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    padding-top: 0.35rem;
+  }
+  .sec-head h2 {
+    font-size: 1.28rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--f-serif);
+    font-size: 1.04rem;
+    font-weight: 600;
+    font-style: italic;
+    margin: 2rem 0 0.6rem;
+  }
+
+  .body { max-width: var(--measure); }
+  @media (min-width: 900px) { .body { margin-left: var(--gutter); } }
+
+  p { margin: 0 0 1rem; }
+  .body > p { text-align: justify; hyphens: auto; }
+  strong { font-weight: 600; }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 0.85em;
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  pre {
+    font-family: var(--f-mono);
+    font-size: 0.775rem;
+    line-height: 1.62;
+    background: var(--code-bg);
+    border: 1px solid var(--rule-soft);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    margin: 1.2rem 0;
+  }
+  @media (min-width: 900px) { pre { margin-left: var(--gutter); } }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  pre.err { border-left-color: var(--accent-warn); }
+  .cmt { color: var(--ink-faint); }
+  .ok  { color: var(--accent-2); font-weight: 600; }
+  .bad { color: var(--accent-warn); }
+
+  .caption-code {
+    font-family: var(--f-sans);
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    margin: -0.7rem 0 1.6rem;
+    padding-left: 0.2rem;
+  }
+  @media (min-width: 900px) { .caption-code { margin-left: var(--gutter); } }
+  .caption-code b { color: var(--ink); font-weight: 600; }
+
+  ul, ol { margin: 0 0 1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.45rem; }
+  li::marker { color: var(--ink-faint); }
+
+  figure { margin: 2rem 0; max-width: 100%; }
+  @media (min-width: 900px) { figure { margin-left: var(--gutter); } }
+  .fig-frame {
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    padding: 1.4rem 1rem;
+    overflow-x: auto;
+  }
+  figure svg { display: block; width: 100%; max-width: 100%; height: auto; color: var(--ink); }
+  figcaption {
+    font-family: var(--f-sans);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-top: 0.7rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  figcaption b { color: var(--ink); font-weight: 600; letter-spacing: 0.03em; }
+
+  .table-wrap { overflow-x: auto; margin: 1.8rem 0; }
+  @media (min-width: 900px) { .table-wrap { margin-left: var(--gutter); } }
+  .tbl-cap {
+    font-family: var(--f-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: 0.6rem;
+  }
+  .tbl-cap b { color: var(--accent); font-weight: 600; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--f-sans);
+    font-size: 0.81rem;
+    line-height: 1.45;
+  }
+  thead th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 0.55rem 0.7rem;
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  thead th.c { text-align: center; }
+  tbody td {
+    padding: 0.52rem 0.7rem;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  tbody td.c { text-align: center; }
+  tbody tr:last-child td { border-bottom: 1.5px solid var(--ink); }
+  td.name { color: var(--ink); font-weight: 500; }
+  td.mono, .mono { font-family: var(--f-mono); font-size: 0.94em; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .yes { color: var(--accent-2); font-weight: 600; }
+  .no  { color: var(--ink-faint); }
+
+  .callout {
+    margin: 1.6rem 0;
+    padding: 1rem 1.2rem;
+    background: var(--panel);
+    border-left: 3px solid var(--accent-2);
+    font-size: 0.95rem;
+  }
+  @media (min-width: 900px) { .callout { margin-left: var(--gutter); } }
+  .callout p { margin: 0; }
+  .callout p + p { margin-top: 0.7rem; }
+  .callout .lead {
+    font-family: var(--f-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+  .callout.warn { border-left-color: var(--accent-warn); }
+  .callout.warn .lead { color: var(--accent-warn); }
+
+  .colophon {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--f-sans);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Proyecto Integrador · Sección 17</p>
+    <h1>Multiplataforma en Nexcode</h1>
+    <p class="subtitle">Migración de la capa de dominio a Kotlin Multiplatform, y qué se descubrió al compilarla para una plataforma que no es la JVM</p>
+
+    <div class="byline">
+      <div>
+        <strong>Autores</strong>
+        <span>Jeferson Wilderman González Tenjo</span>
+        <span>José Leandro Ocampo Camacho</span>
+      </div>
+      <div>
+        <strong>Programa</strong>
+        <span>Ingeniería de Sistemas</span>
+        <span>Universidad de San Buenaventura</span>
+      </div>
+      <div>
+        <strong>Asignatura</strong>
+        <span>Optativa II — Desarrollo Móvil</span>
+        <span>Sexto semestre, 2026</span>
+      </div>
+      <div>
+        <strong>Objetivos compilados</strong>
+        <span>JVM (Android y escritorio)</span>
+        <span>JavaScript (Node.js)</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="abstract">
+    <p><span class="label">Resumen —</span> La capa de dominio de Nexcode se migró de un módulo Kotlin/JVM a un módulo <strong>Kotlin Multiplatform</strong> con dos objetivos de compilación: JVM y JavaScript. La migración obligó a eliminar del dominio toda dependencia de la biblioteca estándar de Java —<code>BigDecimal</code>, <code>java.time</code> y <code>java.util</code>— y a sustituir el acceso al reloj del sistema por una abstracción inyectable. El resultado se verifica ejecutando las mismas 41 pruebas unitarias en las dos plataformas. El hallazgo más relevante no fue el resultado sino el proceso: dos acoplamientos a Java que ninguna revisión manual había detectado se hicieron visibles en el momento de compilar para JavaScript.</p>
+  </div>
+
+  <!-- ============ 17 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">17</span>
+      <h2>Implementación multiplataforma</h2>
+    </div>
+
+    <div class="body">
+      <p>La Sección 11 sostiene que la capa de dominio está aislada del framework. Esa afirmación se apoyaba en una prueba negativa: no aparecen imports de Android en sus archivos. Es una evidencia razonable, pero indirecta; un módulo puede estar libre de Android y seguir atado a la plataforma por la vía de la biblioteca estándar de Java, que en Android está disponible y por tanto no produce ningún error.</p>
+
+      <p>La prueba concluyente de que una capa es independiente de la plataforma consiste en <strong>compilarla para otra</strong>. Con esa finalidad se migró el módulo <code>:domain</code> a Kotlin Multiplatform.</p>
+    </div>
+
+    <h3>A. Qué significa multiplataforma en este proyecto</h3>
+    <div class="body">
+      <p>Kotlin Multiplatform permite escribir código una sola vez en un conjunto de fuentes común y compilarlo para varios destinos. El conjunto <code>commonMain</code> no tiene acceso a la biblioteca de Java ni a las API de ninguna plataforma concreta: solo a la biblioteca estándar de Kotlin y a bibliotecas que a su vez sean multiplataforma. Esa restricción no la impone una convención del equipo, la impone el compilador.</p>
+
+      <p>Se eligieron dos objetivos. <strong>JVM</strong>, porque es el que consumen el módulo <code>:data</code> y la aplicación Android. Y <strong>JavaScript</strong> sobre Node.js, porque es una plataforma genuinamente distinta —no comparte biblioteca estándar con Java— y por tanto sirve como verificación real de portabilidad. La Fig. 8 muestra la estructura resultante.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 340" role="img" aria-label="Estructura de conjuntos de fuentes: commonMain y commonTest contienen todo el código del dominio y se compilan hacia dos destinos, JVM y JavaScript; el módulo de datos y la aplicación Android consumen el destino JVM.">
+          <defs>
+            <marker id="mp1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="mp1g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0C8A5E"/>
+            </marker>
+          </defs>
+
+          <!-- commonMain -->
+          <rect x="230" y="20" width="300" height="86" rx="6" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <text x="248" y="46" font-family="IBM Plex Mono, monospace" font-size="13" fill="#0C8A5E">commonMain / commonTest</text>
+          <text x="248" y="66" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.75">Modelos · Casos de uso · Contratos</text>
+          <text x="248" y="84" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.75">29 archivos · 41 pruebas</text>
+          <text x="248" y="100" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="#0C8A5E">Sin java.* · sin android.*</text>
+
+          <!-- ramas -->
+          <line x1="330" y1="106" x2="330" y2="140" stroke="#0C8A5E" stroke-width="1.5"/>
+          <line x1="430" y1="106" x2="430" y2="140" stroke="#0C8A5E" stroke-width="1.5"/>
+          <line x1="330" y1="140" x2="150" y2="140" stroke="#0C8A5E" stroke-width="1.5"/>
+          <line x1="430" y1="140" x2="610" y2="140" stroke="#0C8A5E" stroke-width="1.5"/>
+          <line x1="150" y1="140" x2="150" y2="170" stroke="#0C8A5E" stroke-width="1.5" marker-end="url(#mp1g)"/>
+          <line x1="610" y1="140" x2="610" y2="170" stroke="#0C8A5E" stroke-width="1.5" marker-end="url(#mp1g)"/>
+
+          <!-- destino jvm -->
+          <rect x="40" y="176" width="220" height="64" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="58" y="202" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">objetivo jvm</text>
+          <text x="58" y="222" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.65">41 pruebas · 0 fallos</text>
+
+          <!-- destino js -->
+          <rect x="500" y="176" width="220" height="64" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="518" y="202" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">objetivo js (Node.js)</text>
+          <text x="518" y="222" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.65">41 pruebas · 0 fallos</text>
+
+          <!-- consumidores -->
+          <rect x="40" y="272" width="220" height="48" rx="6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="4 3"/>
+          <text x="58" y="292" font-family="IBM Plex Mono, monospace" font-size="12" fill="currentColor" opacity="0.8">:data  ·  :app</text>
+          <text x="58" y="309" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">Room · Compose · WorkManager</text>
+
+          <line x1="150" y1="240" x2="150" y2="266" stroke="currentColor" stroke-width="1.4" marker-end="url(#mp1)"/>
+
+          <text x="500" y="292" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.6">Sin consumidor en producción:</text>
+          <text x="500" y="308" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.6">existe como verificación.</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 8.</b> Estructura de conjuntos de fuentes tras la migración. Todo el dominio vive en <span class="mono">commonMain</span> y se compila hacia dos destinos. El destino JavaScript no tiene consumidor en producción: su función es verificar que la lógica de negocio no depende de la plataforma.</figcaption>
+    </figure>
+
+    <h3>B. Qué hubo que eliminar del dominio</h3>
+    <div class="body">
+      <p>Antes de la migración el dominio contenía dieciséis referencias a la biblioteca de Java, ninguna de las cuales producía error alguno compilando para Android. La Tabla XVI enumera cada dependencia y su sustituto.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XVI.</b> Dependencias de Java retiradas del dominio</p>
+      <table>
+        <thead>
+          <tr><th>Dependencia</th><th>Uso que tenía</th><th>Sustituto</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name mono">java.math.BigDecimal</td>
+            <td>Convertir el texto del usuario a centavos con redondeo exacto</td>
+            <td>Aritmética entera propia sobre cadenas</td>
+          </tr>
+          <tr>
+            <td class="name mono">java.time.LocalDate<br>java.time.LocalDateTime</td>
+            <td>Fechas de movimientos y vencimientos</td>
+            <td class="mono">kotlinx-datetime 0.8.0</td>
+          </tr>
+          <tr>
+            <td class="name mono">java.time.DayOfWeek<br>java.time.temporal.ChronoUnit</td>
+            <td>Periodicidad semanal y días hasta el vencimiento</td>
+            <td><span class="mono">kotlinx.datetime.DayOfWeek</span> y <span class="mono">toEpochDays()</span></td>
+          </tr>
+          <tr>
+            <td class="name mono">java.time.YearMonth</td>
+            <td>Filtrar los movimientos del mes en curso</td>
+            <td>Clase propia <span class="mono">MesDelAnio</span></td>
+          </tr>
+          <tr>
+            <td class="name mono">java.time.Clock</td>
+            <td>Obtener la fecha y hora actuales</td>
+            <td>Interfaz inyectable <span class="mono">RelojDominio</span></td>
+          </tr>
+          <tr>
+            <td class="name mono">java.util.SortedMap<br>(vía <span class="mono">toSortedMap</span>)</td>
+            <td>Ordenar por fecha los movimientos agrupados</td>
+            <td><span class="mono">sortedByDescending</span> + <span class="mono">associate</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="body">
+      <p>La sustitución del reloj merece un comentario aparte porque no fue solo un cambio de biblioteca. El caso de uso de registro llamaba directamente a <code>LocalDateTime.now()</code>, lo que ataba el dominio a la plataforma <em>y</em> hacía imposible escribir una prueba que verificara la fecha guardada. Al reemplazarlo por una interfaz inyectable de una sola función, ambos problemas desaparecieron a la vez:</p>
+    </div>
+
+    <pre><code><span class="cmt">// commonMain — el dominio declara lo que necesita, no cómo se obtiene</span>
+fun interface RelojDominio {
+    fun ahora(): LocalDateTime
+}
+
+<span class="cmt">// :app — la plataforma cumple el contrato</span>
+class RelojSistema : RelojDominio {
+    override fun ahora(): LocalDateTime =
+        java.time.LocalDateTime.now().toKotlinLocalDateTime()
+}
+
+<span class="cmt">// commonTest — la prueba fija el tiempo</span>
+val RELOJ_FIJO = RelojDominio { LocalDateTime(2026, 8, 22, 12, 0) }</code></pre>
+    <p class="caption-code"><b>Fragmento 13.</b> El mismo patrón de inversión de dependencias de la Sección 11, aplicado ahora al tiempo: el dominio declara el contrato y cada plataforma lo cumple.</p>
+
+    <h3>C. Los acoplamientos que solo el compilador de JavaScript reveló</h3>
+    <div class="body">
+      <p>Este es el resultado más útil de la migración. Tras retirar las dieciséis referencias de la Tabla XVI, el módulo compilaba sin errores para JVM. Se habría podido concluir que el trabajo estaba terminado. Sin embargo, al compilar para JavaScript aparecieron dos errores más:</p>
+    </div>
+
+    <pre class="err"><code>$ ./gradlew :domain:compileKotlinJs
+
+<span class="bad">e: Money.kt:16:2  Unresolved reference 'JvmInline'.</span>
+<span class="bad">e: GetTransactionsUseCase.kt:29:18  Unresolved reference 'toSortedMap'.</span>
+
+BUILD FAILED</code></pre>
+
+    <div class="body">
+      <p>El primero es sutil: <code>@JvmInline</code> es obligatorio para declarar una <em>value class</em>, y en un módulo JVM el compilador lo resuelve automáticamente. En código común no: exige el import explícito <code>kotlin.jvm.JvmInline</code>, porque es una anotación de expectativa opcional que cada plataforma implementa a su manera.</p>
+
+      <p>El segundo es más grave desde el punto de vista arquitectónico. La función <code>toSortedMap</code> parece Kotlin idiomático —se encadena igual que <code>map</code> o <code>filter</code>— pero pertenece a <code>java.util.SortedMap</code>. Estaba en medio de una cadena de operaciones de colecciones, sin ningún import que la delatara, y ninguna revisión manual la había detectado. La corrección fue reescribir la operación con funciones de la biblioteca estándar de Kotlin:</p>
+    </div>
+
+    <pre><code><span class="cmt">// Antes: toSortedMap viene de java.util, invisible en la cadena</span>
+transactions
+    .groupBy { it.day }
+    .toSortedMap(compareByDescending { it })
+    .mapValues { entry -&gt; entry.value.sortedByDescending { it.dateTime } }
+
+<span class="cmt">// Después: solo biblioteca estándar de Kotlin</span>
+transactions
+    .groupBy { it.day }
+    .toList()
+    .sortedByDescending { (dia, _) -&gt; dia }
+    .associate { (dia, movimientos) -&gt;
+        dia to movimientos.sortedByDescending { it.dateTime }
+    }</code></pre>
+    <p class="caption-code"><b>Fragmento 14.</b> <span class="mono">domain/usecase/transaction/GetTransactionsUseCase.kt</span> — la versión portable produce el mismo resultado: <span class="mono">associate</span> conserva el orden de inserción.</p>
+
+    <div class="callout">
+      <span class="lead">Hallazgo</span>
+      <p>Dos acoplamientos a la plataforma sobrevivieron a la revisión manual y a la compilación para JVM, y solo se hicieron visibles al compilar para JavaScript. Esto sustenta la tesis de la sección: <strong>la independencia de plataforma no se declara, se comprueba compilando para otra</strong>. Un módulo que solo se compila para su destino habitual puede estar acoplado sin que nadie lo note.</p>
+    </div>
+
+    <h3>D. Dónde ocurre la traducción entre mundos</h3>
+    <div class="body">
+      <p>El dominio dejó de hablar <code>java.time</code>, pero las capas que lo rodean sí lo necesitan: Room almacena las fechas, y <code>DateTimeFormatter</code> es lo que sabe escribir «Sábado 22 de agosto» en español. La conversión entre ambos sistemas de tipos se concentró deliberadamente en <strong>cinco archivos frontera</strong>, listados en la Tabla XVII. Fuera de ellos, ningún archivo del proyecto mezcla los dos mundos.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XVII.</b> Archivos frontera donde se traduce entre kotlinx-datetime y java.time</p>
+      <table>
+        <thead>
+          <tr><th>Archivo</th><th>Capa</th><th>Motivo de la traducción</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name mono">RoomConverters.kt</td><td>Datos</td><td>SQLite guarda números y texto, no fechas</td></tr>
+          <tr><td class="name mono">TransactionRepositoryImpl.kt</td><td>Datos</td><td>Convertir un rango de días a milisegundos para la consulta</td></tr>
+          <tr><td class="name mono">DefaultData.kt</td><td>Datos</td><td>Fechar los datos de demostración respecto de hoy</td></tr>
+          <tr><td class="name mono">RelojSistema.kt</td><td>Presentación</td><td>Cumplir el contrato <span class="mono">RelojDominio</span> con el reloj del dispositivo</td></tr>
+          <tr><td class="name mono">Formato.kt</td><td>Presentación</td><td>Escribir meses y días en español con <span class="mono">DateTimeFormatter</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>E. Qué se comparte y qué no puede compartirse</h3>
+    <div class="body">
+      <p>Conviene delimitar el alcance con precisión, porque «multiplataforma» admite lecturas más amplias que la que aplica aquí. Lo compartido es <strong>la capa de dominio completa</strong>: modelos, reglas de validación, casos de uso, cálculos y contratos. Lo que no se comparte es todo aquello que por definición depende del sistema operativo, y la Tabla XVIII lo enumera sin eufemismos.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XVIII.</b> Alcance real de lo compartido</p>
+      <table>
+        <thead>
+          <tr><th>Componente</th><th>¿Compartido?</th><th>Razón</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Modelos y reglas de negocio</td><td class="c yes">Sí</td><td>Son cálculo puro</td></tr>
+          <tr><td class="name">Los 20 casos de uso</td><td class="c yes">Sí</td><td>Solo dependen de los contratos</td></tr>
+          <tr><td class="name">Contratos de repositorio</td><td class="c yes">Sí</td><td>Son interfaces</td></tr>
+          <tr><td class="name">Las 41 pruebas unitarias</td><td class="c yes">Sí</td><td>Viven en <span class="mono">commonTest</span></td></tr>
+          <tr><td class="name">Persistencia (Room / SQLite)</td><td class="c no">No</td><td>Room es una biblioteca de Android</td></tr>
+          <tr><td class="name">Interfaz (Jetpack Compose)</td><td class="c no">No</td><td>Vinculada al sistema de vistas de Android</td></tr>
+          <tr><td class="name">Notificaciones y WorkManager</td><td class="c no">No</td><td>El trabajo en segundo plano es propio de cada sistema</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>F. Verificación</h3>
+    <div class="body">
+      <p>La prueba de que la migración cumplió su objetivo es que <strong>el mismo archivo de pruebas se ejecuta en las dos plataformas y produce el mismo resultado</strong>. No se trata de dos suites paralelas: es un único conjunto en <code>commonTest</code>, compilado dos veces.</p>
+    </div>
+
+    <pre><code>$ ./gradlew :domain:jvmTest :domain:jsNodeTest
+
+<span class="ok">jvmTest    · MoneyTest ....................... 12 pruebas, 0 fallos
+jvmTest    · AddTransactionUseCaseTest ......  7 pruebas, 0 fallos
+jvmTest    · GetCategorySummaryUseCaseTest ..  5 pruebas, 0 fallos
+
+jsNodeTest · MoneyTest ....................... 12 pruebas, 0 fallos
+jsNodeTest · AddTransactionUseCaseTest ......  7 pruebas, 0 fallos
+jsNodeTest · GetCategorySummaryUseCaseTest ..  5 pruebas, 0 fallos</span>
+
+BUILD SUCCESSFUL</code></pre>
+
+    <div class="body">
+      <p>Que las pruebas de <code>Money</code> pasen en JavaScript tiene un valor añadido: el análisis de montos se reescribió sin <code>BigDecimal</code>, y JavaScript no tiene enteros de 64 bits nativos —Kotlin los emula—. Que el redondeo al centavo produzca el mismo resultado en ambas plataformas confirma que la reimplementación es correcta y no solo compilable.</p>
+    </div>
+
+    <h3>G. Limitaciones y trabajo futuro</h3>
+    <div class="body">
+      <p>El alcance alcanzado es real pero acotado, y conviene declararlo con la misma claridad con que se declara el logro.</p>
+
+      <p><strong>No hay objetivo iOS.</strong> Compilar para iOS exige un equipo con macOS y las herramientas de Xcode, de las que el equipo no dispone. La restricción es de infraestructura, no de diseño: el código de <code>commonMain</code> no usa nada que impida añadir ese objetivo, y hacerlo consistiría en declararlo en el archivo de construcción.</p>
+
+      <p><strong>La interfaz no se comparte.</strong> Nexcode tiene una sola interfaz, escrita en Jetpack Compose para Android. Compartirla exigiría migrar a Compose Multiplatform, que es un proyecto de otra magnitud y no formaba parte de los objetivos.</p>
+
+      <p><strong>El objetivo JavaScript no tiene consumidor.</strong> Existe como verificación, no como producto: no hay una versión web de Nexcode. Su valor es el descrito en el apartado C, y ese valor se cobra en cada compilación futura, porque cualquier acoplamiento nuevo a la plataforma romperá el build.</p>
+    </div>
+
+    <div class="callout warn">
+      <span class="lead">Costo asumido</span>
+      <p>La migración tuvo un precio que conviene registrar: el dominio ya no usa <code>BigDecimal</code>, de modo que el análisis de montos es código propio y no una biblioteca probada por terceros. Se compensó con ocho pruebas unitarias específicas de <code>Money</code>, incluidas las de redondeo del tercer decimal y de límite superior. Es un intercambio consciente: se cambió una dependencia de plataforma por código propio bajo prueba.</p>
+    </div>
+
+    <h3>H. Conclusión</h3>
+    <div class="body">
+      <p>La migración confirmó la afirmación de la Sección 11 y, a la vez, mostró que la evidencia en que esa afirmación se apoyaba era insuficiente. Contar imports de Android detecta el acoplamiento evidente; compilar para otra plataforma detecta el acoplamiento silencioso. Los dos errores del apartado C llevaban semanas en el repositorio sin que ninguna herramienta anterior los señalara.</p>
+
+      <p>El resultado práctico es que la lógica de negocio de Nexcode —qué hace válido un gasto, cómo se reparte el gasto por categoría, cuándo vence un pago fijo— es hoy código portable, verificado en dos plataformas, que podría reutilizarse en una versión web o de escritorio sin reescribir una línea.</p>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Sección 17 del informe del Proyecto Integrador — Implementación multiplataforma · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Continúa la numeración de figuras y tablas de las secciones 8, 11 y 12–16. Todas las salidas de consola fueron obtenidas ejecutando las tareas indicadas sobre el repositorio del proyecto.
+  </p>
+
+</div>

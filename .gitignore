@@ -1,0 +1,29 @@
+# --- Android / Gradle ---
+*.iml
+.idea/
+.gradle/
+.kotlin/
+build/
+/build
+/*/build/
+/app/build
+captures/
+.externalNativeBuild
+.cxx
+.DS_Store
+Thumbs.db
+
+# --- Credenciales y firma: NUNCA versionar ---
+local.properties
+keystore.properties
+*.jks
+*.keystore
+google-services.json
+app/google-services.json
+*.env
+.env*
+
+# --- Binarios generados ---
+*.apk
+*.aab
+*.aar

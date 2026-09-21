@@ -1,0 +1,729 @@
+===============================================================================
+NEXCODE - Control de Gastos Personales
+Diagramas UML en PlantUML para draw.io
+Jeferson Wilderman Gonzalez Tenjo · Jose Leandro Ocampo Camacho
+Optativa II - Desarrollo Movil · Universidad de San Buenaventura
+Estado del codigo: 7 de septiembre de 2026
+===============================================================================
+
+CONTENIDO
+
+  ESTRUCTURA
+  1. Arquitectura ................ capas, modulos e inversion de dependencias
+  2. Infraestructura ............. despliegue: telefono, nube y protocolos
+  3. Composicion ................. componentes internos e interfaces
+
+  COMPORTAMIENTO
+  4. Flujo: registrar un gasto ... del dedo del usuario a la nube
+  5. Flujo: sincronizacion ....... una pasada completa, paso a paso
+  6. Flujo: el agente de IA ...... llamada a funciones y cascada de modelos
+  7. Flujo: arranque ............. actividad: sembrar o no sembrar
+
+COMO IMPORTARLOS EN DRAW.IO
+
+  1. Extras (o Arrange) -> Insert -> Advanced -> PlantUML...
+  2. Copia UN diagrama, desde @startuml hasta @enduml. Pulsa Insert.
+  3. Repite. draw.io inserta uno por vez.
+  Para mover las cajas: seleccionar la imagen y Ctrl+Shift+U (desagrupar).
+
+  SI DRAW.IO SE QUEJA DE LOS ICONOS
+  Las lineas "!include <logos/...>" traen los logotipos que PlantUML incluye
+  de fabrica. Si el servidor de draw.io fuera antiguo y no las resolviera,
+  borra esas lineas y las etiquetas <$...> del diagrama: todo lo demas sigue
+  funcionando igual. La alternativa es usar directamente las imagenes ya
+  exportadas en recursos/diagramas/ (PNG y SVG).
+
+SIMBOLOS
+
+  telefono   nodo fisico donde corre la aplicacion
+  nube       servicio alojado fuera del telefono
+  cilindro   almacen persistente (SQLite en el telefono, Firestore en la nube)
+  logo       tecnologia concreta: Firebase, Android, SQLite, Kotlin, Java
+  []         componente UML          ()   interfaz
+  ..|>       realizacion (implementa)  ..>  dependencia (usa)
+
+
+===============================================================================
+1. ARQUITECTURA - Capas e inversion de dependencias
+===============================================================================
+
+@startuml Nexcode-1-Arquitectura
+!include <logos/android-icon>
+!include <logos/kotlin>
+!include <logos/java>
+!include <logos/sqlite>
+!include <logos/firebase>
+!include <tupadr3/font-awesome-5/mobile_alt>
+!include <tupadr3/font-awesome-5/cogs>
+!include <tupadr3/font-awesome-5/clock>
+!include <tupadr3/font-awesome-5/database>
+!include <tupadr3/font-awesome-5/sync_alt>
+!include <tupadr3/font-awesome-5/key>
+!include <tupadr3/font-awesome-5/robot>
+!include <tupadr3/font-awesome-5/exchange_alt>
+!include <tupadr3/font-awesome-5/box_open>
+
+title Nexcode · Arquitectura en capas y regla de dependencias
+
+' Flechas en angulo recto, nunca curvas.
+skinparam linetype ortho
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 12
+skinparam roundCorner 6
+skinparam componentStyle uml2
+skinparam packageStyle rectangle
+skinparam ArrowColor #35506B
+skinparam ArrowThickness 1.4
+skinparam ArrowFontColor #35506B
+skinparam ArrowFontSize 11
+skinparam nodesep 25
+skinparam ranksep 55
+
+package "  <$android-icon>   :app  ·  Capa de presentacion  " as APP #E8F1FB {
+  component "<$mobile_alt*2>\nPantallas\n<<Jetpack Compose>>" as UI
+  component "<$exchange_alt*2>\nViewModels\n<<MVVM>>" as VM
+  component "<$cogs*2>\nAppContainer\n<<inyeccion>>" as DI
+  component "<$clock*2>\nWorkers\n<<WorkManager>>" as WK
+  component "<$java*2>\nExportadorCsv\nValidadorEntrada" as JV
+}
+
+package "  <$kotlin>   :domain  ·  Capa de negocio  " as DOM #E9F7EF {
+  component "<$cogs*2>\nCasos de uso\n21 en total" as UC
+  component "<$box_open*2>\nModelos\nTransaction · Account\nCategory · Money" as MD
+
+  package "Contratos que el dominio EXIGE" as CTR #FFFFFF {
+    interface "Repositorios" as IREPO
+    interface "FinancialAdvisor" as IAI
+  }
+}
+
+package "  <$android-icon>   :data  ·  Capa de acceso a datos  " as DAT #FDF3E3 {
+  component "<$database*2>\nRepositorios\n<<implementacion>>" as RI
+  component "<$exchange_alt*2>\nMappers\nentidad <-> modelo" as MP
+  database "<$sqlite*2>\nRoom / SQLite\n4 entidades · 4 DAO" as DB
+  component "<$sync_alt*2>  <$firebase>\nMotorDeSincronizacion" as SY
+  component "<$key*2>  <$firebase>\nCuentaDeUsuario" as AU
+  component "<$robot*2>\nGeminiAdvisor\n<<REST>>" as AI
+}
+
+UI --> VM : eventos / estado
+DI ..> VM : construye
+UI ..> JV : exportar CSV
+VM --> UC : invoca
+WK ..> SY : pasada periodica
+
+UC --> MD
+UC ..> IREPO : depende del contrato,\nno de la implementacion
+UC ..> IAI
+
+' Las realizaciones se escriben desde la interfaz para que el motor de
+' dibujo coloque :data DEBAJO del dominio, que es como se lee una
+' arquitectura en capas.
+IREPO <|.. RI
+IAI <|.. AI
+
+RI --> MP
+MP --> DB
+SY --> DB
+' Enlace solo de colocacion: CuentaDeUsuario habla con Firebase
+' Authentication, no con Room. Ver el diagrama 2.
+SY -[hidden]right-> AU
+
+note right of CTR
+  **Inversion de dependencias.**
+  Las flechas de :data **suben** hacia el
+  dominio. El dominio declara QUE necesita;
+  :data decide COMO se resuelve.
+
+  Comprobado: cambiar de proveedor de IA
+  toco un archivo de :data y cero del dominio.
+end note
+
+note bottom of DOM
+  **:domain no declara :app ni :data** en su
+  build.gradle.kts, asi que la dependencia
+  inversa no compila. La regla la impone el
+  compilador, no la disciplina del equipo.
+
+  Kotlin Multiplatform: compila para JVM y
+  JavaScript; sus 51 pruebas corren en ambas.
+end note
+
+note bottom of DB
+  Los metadatos de replica
+  (uuid · actualizado_en · borrado · sincronizado)
+  viven en las entidades y **no cruzan al dominio**.
+end note
+
+@enduml
+
+
+===============================================================================
+2. INFRAESTRUCTURA - Diagrama de despliegue
+===============================================================================
+
+@startuml Nexcode-2-Infraestructura
+!include <logos/firebase>
+!include <logos/google-cloud>
+!include <logos/sqlite>
+!include <logos/android-icon>
+!include <tupadr3/font-awesome-5/mobile_alt>
+!include <tupadr3/font-awesome-5/database>
+!include <tupadr3/font-awesome-5/robot>
+!include <tupadr3/font-awesome-5/key>
+!include <tupadr3/font-awesome-5/lock>
+!include <tupadr3/font-awesome-5/clock>
+!include <tupadr3/font-awesome-5/microphone>
+
+title Nexcode · Despliegue: la base en fisico y la replica en la nube
+
+skinparam linetype ortho
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 12
+skinparam roundCorner 8
+skinparam componentStyle uml2
+skinparam ArrowColor #35506B
+skinparam ArrowThickness 1.4
+skinparam ArrowFontColor #35506B
+skinparam ArrowFontSize 11
+skinparam nodesep 30
+skinparam ranksep 65
+
+actor "Estudiante" as USER
+
+node "<$mobile_alt*2>\n**TELEFONO ANDROID**  <$android-icon>\nAPI 26+  ·  la base **en fisico**" as PHONE #E8F1FB {
+  component "<$mobile_alt*2>\nInterfaz\nJetpack Compose" as UI
+  component "<$clock*2>\nSincronizadorWorker\ncada 15 min · exige red" as WK
+  component "<$microphone*2>\nVoz del dispositivo\nSpeechRecognizer + TTS" as VOZ
+  database "<$database*2>  <$sqlite>\n**nexcode.db**\nSQLite · esquema v3" as DB #FFFFFF
+}
+
+cloud "**LA NUBE**  ·  Google Cloud  <$google-cloud>" as GC #F4F8FA {
+
+  node "<$firebase*2>\n**FIREBASE**  ·  plan Spark (gratuito)" as FB #E9F7EF {
+    component "<$key*2>\nAuthentication\nsesion anonima\n+ correo y contrasena" as AUTH
+    component "<$lock*2>\nReglas de seguridad\nfirestore.rules" as RULES
+    database "<$database*2>\n**Cloud Firestore**\nusuarios/{uid}/{coleccion}" as FS #FFFFFF
+  }
+
+  node "<$robot*2>\n**GEMINI**  ·  Generative Language API" as GLA #E9F7EF {
+    component "flash-latest\n3.7-flash\nflash-lite-latest" as GEM
+  }
+}
+
+USER --> UI : usa la aplicacion
+UI --> DB : **lee y escribe siempre**\ncon o sin red
+UI ..> VOZ : dictado y lectura
+UI --> GEM : HTTPS / JSON\n5 funciones declaradas
+WK --> DB : consulta lo pendiente
+WK --> AUTH : obtiene el uid
+WK --> FS : HTTPS / gRPC\nsolo lo que cambio
+RULES -> FS : evalua **cada** peticion\nen el servidor
+
+note right of DB
+  **La base "en fisico".**
+  Fuente de verdad local: la aplicacion
+  funciona entera sin red. Se descarto usar
+  la cache de Firestore como almacen porque
+  es opaca, y el requisito se defiende
+  enseniando un archivo SQLite real.
+end note
+
+note left of FS
+  **La replica.**
+  Documentos identificados por uuid, no por
+  el id autoincremental de SQLite: dos
+  telefonos sin red generan el mismo id y
+  uno pisaria al otro.
+end note
+
+note bottom of GEM
+  Cascada de tres modelos: el nivel gratuito
+  devuelve 503 "high demand" de forma aleatoria
+  y por modelo. Ante saturacion la aplicacion
+  cambia de modelo en vez de insistir.
+end note
+
+legend bottom
+  |= Servicio |= Nivel |= Coste |
+  | Firebase Authentication | Spark | gratuito permanente |
+  | Cloud Firestore | Spark | gratuito permanente |
+  | Gemini API | gratuito | 503 aleatorio bajo demanda |
+  | Room / SQLite | local | sin coste |
+  Pendiente (etapas 3 y 4): FCM para la alerta al asesor humano y webhook de voz
+  en Cloudflare Workers, no en Cloud Functions, que exigen plan de pago.
+endlegend
+
+@enduml
+
+
+===============================================================================
+3. COMPOSICION - Componentes internos
+===============================================================================
+
+@startuml Nexcode-3-Composicion
+!include <logos/android-icon>
+!include <logos/kotlin>
+!include <logos/java>
+!include <logos/sqlite>
+!include <logos/firebase>
+!include <tupadr3/font-awesome-5/mobile_alt>
+!include <tupadr3/font-awesome-5/robot>
+!include <tupadr3/font-awesome-5/cogs>
+!include <tupadr3/font-awesome-5/clock>
+!include <tupadr3/font-awesome-5/bell>
+!include <tupadr3/font-awesome-5/microphone>
+!include <tupadr3/font-awesome-5/file_csv>
+!include <tupadr3/font-awesome-5/database>
+!include <tupadr3/font-awesome-5/sync_alt>
+!include <tupadr3/font-awesome-5/key>
+!include <tupadr3/font-awesome-5/seedling>
+!include <tupadr3/font-awesome-5/map_signs>
+
+title Nexcode · Composicion de la aplicacion por componentes
+
+skinparam linetype ortho
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 12
+skinparam roundCorner 6
+skinparam componentStyle uml2
+skinparam packageStyle rectangle
+skinparam ArrowColor #35506B
+skinparam ArrowThickness 1.4
+skinparam ArrowFontColor #35506B
+skinparam ArrowFontSize 11
+skinparam nodesep 25
+skinparam ranksep 55
+
+package "<$android-icon>  PRESENTACION  ·  lo que el usuario toca" as P #E8F1FB {
+  package "Pantallas + ViewModel" as PS {
+    component "<$mobile_alt*2>\nGastos" as F1
+    component "<$mobile_alt*2>\nMovimientos" as F2
+    component "<$mobile_alt*2>\nNuevo movimiento" as F3
+    component "<$mobile_alt*2>\nBolsillo\npagos fijos" as F4
+    component "<$mobile_alt*2>\nCuentas" as F5
+    component "<$robot*2>\nAsistente" as F6
+    component "<$mobile_alt*2>\nPerfil" as F7
+  }
+  package "Servicios de la aplicacion" as SV {
+    component "<$map_signs*2>\nNexcodeNavHost\nnavegacion" as NAV
+    component "<$cogs*2>\nAppContainer\nfabrica" as CONT
+    component "<$clock*2>\nSincronizadorWorker" as W1
+    component "<$bell*2>\nRecordatoriosWorker\nnotificaciones" as W2
+    component "<$microphone*2>\nAsistenteDeVoz" as VOZ
+    component "<$file_csv*2>  <$java>\nExportadorCsv\nValidadorEntrada" as JAVA
+  }
+}
+
+package "<$kotlin>  DOMINIO  ·  las reglas del negocio" as D #E9F7EF {
+  component "<$cogs*2>\nCasos de uso\ntransaction · analytics\ncatalog · recurring" as UC
+  component "<$robot*2>\nHerramientasDelAgente\n5 funciones sobre los datos" as TOOLS
+  interface "Repositorios" as IREPO
+  interface "FinancialAdvisor" as IAI
+}
+
+package "DATOS  ·  donde se guarda y se replica" as DT #FDF3E3 {
+  component "<$cogs*2>\nDataProvider\n<<fabrica>>" as PROV
+  component "<$database*2>\nRepositorios\n<<implementacion>>" as REPO
+  component "<$sync_alt*2>  <$firebase>\nMotorDeSincronizacion" as SYNC
+  component "<$key*2>  <$firebase>\nCuentaDeUsuario" as AUTH
+  component "<$robot*2>\nGeminiAdvisor\n<<REST>>" as AI
+  component "<$seedling*2>\nDefaultData\nsiembra" as SEED
+  database "<$database*2>  <$sqlite>\nRoom · nexcode.db" as ROOM
+}
+
+NAV --> PS : rutas
+CONT ..> PS : construye los ViewModel
+CONT ..> PROV
+
+' Una sola flecha desde el paquete, no seis desde cada pantalla: el
+' dibujo dice lo mismo y deja de ser un manojo de lineas paralelas.
+PS --> UC : invocan casos de uso
+F2 ..> JAVA : exportar CSV
+F6 ..> VOZ : dictado y lectura
+F7 --> SYNC : sincronizar ahora
+F7 --> AUTH : proteger / entrar
+
+W1 --> SYNC
+W2 --> UC
+
+UC ..> IREPO
+UC ..> IAI
+TOOLS ..> IREPO
+AI ..> TOOLS : ejecuta la funcion pedida
+
+' Realizaciones escritas desde la interfaz, para que :data quede debajo.
+IREPO <|.. REPO
+IAI <|.. AI
+
+PROV ..> REPO
+PROV ..> SYNC
+PROV ..> AUTH
+PROV ..> AI
+PROV ..> SEED
+
+REPO --> ROOM
+SYNC --> ROOM
+SEED --> ROOM
+
+note right of TOOLS
+  **Es un agente, no una llamada a un modelo.**
+  Se le declaran 5 funciones y el modelo decide
+  cuales usar, en que orden y cuantas veces:
+
+  · consultar_resumen_del_mes
+  · consultar_tendencia
+  · consultar_pagos_pendientes
+  · buscar_movimientos
+  · registrar_gasto   (escribe)
+
+  El contrato vive en el DOMINIO: quien decide
+  que puede hacer el agente es el negocio, no el
+  proveedor de IA.
+end note
+
+note bottom of JAVA
+  Java se usa de verdad en tres sitios.
+  ExportadorCsv escapa segun RFC 4180: sin eso,
+  un titulo como "Mercado; frutas" parte la fila.
+end note
+
+@enduml
+
+
+===============================================================================
+4. FLUJO - Registrar un gasto (primero el telefono, despues la nube)
+===============================================================================
+
+@startuml Nexcode-4-Flujo-Registrar
+!include <logos/sqlite>
+!include <logos/firebase>
+
+title Flujo · Registrar un gasto: la aplicacion responde sin esperar a la nube
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 12
+skinparam roundCorner 6
+skinparam ArrowColor #35506B
+skinparam ParticipantPadding 12
+skinparam BoxPadding 12
+
+actor Usuario as U
+box "Presentacion" #E8F1FB
+  participant "AddTransactionScreen" as S
+  participant "AddTransactionViewModel" as V
+end box
+box "Dominio" #E9F7EF
+  participant "AddTransactionUseCase" as UC
+end box
+box "Datos" #FDF3E3
+  participant "TransactionRepositoryImpl" as R
+  database "<$sqlite>\nRoom / SQLite" as DB
+  participant "MotorDeSincronizacion" as SY
+end box
+participant "<$firebase>\nCloud Firestore" as FS #E9F7EF
+
+autonumber "<b>0."
+U -> S : escribe monto, categoria y cuenta
+S -> V : guardar(datos del formulario)
+activate V
+V -> UC : invoke(Transaction)
+activate UC
+UC -> UC : valida las reglas de negocio\n(monto > 0, titulo no vacio)
+UC -> R : add(transaction)
+activate R
+R -> R : toEntity() + metadatos\nuuid aleatorio · sincronizado = 0
+R -> DB : INSERT
+DB --> R : id local
+deactivate R
+UC --> V : id
+deactivate UC
+V --> S : estado actualizado
+deactivate V
+S --> U : el gasto ya aparece en la lista
+
+note over U, DB
+  Hasta aqui **no ha hecho falta la red**. La aplicacion ya cumplio
+  con el usuario; la nube es un asunto posterior.
+end note
+
+== Mas tarde, cuando hay conexion ==
+
+SY -> DB : filas con sincronizado = 0
+activate SY
+DB --> SY : la cola de pendientes
+SY -> FS : set(documento identificado por uuid)
+FS --> SY : confirmado
+SY -> DB : UPDATE sincronizado = 1
+deactivate SY
+
+note over SY, FS
+  Se marca **despues** de que la nube confirme. Marcarlo antes
+  perderia el cambio para siempre si la escritura fallara.
+end note
+
+@enduml
+
+
+===============================================================================
+5. FLUJO - Una pasada de sincronizacion
+===============================================================================
+
+@startuml Nexcode-5-Flujo-Sincronizacion
+!include <logos/sqlite>
+!include <logos/firebase>
+
+title Flujo · Pasada de sincronizacion: por que el orden no es arbitrario
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 12
+skinparam roundCorner 6
+skinparam ArrowColor #35506B
+skinparam ParticipantPadding 14
+skinparam BoxPadding 12
+
+participant "SincronizadorWorker" as W #E8F1FB
+participant "MotorDeSincronizacion" as M #FDF3E3
+participant "<$firebase>\nAuthentication" as A #E9F7EF
+database "<$sqlite>\nRoom" as DB #FDF3E3
+participant "<$firebase>\nCloud Firestore" as FS #E9F7EF
+
+autonumber "<b>0."
+W -> M : sincronizar()
+activate M
+
+M -> A : uid de la sesion
+alt sesion disponible
+  A --> M : uid
+else sin red o sin proveedor habilitado
+  A --> M : null
+  M --> W : SinSesion\n"Sin conexion, tus datos siguen en el telefono"
+  note right of M
+    La aplicacion **no se cae** ni pierde nada:
+    Room sigue siendo la fuente de verdad.
+    Este es el peor caso de la redundancia,
+    y funciona.
+  end note
+end
+
+group 1 · Subida de todo lo pendiente
+  M -> DB : pendientes de las 4 tablas
+  M -> FS : lote de escritura\n(los borrados logicos suben tambien)
+  FS --> M : confirmado
+  M -> DB : marcar sincronizado = 1
+end
+
+group 2 · Bajada del catalogo
+  M -> FS : cuentas y categorias\nactualizado_en > ultima marca
+  FS --> M : documentos nuevos
+  M -> DB : insertar o actualizar por uuid
+end
+
+group 3 · Reconstruir la traduccion de identificadores
+  M -> DB : releer uuid <-> id local
+  note right of M
+    **No es adorno.** El paso 2 pudo crear cuentas
+    nuevas en esta base. Sin rehacer la tabla de
+    equivalencias, los movimientos bajarian
+    apuntando a identificadores que ya no valen.
+  end note
+end
+
+group 4 · Bajada de lo que depende del catalogo
+  M -> FS : movimientos y pagos fijos
+  FS --> M : documentos nuevos
+  M -> DB : insertar o actualizar
+  note right of M
+    Un movimiento cuya cuenta aun no bajo **no se
+    descarta**: espera a la siguiente pasada. La
+    marca solo avanza sobre lo aplicado, asi que
+    un corte a mitad se reanuda donde quedo.
+  end note
+end
+
+M --> W : Exito(subidos, bajados)
+deactivate M
+
+@enduml
+
+
+===============================================================================
+6. FLUJO - El agente de IA resolviendo una pregunta
+===============================================================================
+
+@startuml Nexcode-6-Flujo-Agente
+!include <logos/sqlite>
+!include <tupadr3/font-awesome-5/robot>
+
+title Flujo · El agente decide que funciones llamar
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 12
+skinparam roundCorner 6
+skinparam ArrowColor #35506B
+skinparam ParticipantPadding 12
+skinparam BoxPadding 12
+
+actor Usuario as U
+participant "AssistantScreen" as S #E8F1FB
+participant "RequestFinancialAdvice\nUseCase" as UC #E9F7EF
+participant "GeminiAdvisor" as G #FDF3E3
+participant "<$robot>\nHerramientasDelAgente" as T #E9F7EF
+database "<$sqlite>\nRoom" as DB #FDF3E3
+participant "Gemini API" as API #E9F7EF
+
+autonumber "<b>0."
+U -> S : "cuanto llevo gastado este mes?"
+S -> UC : pedirConsejo(pregunta)
+activate UC
+UC -> G : responder(pregunta, herramientas)
+activate G
+
+note right of G
+  El mensaje inicial **no lleva** el estado financiero
+  a proposito. Si se le entregara masticado, el modelo
+  no tendria motivo para usar las herramientas y
+  dejaria de ser un agente.
+end note
+
+G -> API : generateContent\n+ declaracion de 5 funciones
+alt 503 "high demand"
+  API --> G : modelo saturado
+  G -> G : **cambia de modelo**\nflash-latest -> 3.7-flash -> flash-lite
+  G -> API : reintento con el siguiente
+end
+API --> G : functionCall: consultar_resumen_del_mes
+
+loop mientras el modelo siga pidiendo funciones
+  G -> T : ejecutar(nombre, argumentos)
+  activate T
+  T -> DB : consulta real sobre los datos
+  DB --> T : ingresos, gastos, reparto
+  T --> G : resultado en JSON
+  deactivate T
+  G -> API : functionResponse\n+ thoughtSignature devuelta intacta
+  API --> G : otra funcion, o la respuesta final
+end
+
+API --> G : texto final
+G --> UC : respuesta
+deactivate G
+UC --> S : respuesta
+deactivate UC
+S --> U : "Llevas $226.600. Mercado 39%, Ocio 14%..."
+
+note over G, API
+  Se habla **REST directo**, sin el SDK. Dos motivos comprobados en
+  dispositivo: el SDK manda el rol "function" que la API rechaza con
+  400, y no modela el thoughtSignature que los modelos 3.x exigen de
+  vuelta, con lo que la conversacion moria en el segundo turno.
+  Ademas quito 4 MB del APK.
+end note
+
+@enduml
+
+
+===============================================================================
+7. FLUJO - Arranque de la aplicacion: sembrar o no sembrar
+===============================================================================
+
+@startuml Nexcode-7-Flujo-Arranque
+title Flujo · Arranque: la decision que evitaba duplicar los datos
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 12
+skinparam roundCorner 6
+skinparam ArrowColor #35506B
+skinparam ActivityBackgroundColor #E8F1FB
+skinparam ActivityBorderColor #35506B
+skinparam ActivityDiamondBackgroundColor #FDF3E3
+skinparam ActivityDiamondBorderColor #E0A32E
+skinparam NoteBackgroundColor #FFFDE7
+
+start
+:NexcodeApplication.onCreate();
+:Construir AppContainer;
+:Crear canal de notificaciones;
+
+if (¿Firebase inicializo?\n(hay google-services.json)) then (no)
+  :Motor de replica = null;
+  note right
+    La aplicacion opera **solo contra Room**,
+    exactamente como antes de tener nube.
+    Sin este camino, la falta de configuracion
+    romperia la entrega.
+  end note
+  :Sembrar datos de demostracion;
+else (si)
+  :Preguntar a la nube:\n¿este usuario ya tiene cuentas?\n(Source.SERVER, tope de 12 s);
+
+  if (respuesta) then (la nube TIENE datos)
+    :**No sembrar nada**;
+    note right
+      Sembrar aqui era el error: el telefono nuevo
+      creaba sus 10 cuentas y ademas bajaba las 10
+      de la nube. 20 cuentas duplicadas, y lo mismo
+      con las otras tres tablas.
+    end note
+  else (vacia, o no se pudo saber)
+    :Sembrar 10 cuentas, 10 categorias,\n10 movimientos y 10 pagos fijos;
+    :uuid **fijo** derivado del nombre\n(demo-cuenta-efectivo)\ny fecha fija en el pasado;
+    note right
+      El uuid fijo hace inofensiva una siembra a
+      ciegas: si la nube ya tenia esas filas, la
+      bajada las **actualiza** en vez de anadirlas.
+      La fecha en el pasado impide que la semilla
+      pise una edicion del usuario.
+    end note
+  endif
+endif
+
+:Programar RecordatoriosWorker\n(revision diaria de pagos fijos);
+:Programar SincronizadorWorker\n(cada 15 min, exige red);
+:Revisar pagos vencidos ahora;
+
+stop
+
+@enduml
+
+
+===============================================================================
+NOTAS PARA QUIEN LOS EDITE
+===============================================================================
+
+  PALETA (la de la aplicacion, para que todo pegue)
+    #E8F1FB  azul claro   -> capa de presentacion
+    #E9F7EF  verde claro  -> dominio y servicios en la nube
+    #FDF3E3  ambar claro  -> capa de datos
+    #35506B  azul oscuro  -> flechas y texto
+
+  ICONOS
+    <$android-icon> <$kotlin> <$java> <$sqlite> <$firebase> <$google-cloud>
+    <$ma_cellphone_android> <$robot>
+    Vienen dentro de PlantUML; no hay que descargar nada. Se traen con las
+    lineas !include del principio de cada diagrama.
+
+  REGENERAR LAS IMAGENES (necesita plantuml.jar y Java)
+    java -jar plantuml.jar -charset UTF-8 -failfast2 -tpng -o recursos/diagramas diagramas.txt
+    java -jar plantuml.jar -charset UTF-8 -failfast2 -tsvg -o recursos/diagramas diagramas.txt
+
+    -failfast2 aborta al primer error de sintaxis en vez de generar una imagen
+    con el error dibujado dentro, que es facil de pasar por alto.
+
+  Estos diagramas describen el codigo a 7 de septiembre de 2026. Si la
+  arquitectura cambia, actualiza tambien CONTEXTO-DEL-PROYECTO.md en el mismo
+  turno: lo que se queda quieto se desfasa sin que nadie lo note.

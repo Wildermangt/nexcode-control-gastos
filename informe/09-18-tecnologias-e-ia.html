@@ -1,0 +1,532 @@
+<title>Tecnologías e IA de Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:#FBFCFE; --panel:#F2F5FA; --ink:#101A2B; --ink-soft:#4A5B72; --ink-faint:#7C8CA3;
+    --rule:#D6DEE9; --rule-soft:#E6ECF4; --accent:#104080; --accent-2:#0C8A5E; --accent-warn:#B05A00;
+    --code-bg:#F1F4F9;
+    --measure:68ch; --gutter:5.5rem;
+    --f-serif:"Source Serif 4","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --f-sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif;
+    --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+      --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+      --code-bg:#111A27;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+    --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+    --code-bg:#111A27;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-serif); font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased; }
+  .sheet { max-width:calc(var(--measure) + var(--gutter) + 4rem); margin:0 auto; padding:4rem 2rem 6rem; }
+  .masthead { border-bottom:2px solid var(--ink); padding-bottom:1.6rem; }
+  .eyebrow { font-family:var(--f-sans); font-size:0.7rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin:0 0 0.9rem; }
+  h1 { font-size:clamp(1.9rem,4.2vw,2.7rem); line-height:1.14; font-weight:700; letter-spacing:-0.015em; margin:0 0 0.5rem; text-wrap:balance; }
+  .subtitle { font-size:1.12rem; color:var(--ink-soft); font-style:italic; margin:0 0 1.8rem; max-width:56ch; }
+  .byline { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1.1rem 2rem; font-family:var(--f-sans); font-size:0.82rem; line-height:1.5; color:var(--ink-soft); }
+  .byline strong { display:block; color:var(--ink); font-weight:600; }
+  .byline span { display:block; }
+  .abstract { margin:2.6rem 0 0; padding:1.4rem 1.6rem; background:var(--panel); border-left:3px solid var(--accent); }
+  .abstract p { margin:0; font-size:0.96rem; line-height:1.6; }
+  .abstract .label { font-family:var(--f-sans); font-weight:600; letter-spacing:0.04em; }
+  section { margin-top:3.4rem; }
+  .sec-head { display:grid; grid-template-columns:var(--gutter) minmax(0,1fr); align-items:baseline; border-top:1px solid var(--rule); padding-top:1rem; margin-bottom:1.4rem; }
+  .sec-num { font-family:var(--f-sans); font-size:0.76rem; font-weight:600; letter-spacing:0.12em; color:var(--accent); padding-top:0.35rem; }
+  .sec-head h2 { font-size:1.28rem; font-weight:600; letter-spacing:0.03em; text-transform:uppercase; margin:0; text-wrap:balance; }
+  h3 { font-family:var(--f-serif); font-size:1.04rem; font-weight:600; font-style:italic; margin:2rem 0 0.6rem; }
+  .body { max-width:var(--measure); }
+  @media (min-width:900px) { .body { margin-left:var(--gutter); } }
+  p { margin:0 0 1rem; }
+  .body > p { text-align:justify; hyphens:auto; }
+  strong { font-weight:600; }
+  code { font-family:var(--f-mono); font-size:0.85em; background:var(--code-bg); padding:0.1em 0.35em; border-radius:3px; }
+  pre { font-family:var(--f-mono); font-size:0.775rem; line-height:1.62; background:var(--code-bg); border:1px solid var(--rule-soft); border-left:3px solid var(--accent); padding:1rem 1.1rem; overflow-x:auto; margin:1.2rem 0; }
+  @media (min-width:900px) { pre { margin-left:var(--gutter); } }
+  pre code { background:none; padding:0; font-size:inherit; }
+  .cmt { color:var(--ink-faint); }
+  .ok { color:var(--accent-2); font-weight:600; }
+  .caption-code { font-family:var(--f-sans); font-size:0.76rem; color:var(--ink-soft); margin:-0.7rem 0 1.6rem; }
+  @media (min-width:900px) { .caption-code { margin-left:var(--gutter); } }
+  .caption-code b { color:var(--ink); font-weight:600; }
+  ul { margin:0 0 1rem; padding-left:1.3rem; }
+  li { margin-bottom:0.45rem; }
+  li::marker { color:var(--ink-faint); }
+  figure { margin:2rem 0; max-width:100%; }
+  @media (min-width:900px) { figure { margin-left:var(--gutter); } }
+  .fig-frame { background:var(--panel); border:1px solid var(--rule-soft); padding:1.4rem 1rem; overflow-x:auto; }
+  figure svg { display:block; width:100%; max-width:100%; height:auto; color:var(--ink); }
+  figcaption { font-family:var(--f-sans); font-size:0.78rem; line-height:1.5; color:var(--ink-soft); margin-top:0.7rem; padding-top:0.6rem; border-top:1px solid var(--rule); }
+  figcaption b { color:var(--ink); font-weight:600; letter-spacing:0.03em; }
+  .table-wrap { overflow-x:auto; margin:1.8rem 0; }
+  @media (min-width:900px) { .table-wrap { margin-left:var(--gutter); } }
+  .tbl-cap { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); text-align:center; margin-bottom:0.6rem; }
+  .tbl-cap b { color:var(--accent); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-family:var(--f-sans); font-size:0.8rem; line-height:1.45; }
+  thead th { text-align:left; font-weight:600; color:var(--ink); padding:0.55rem 0.7rem; border-top:1.5px solid var(--ink); border-bottom:1px solid var(--ink); }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--rule-soft); color:var(--ink-soft); vertical-align:top; }
+  tbody tr:last-child td { border-bottom:1.5px solid var(--ink); }
+  td.name { color:var(--ink); font-weight:500; }
+  .mono { font-family:var(--f-mono); font-size:0.94em; }
+  td.ver { font-family:var(--f-mono); color:var(--ink); white-space:nowrap; }
+  .callout { margin:1.6rem 0; padding:1rem 1.2rem; background:var(--panel); border-left:3px solid var(--accent-2); font-size:0.95rem; }
+  @media (min-width:900px) { .callout { margin-left:var(--gutter); } }
+  .callout p { margin:0; }
+  .callout p + p { margin-top:0.7rem; }
+  .callout .lead { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-2); display:block; margin-bottom:0.35rem; }
+  .callout.warn { border-left-color:var(--accent-warn); }
+  .callout.warn .lead { color:var(--accent-warn); }
+  .colophon { margin-top:4rem; padding-top:1.2rem; border-top:1px solid var(--rule); font-family:var(--f-sans); font-size:0.74rem; color:var(--ink-faint); line-height:1.6; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Proyecto Integrador · Secciones 9 y 18</p>
+    <h1>Tecnologías e IA de Nexcode</h1>
+    <p class="subtitle">Pila tecnológica con versiones verificadas, y arquitectura del asistente financiero preparado para un agente conversacional</p>
+
+    <div class="byline">
+      <div>
+        <strong>Autores</strong>
+        <span>Jeferson Wilderman González Tenjo</span>
+        <span>José Leandro Ocampo Camacho</span>
+      </div>
+      <div>
+        <strong>Programa</strong>
+        <span>Ingeniería de Sistemas</span>
+        <span>Universidad de San Buenaventura</span>
+      </div>
+      <div>
+        <strong>Asignatura</strong>
+        <span>Optativa II — Desarrollo Móvil</span>
+        <span>Sexto semestre, 2026</span>
+      </div>
+      <div>
+        <strong>Estado del asistente</strong>
+        <span>Voz y texto operativos en el dispositivo</span>
+        <span>Agente remoto preparado, sin conectar</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="abstract">
+    <p><span class="label">Nota metodológica —</span> Todas las versiones de la Sección 9 se tomaron del catálogo de dependencias del proyecto (<span class="mono">gradle/libs.versions.toml</span>) en el estado de la entrega, no de la documentación de los fabricantes. La Sección 18 documenta el estado real del asistente, distinguiendo con precisión lo implementado y verificado de lo preparado pero no conectado.</p>
+  </div>
+
+  <!-- ============ 9 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">9</span>
+      <h2>Tecnologías utilizadas</h2>
+    </div>
+
+    <div class="body">
+      <p>La selección tecnológica siguió tres criterios: preferencia por las herramientas oficiales de la plataforma Android, minimización del número de dependencias externas, y compatibilidad verificada por construcción y no por documentación. Este último criterio resultó decisivo, como se explica al final de la sección.</p>
+    </div>
+
+    <h3>A. Lenguaje y herramientas de construcción</h3>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXXI.</b> Lenguaje, construcción y entorno</p>
+      <table>
+        <thead>
+          <tr><th>Componente</th><th>Versión</th><th>Función en el proyecto</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Kotlin</td><td class="ver">2.3.21</td><td>Lenguaje único de las tres capas</td></tr>
+          <tr><td class="name">Kotlin Multiplatform</td><td class="ver">2.3.21</td><td>Compilación del dominio para JVM y JavaScript</td></tr>
+          <tr><td class="name">Android Gradle Plugin</td><td class="ver">8.7.3</td><td>Construcción de los módulos Android</td></tr>
+          <tr><td class="name">Gradle</td><td class="ver">8.14.5</td><td>Sistema de construcción y catálogo de versiones</td></tr>
+          <tr><td class="name">JDK</td><td class="ver">21 LTS</td><td>Compilación; objetivo de la JVM</td></tr>
+          <tr><td class="name">compileSdk / targetSdk</td><td class="ver">35</td><td>API de Android sobre la que se compila</td></tr>
+          <tr><td class="name">minSdk</td><td class="ver">26</td><td>Android 8.0; permite <span class="mono">java.time</span> sin azucarado</td></tr>
+          <tr><td class="name">Android Studio</td><td class="ver">Quail (2026.1)</td><td>Entorno de desarrollo</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>B. Bibliotecas por capa</h3>
+    <div class="body">
+      <p>La Tabla XXXII agrupa las dependencias por la capa que las consume, lo que hace visible una propiedad de la arquitectura: el dominio depende de dos bibliotecas y ninguna es de Android.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXXII.</b> Bibliotecas utilizadas, por capa</p>
+      <table>
+        <thead>
+          <tr><th>Capa</th><th>Biblioteca</th><th>Versión</th><th>Para qué</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name" rowspan="2">Dominio</td><td class="mono">kotlinx-coroutines</td><td class="ver">1.9.0</td><td>Flujos reactivos y funciones suspendidas</td></tr>
+          <tr><td class="mono">kotlinx-datetime</td><td class="ver">0.8.0</td><td>Fechas multiplataforma</td></tr>
+
+          <tr><td class="name" rowspan="2">Datos</td><td class="mono">Room</td><td class="ver">2.8.4</td><td>Persistencia sobre SQLite con migraciones</td></tr>
+          <tr><td class="mono">org.json</td><td class="ver">Android</td><td>Construcción del payload del asistente</td></tr>
+
+          <tr><td class="name" rowspan="6">Presentación</td><td class="mono">Compose BOM</td><td class="ver">2025.01.00</td><td>Coordinación de versiones de Compose</td></tr>
+          <tr><td class="mono">Material 3</td><td class="ver">vía BOM</td><td>Componentes y gestos de deslizamiento</td></tr>
+          <tr><td class="mono">Navigation Compose</td><td class="ver">2.8.5</td><td>Navegación entre pantallas</td></tr>
+          <tr><td class="mono">Lifecycle</td><td class="ver">2.8.7</td><td>ViewModel y recolección con ciclo de vida</td></tr>
+          <tr><td class="mono">Activity Compose</td><td class="ver">1.9.3</td><td>Integración de Compose y permisos</td></tr>
+          <tr><td class="mono">WorkManager</td><td class="ver">2.10.5</td><td>Revisión diaria de pagos y notificaciones</td></tr>
+
+          <tr><td class="name" rowspan="2">API del sistema</td><td class="mono">SpeechRecognizer</td><td class="ver">Android</td><td>Reconocimiento de voz sin dependencia externa</td></tr>
+          <tr><td class="mono">TextToSpeech</td><td class="ver">Android</td><td>Síntesis de voz en español</td></tr>
+
+          <tr><td class="name">Pruebas</td><td class="mono">kotlin.test · JUnit</td><td class="ver">4.13.2</td><td>Pruebas unitarias en las dos plataformas</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>C. Herramientas de verificación</h3>
+    <div class="body">
+      <p>Además de las bibliotecas que forman parte del producto, el proyecto se apoyó en un conjunto de herramientas de verificación: el <strong>compilador de Kotlin</strong> como detector de violaciones de arquitectura, <strong>Android Lint</strong> para el análisis estático, y las utilidades del SDK —<code>adb</code>, <code>uiautomator</code>, <code>logcat</code> y <code>dumpsys</code>— para recoger evidencia sobre el dispositivo emulado. La Sección 19 documenta su uso.</p>
+    </div>
+
+    <h3>D. Una restricción de compatibilidad no documentada</h3>
+    <div class="body">
+      <p>La elección de Kotlin 2.3.21 y no de la versión más reciente disponible merece explicación, porque no fue una preferencia sino una restricción descubierta al construir. El procesador de anotaciones de Room no admite los metadatos que genera Kotlin 2.4, y falla con el siguiente mensaje:</p>
+    </div>
+
+    <pre><code>e: java.lang.IllegalArgumentException: Provided Metadata instance has
+   version 2.4.0, while maximum supported version is 2.3.0.
+   To support newer versions, update the kotlin-metadata-jvm library.</code></pre>
+
+    <div class="body">
+      <p>Se probaron tres versiones de Room —2.6.1, 2.7.2 y 2.8.4— y ninguna resolvió la incompatibilidad, porque el límite lo impone el procesador y no la versión de la biblioteca. La combinación verificada por construcción es <strong>Kotlin 2.3.21 con Room 2.8.4</strong>.</p>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Criterio adoptado</span>
+      <p>Ninguna versión de la Tabla XXXI o XXXII se tomó de la documentación de su fabricante: todas se fijaron probando la construcción completa. Una matriz de compatibilidad publicada describe lo que debería funcionar; un <span class="mono">BUILD SUCCESSFUL</span> describe lo que funciona.</p>
+    </div>
+  </section>
+
+  <!-- ============ 18 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">18</span>
+      <h2>Integración o asistencia mediante IA</h2>
+    </div>
+
+    <div class="body">
+      <p>Nexcode incorpora un asistente financiero que interpreta los datos del usuario y devuelve una lectura en lenguaje natural, y que admite <strong>conversación por voz</strong>: el usuario pregunta hablando y la aplicación responde en voz alta. Su diseño responde a una pregunta previa: <em>¿qué parte de un asistente es lógica de negocio y qué parte es infraestructura?</em> La respuesta adoptada es que <strong>decidir qué información merece un consejo</strong> pertenece al dominio, mientras que <strong>quién redacta ese consejo</strong> es un detalle sustituible.</p>
+
+      <p>Por eso el dominio declara únicamente un contrato, <code>FinancialAdvisor</code>, con una sola función. Quien lo cumpla —un motor de reglas local o un agente conversacional remoto— es una decisión de la capa de datos que el resto de la aplicación desconoce. Es el mismo patrón de inversión de dependencias que la Sección 11 aplica a la persistencia.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 330" role="img" aria-label="Arquitectura del asistente: el caso de uso arma la petición con el balance y las categorías, la entrega a la interfaz FinancialAdvisor del dominio, y la implementación NexcodeAIService decide entre el motor de reglas local y el envío del payload JSON a un agente remoto.">
+          <defs>
+            <marker id="ia" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="iag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0C8A5E"/>
+            </marker>
+            <marker id="iaw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#B05A00"/>
+            </marker>
+          </defs>
+
+          <text x="24" y="24" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.6">:domain</text>
+          <rect x="24" y="34" width="712" height="106" rx="5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.3"/>
+
+          <rect x="44" y="56" width="250" height="64" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="60" y="80" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor">RequestFinancialAdvice</text>
+          <text x="60" y="98" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">arma balance + top categorías</text>
+          <text x="60" y="113" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">del mes en curso</text>
+
+          <rect x="440" y="56" width="272" height="64" rx="6" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <text x="456" y="78" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-style="italic" fill="#0C8A5E">«interface»</text>
+          <text x="456" y="97" font-family="IBM Plex Mono, monospace" font-size="12" fill="#0C8A5E">FinancialAdvisor</text>
+          <text x="456" y="113" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity="0.6">requestAdvice(AdviceRequest)</text>
+
+          <line x1="294" y1="88" x2="434" y2="88" stroke="currentColor" stroke-width="1.4" marker-end="url(#ia)"/>
+          <text x="316" y="80" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.8">AdviceRequest</text>
+
+          <text x="24" y="176" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.6">:data</text>
+          <rect x="24" y="186" width="712" height="126" rx="5" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.3"/>
+
+          <rect x="440" y="206" width="272" height="52" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="456" y="228" font-family="IBM Plex Mono, monospace" font-size="12" fill="currentColor">NexcodeAIService</text>
+          <text x="456" y="246" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">¿hay webhookUrl configurada?</text>
+
+          <line x1="576" y1="206" x2="576" y2="126" stroke="#0C8A5E" stroke-width="1.8" stroke-dasharray="6 4" marker-end="url(#iag)"/>
+          <text x="588" y="170" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="#0C8A5E">implementa</text>
+
+          <rect x="44" y="196" width="176" height="72" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="58" y="218" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="currentColor">Motor de reglas</text>
+          <text x="58" y="235" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">local · sin conexión</text>
+          <text x="58" y="252" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="#0C8A5E">EN USO</text>
+
+          <rect x="240" y="196" width="176" height="72" rx="6" fill="none" stroke="#B05A00" stroke-width="1.4" stroke-dasharray="5 3"/>
+          <text x="254" y="218" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="#B05A00">Agente remoto</text>
+          <text x="254" y="235" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">webhook · JSON</text>
+          <text x="254" y="252" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="#B05A00">PREPARADO, NO CONECTADO</text>
+
+          <line x1="434" y1="222" x2="226" y2="222" stroke="currentColor" stroke-width="1.4" marker-end="url(#ia)"/>
+          <text x="300" y="288" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">si falla el agente, se degrada al motor local</text>
+          <path d="M 416 240 L 430 240 L 430 276 L 150 276 L 150 272" fill="none" stroke="#B05A00" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#iaw)"/>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 12.</b> Arquitectura del asistente. El dominio solo conoce la interfaz; la implementación decide entre el motor local y el agente remoto según haya o no una dirección de webhook configurada. Si el agente remoto falla, la respuesta se degrada al motor local en lugar de mostrar un error.</figcaption>
+    </figure>
+
+    <h3>A. Lo que el dominio entrega al asistente</h3>
+    <div class="body">
+      <p>La petición es un modelo de dominio, no una estructura de red: contiene el periodo, el balance, las cinco categorías de mayor gasto y, opcionalmente, la pregunta del usuario. Nótese que <code>userQuestion</code> es un tipo opcional porque el usuario puede pedir un análisis sin preguntar nada concreto, lo que enlaza con la seguridad ante nulos de la Sección 15.</p>
+    </div>
+
+    <pre><code>data class AdviceRequest(
+    val periodLabel: String,
+    val balance: Balance,
+    val topCategories: List&lt;CategorySummary&gt;,
+    val userQuestion: String? = null   <span class="cmt">// null = análisis sin pregunta</span>
+)
+
+data class AdviceResponse(
+    val message: String,
+    val tips: List&lt;String&gt; = emptyList(),
+    val source: Source = Source.LOCAL_SIMULATION
+) {
+    enum class Source { LOCAL_SIMULATION, REMOTE_AGENT }
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 15.</b> <span class="mono">domain/ai/FinancialAdvisor.kt</span> — la respuesta declara su origen, de modo que la interfaz puede indicar al usuario si el análisis es local o remoto.</p>
+
+    <h3>B. Motor de reglas local</h3>
+    <div class="body">
+      <p>La implementación que opera hoy analiza los datos con un conjunto de reglas sobre la tasa de ahorro y la concentración del gasto. No es un modelo de lenguaje: es una función determinista que produce el mismo consejo ante los mismos datos, lo que además la hace verificable.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXXIII.</b> Reglas del motor local</p>
+      <table>
+        <thead>
+          <tr><th>Condición</th><th>Consejo generado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Sin ingresos registrados</td><td>Sugiere registrar el salario para poder medir la capacidad de ahorro</td></tr>
+          <tr><td class="name">Tasa de ahorro negativa</td><td>Advierte que el gasto supera al ingreso y señala recortar la categoría mayor</td></tr>
+          <tr><td class="name">Ahorro inferior al 10 %</td><td>Indica la meta sana de entre 15 % y 20 % del ingreso</td></tr>
+          <tr><td class="name">Ahorro igual o superior al 20 %</td><td>Confirma que la situación es buena</td></tr>
+          <tr><td class="name">Una categoría supera el 40 % del gasto</td><td>Señala esa categoría como la mayor palanca de ahorro</td></tr>
+          <tr><td class="name">Una categoría con 10 o más movimientos</td><td>Advierte sobre gastos pequeños que se acumulan</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="body">
+      <p>La salida obtenida sobre datos reales durante la verificación fue la siguiente:</p>
+    </div>
+
+    <pre><code>Analisis local (sin conexion)
+
+<span class="ok">Este mes ingresaste 0 y gastaste 25.000. Tu saldo es -25.000.</span>
+
+1. Aun no registras ingresos este mes: agrega tu salario para medir
+   tu capacidad de ahorro.
+2. Comida concentra el 100% de tus gastos. Ahi esta tu mayor palanca
+   de ahorro.</code></pre>
+    <p class="caption-code"><b>Salida 4.</b> Respuesta del asistente durante el caso de prueba S-12, generada a partir de los movimientos reales del usuario.</p>
+
+    <h3>C. Asistente de voz con las API del sistema</h3>
+    <div class="body">
+      <p>El enunciado del proyecto pedía un asistente de voz. La vía habitual sería contratar una plataforma de agentes conversacionales, pero Android incluye de fábrica las dos mitades necesarias: <code>SpeechRecognizer</code> convierte voz en texto y <code>TextToSpeech</code> convierte texto en voz. Usarlas evita el costo por minuto, elimina la dependencia de un servicio externo y respeta la restricción R-1 de la Sección 7, porque en los dispositivos que tienen instalado el paquete de idioma ambas funcionan sin conexión.</p>
+
+      <p>La decisión, además, no obligó a modificar la lógica de negocio. La voz es simplemente <strong>otra entrada y otra salida</strong> sobre el mismo contrato <code>FinancialAdvisor</code>: el dominio no contiene una sola referencia al micrófono.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXXIV.</b> Opciones evaluadas para el asistente de voz</p>
+      <table>
+        <thead>
+          <tr><th>Opción</th><th>Costo</th><th>Sin conexión</th><th>Motivo de la decisión</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">API del sistema Android</td>
+            <td>Ninguno</td>
+            <td>Sí, con el paquete de idioma</td>
+            <td><strong>Elegida.</strong> Cubre el requisito sin servicio externo ni cuenta</td>
+          </tr>
+          <tr>
+            <td class="name">Agente de voz comercial</td>
+            <td>Por minuto hablado</td>
+            <td>No</td>
+            <td>Descartada: exige sesión de audio en tiempo real y presupuesto recurrente</td>
+          </tr>
+          <tr>
+            <td class="name">Modelo de lenguaje por API</td>
+            <td>Por consulta</td>
+            <td>No</td>
+            <td>Complementaria: mejoraría el texto, no aporta la voz</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 250" role="img" aria-label="Recorrido de una consulta por voz: el micrófono alimenta a SpeechRecognizer, que produce texto; el texto entra al caso de uso y al asistente financiero; la respuesta vuelve como texto y TextToSpeech la lee por el altavoz. El dominio permanece en el centro sin conocer el micrófono.">
+          <defs>
+            <marker id="vz" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="vzg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0C8A5E"/>
+            </marker>
+          </defs>
+
+          <text x="24" y="24" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.65">CAPA DE PRESENTACIÓN — depende del dispositivo</text>
+
+          <rect x="24" y="38" width="148" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="40" y="62" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Micrófono</text>
+          <text x="40" y="80" font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity="0.65">RECORD_AUDIO</text>
+
+          <rect x="196" y="38" width="176" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="212" y="62" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor">SpeechRecognizer</text>
+          <text x="212" y="80" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">voz → texto</text>
+
+          <rect x="588" y="38" width="148" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="604" y="62" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor">Altavoz</text>
+          <text x="604" y="80" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">respuesta hablada</text>
+
+          <rect x="396" y="38" width="168" height="56" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="412" y="62" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor">TextToSpeech</text>
+          <text x="412" y="80" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">texto → voz</text>
+
+          <line x1="172" y1="66" x2="190" y2="66" stroke="currentColor" stroke-width="1.4" marker-end="url(#vz)"/>
+          <line x1="564" y1="66" x2="582" y2="66" stroke="currentColor" stroke-width="1.4" marker-end="url(#vz)"/>
+
+          <text x="24" y="140" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="#0C8A5E" opacity="0.85">:domain — no conoce el micrófono</text>
+          <rect x="196" y="152" width="368" height="62" rx="6" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <text x="216" y="176" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="#0C8A5E">RequestFinancialAdviceUseCase</text>
+          <text x="216" y="196" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">el mismo que usa la entrada escrita</text>
+
+          <line x1="284" y1="94" x2="284" y2="146" stroke="#0C8A5E" stroke-width="1.5" marker-end="url(#vzg)"/>
+          <text x="292" y="126" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#0C8A5E">pregunta</text>
+
+          <line x1="480" y1="152" x2="480" y2="100" stroke="#0C8A5E" stroke-width="1.5" marker-end="url(#vzg)"/>
+          <text x="488" y="126" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#0C8A5E">respuesta</text>
+
+          <text x="24" y="238" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">Cambiar la voz por texto solo cambia las cajas de arriba: el centro no se entera.</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 13.</b> Recorrido de una consulta por voz. Las cajas superiores pertenecen a la capa de presentación y dependen del dispositivo; el caso de uso del centro es exactamente el mismo que atiende la entrada escrita. Es la separación de capas de la Sección 11 aplicada a una modalidad de interacción nueva.</figcaption>
+    </figure>
+
+    <div class="body">
+      <p>Tres decisiones de comportamiento merecen registro. La aplicación <strong>solo responde hablando si la pregunta llegó hablada</strong>: si el usuario escribe y pulsa el botón, la respuesta aparece en silencio, porque un asistente que habla sin que se lo pidan resulta molesto. La lectura usa <code>QUEUE_FLUSH</code> y no <code>QUEUE_ADD</code>, de modo que un análisis nuevo interrumpe al anterior en lugar de encolarse detrás de una respuesta ya obsoleta. Y los dos motores se liberan en el <code>DisposableEffect</code> de la pantalla, porque retienen recursos del sistema: no hacerlo dejaría el micrófono ocupado después de salir.</p>
+    </div>
+
+    <h3>D. Un fallo del reconocimiento y su corrección</h3>
+    <div class="body">
+      <p>La primera versión solicitaba el motor local con <code>EXTRA_PREFER_OFFLINE = true</code>, coherente con el requisito de funcionar sin conexión. En el dispositivo de prueba el reconocimiento falló siempre, y el registro del sistema mostró la causa:</p>
+    </div>
+
+    <pre><code>W ReconocedorDeVoz: Error de reconocimiento: codigo 12
+E SodaSpeechRecognizer: Failed to get language pack of required locale: error 12
+W RecognitionServiceImpl: Speech recognition error type LANGUAGE_PACK_ERROR</code></pre>
+
+    <div class="body">
+      <p>El dispositivo no tenía instalado el paquete de español para reconocimiento sin conexión. La corrección no consistió en renunciar al modo local —se perdería el funcionamiento sin datos en los equipos que sí lo tienen— sino en <strong>reintentar una sola vez con el motor en línea</strong>, salvo para los errores en que reintentar no aporta nada: que el usuario no dijo nada, que se agotó el tiempo de espera, que falta el permiso o que el motor está ocupado.</p>
+    </div>
+
+    <pre><code>override fun onError(error: Int) {
+    <span class="cmt">// Un fallo del motor local no es definitivo: puede faltar el</span>
+    <span class="cmt">// paquete de idioma sin conexión. Se reintenta una vez en línea.</span>
+    val vuelveAFallar = error in ERRORES_SIN_REINTENTO
+
+    if (preferirSinConexion &amp;&amp; !vuelveAFallar) {
+        escuchar(onParcial, onResultado, onError, preferirSinConexion = false)
+    } else {
+        onError(mensajeDeError(error))
+    }
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 17.</b> <span class="mono">presentation/voz/ReconocedorDeVoz.kt</span> — tras la corrección, el registro muestra el error 12 seguido de una escucha activa en lugar de un fallo.</p>
+
+    <div class="callout">
+      <span class="lead">Alcance de la verificación</span>
+      <p>Sobre el emulador se comprobaron la solicitud del permiso de micrófono, el estado de escucha en pantalla, los mensajes de error legibles, el reintento automático descrito arriba y la liberación de los motores al salir. La conversión efectiva de voz a texto <strong>se verificó después sobre un teléfono físico</strong>, que es lo que un emulador sin micrófono no permite: dictada la pregunta «cuánto llevo ahorrado», la aplicación la transcribió al campo de consulta, mostró la respuesta y la leyó en voz alta. El caso queda registrado como <span class="mono">S-17</span> en la Sección 19, con la traza de los dos servicios del sistema.</p>
+    </div>
+
+    <div class="body">
+      <p>Esa verificación dejó constancia de un comportamiento que conviene documentar. El sintetizador solicita la voz colombiana <code>es-CO</code> y, si no está instalada, la castellana <code>es-ES</code>; en el dispositivo de prueba no había ninguna de las dos y Android resolvió a <code>es-US</code>, la voz española más próxima entre las disponibles. La cadena de reserva no llegó a agotarse en un fallo porque el sistema operativo interpreta la petición como una preferencia y no como un requisito. El resultado es correcto en idioma, con un acento que no es el local: una degradación silenciosa preferible a un error.</p>
+
+      <p>La síntesis se resolvió además con una voz <strong>incorporada al dispositivo</strong>, no descargada en el momento. La aplicación conserva así su premisa en la modalidad hablada: el análisis se calcula en el dominio local, se pronuncia con un motor local y ningún dato financiero sale del teléfono.</p>
+    </div>
+
+    <h3>E. Preparación para un agente conversacional</h3>
+    <div class="body">
+      <p>La integración con un agente externo —del tipo Retell AI— está construida hasta el punto exacto donde empieza a depender de un servicio de terceros. El método <code>buildPayload</code> serializa la petición del dominio al formato JSON que viajaría al webhook, y es público a propósito: permite inspeccionar y documentar el contrato sin necesidad de tener el servicio contratado.</p>
+      <p>El payload lleva tres bloques y el tercero es el que hace la diferencia. <span class="mono">resumen</span> y <span class="mono">categorias</span> describen el mes en curso; <span class="mono">tendencia</span> aporta la serie de los últimos seis meses con sus indicadores, calculada por <code>AnalizarTendenciaUseCase</code>. Sin ese bloque un agente —local o remoto— solo puede describir cifras: un gasto de 294 600 pesos no es alto ni bajo, es simplemente esa cantidad. Con la serie puede afirmar que está un 10 % por encima del mes anterior y proyectar el cierre, que es lo que el usuario necesita oír mientras todavía puede corregirlo.</p>
+    </div>
+
+    <pre><code>{
+  "agent_id": "nexcode-finance-agent",
+  "periodo": "2026-08-01 a 2026-08-24",
+  "resumen": {
+    "ingresos": 1400000.0,
+    "gastos": 294600.0,
+    "saldo": 1105400.0,
+    "tasa_ahorro": 0.78
+  },
+  "categorias": [
+    { "nombre": "Mercado", "total": 87500.0, "movimientos": 1, "porcentaje": 29 },
+    { "nombre": "Ropa",    "total": 55000.0, "movimientos": 1, "porcentaje": 18 }
+  ],
+  "tendencia": {
+    "serie": [
+      { "mes": "jun 2026", "ingresos": 1400000.0, "gastos": 412000.0, "movimientos": 14 },
+      { "mes": "jul 2026", "ingresos": 1400000.0, "gastos": 268000.0, "movimientos": 9 },
+      { "mes": "ago 2026", "ingresos": 1400000.0, "gastos": 294600.0, "movimientos": 11 }
+    ],
+    "promedio_mensual": 340000.0,
+    "promedio_diario": 12275.0,
+    "proyeccion_cierre": 380525.0,
+    "variacion_porcentual": 10
+  },
+  "pregunta_usuario": null
+}</code></pre>
+    <p class="caption-code"><b>Fragmento 16.</b> Payload generado por <span class="mono">NexcodeAIService.buildPayload()</span> con los datos de la verificación. Las claves van en español porque el agente responde al usuario en ese idioma.</p>
+
+    <div class="body">
+      <p>El envío está implementado con <code>HttpURLConnection</code>, incluye cabecera de autorización opcional y tiempo de espera configurable, y su comportamiento ante fallo es degradar al motor local anteponiendo la advertencia «(Sin conexión con el agente)». Activarlo requiere una sola línea: proporcionar la dirección del webhook en la configuración del servicio.</p>
+    </div>
+
+    <pre><code><span class="cmt">// app/di/AppContainer.kt — estado actual</span>
+val financialAdvisor: FinancialAdvisor = NexcodeAIService(
+    NexcodeAIService.AiConfig(webhookUrl = null)   <span class="cmt">// motor local</span>
+)</code></pre>
+
+    <div class="callout warn">
+      <span class="lead">Estado real de la integración</span>
+      <p>El agente conversacional remoto <strong>no está conectado</strong>. Lo implementado y verificado es el asistente de voz sobre las API del sistema, el motor de reglas local, el contrato del dominio, la serialización del payload y el cliente HTTP con su degradación ante fallo. Lo que falta es crear el agente en la plataforma y proporcionar su dirección; no requiere cambios de código en la aplicación.</p>
+      <p>Se documenta así porque afirmar una integración que no opera sería falso, y porque la distinción entre «preparado» e «integrado» es precisamente lo que un revisor debe poder comprobar.</p>
+    </div>
+
+    <h3>F. Asistencia de IA en el desarrollo</h3>
+    <div class="body">
+      <p>Corresponde declarar también el otro sentido en que la inteligencia artificial participó en el proyecto: como herramienta de desarrollo. Se emplearon asistentes de programación para la generación y revisión de código, la exploración de alternativas de diseño y la redacción de este informe. Las decisiones arquitectónicas, la selección de versiones y la verificación sobre dispositivo fueron ejecutadas y comprobadas por los autores, y cada afirmación técnica de este documento está respaldada por una salida de consola reproducible.</p>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Secciones 9 y 18 del informe del Proyecto Integrador — Tecnologías utilizadas e integración mediante IA · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Continúa la numeración de figuras y tablas de las secciones 1–8, 10, 11, 12–16, 17 y 19. La Fig. 13 y la Tabla XXXIV corresponden al asistente de voz.
+  </p>
+
+</div>

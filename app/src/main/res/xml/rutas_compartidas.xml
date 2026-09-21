@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Rutas que el proveedor de archivos puede compartir.
+
+    Solo la subcarpeta "exportaciones" de la cache. Publicar la cache entera
+    dejaria al alcance de cualquier aplicacion los archivos temporales de Room.
+-->
+<paths>
+    <cache-path
+        name="exportaciones"
+        path="exportaciones/" />
+</paths>

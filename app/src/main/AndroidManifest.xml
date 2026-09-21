@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- La usa el agente de IA para consultar la API. Sin conexion, o sin
+         clave configurada, el asistente responde con su motor local y el
+         resto de la aplicacion funciona igual. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Obligatorio desde Android 13 para publicar el recordatorio de un pago
+         fijo en la barra de notificaciones. Se solicita en tiempo de ejecucion. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- El asistente de voz escucha por el microfono. Se solicita en tiempo
+         de ejecucion, solo cuando el usuario toca el boton de hablar. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Visibilidad de paquetes: desde Android 11 una app no puede encontrar
+         el servicio de reconocimiento de voz del sistema si no lo declara. -->
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".NexcodeApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Nexcode">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Nexcode"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Proveedor del archivo exportado. Compartir un CSV por su ruta
+             directa lanza FileUriExposedException desde Android 7: el archivo
+             tiene que salir como content:// y con permiso temporal. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.archivos"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rutas_compartidas" />
+        </provider>
+
+    </application>
+
+</manifest>

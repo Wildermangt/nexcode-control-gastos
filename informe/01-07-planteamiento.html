@@ -1,0 +1,456 @@
+<title>Planteamiento de Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:#FBFCFE; --panel:#F2F5FA; --ink:#101A2B; --ink-soft:#4A5B72; --ink-faint:#7C8CA3;
+    --rule:#D6DEE9; --rule-soft:#E6ECF4; --accent:#104080; --accent-2:#0C8A5E; --accent-warn:#B05A00;
+    --code-bg:#F1F4F9;
+    --measure:68ch; --gutter:5.5rem;
+    --f-serif:"Source Serif 4","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --f-sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif;
+    --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+      --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+      --code-bg:#111A27;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+    --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+    --code-bg:#111A27;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-serif); font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased; }
+  .sheet { max-width:calc(var(--measure) + var(--gutter) + 4rem); margin:0 auto; padding:4rem 2rem 6rem; }
+
+  /* ---- portada ---- */
+  .cover { border-bottom:2px solid var(--ink); padding-bottom:2rem; text-align:center; }
+  .cover .institucion { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin:0 0 0.4rem; }
+  .cover .asignatura { font-family:var(--f-sans); font-size:0.74rem; color:var(--ink-soft); margin:0 0 2.2rem; letter-spacing:0.04em; }
+  .cover h1 { font-size:clamp(1.7rem,3.6vw,2.35rem); line-height:1.2; font-weight:700; letter-spacing:-0.012em; margin:0 auto 1rem; max-width:24ch; text-wrap:balance; }
+  .cover .sub { font-size:1.02rem; font-style:italic; color:var(--ink-soft); margin:0 auto 2.2rem; max-width:46ch; }
+
+  .autores { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1.4rem 2rem; text-align:center; font-family:var(--f-sans); font-size:0.83rem; line-height:1.55; color:var(--ink-soft); max-width:620px; margin:0 auto; }
+  .autores .nombre { display:block; color:var(--ink); font-weight:600; font-size:0.92rem; }
+  .autores .dato { display:block; }
+  .autores .correo { display:block; font-family:var(--f-mono); font-size:0.76rem; color:var(--ink-faint); }
+
+  section { margin-top:3.4rem; }
+  .sec-head { display:grid; grid-template-columns:var(--gutter) minmax(0,1fr); align-items:baseline; border-top:1px solid var(--rule); padding-top:1rem; margin-bottom:1.4rem; }
+  .sec-num { font-family:var(--f-sans); font-size:0.76rem; font-weight:600; letter-spacing:0.12em; color:var(--accent); padding-top:0.35rem; }
+  .sec-head h2 { font-size:1.28rem; font-weight:600; letter-spacing:0.03em; text-transform:uppercase; margin:0; text-wrap:balance; }
+  h3 { font-family:var(--f-serif); font-size:1.04rem; font-weight:600; font-style:italic; margin:2rem 0 0.6rem; }
+  .body { max-width:var(--measure); }
+  @media (min-width:900px) { .body { margin-left:var(--gutter); } }
+  p { margin:0 0 1rem; }
+  .body > p { text-align:justify; hyphens:auto; }
+  strong { font-weight:600; }
+  code { font-family:var(--f-mono); font-size:0.85em; background:var(--code-bg); padding:0.1em 0.35em; border-radius:3px; }
+  ul, ol { margin:0 0 1rem; padding-left:1.3rem; }
+  li { margin-bottom:0.5rem; }
+  li::marker { color:var(--ink-faint); }
+
+  .resumen { background:var(--panel); border-left:3px solid var(--accent); padding:1.4rem 1.6rem; margin:1.6rem 0; }
+  @media (min-width:900px) { .resumen { margin-left:var(--gutter); } }
+  .resumen p { margin:0; font-size:0.95rem; line-height:1.62; text-align:justify; }
+  .resumen p + p { margin-top:0.9rem; }
+  .resumen .label { font-family:var(--f-sans); font-weight:600; letter-spacing:0.04em; font-style:normal; }
+  .resumen.en { border-left-color:var(--ink-faint); }
+  .resumen.en p { font-style:italic; }
+
+  .pregunta { margin:1.8rem 0; padding:1.6rem 1.8rem; border:1px solid var(--accent); border-left-width:4px; background:var(--panel); }
+  @media (min-width:900px) { .pregunta { margin-left:var(--gutter); } }
+  .pregunta p { margin:0; font-size:1.06rem; line-height:1.55; color:var(--ink); font-weight:600; text-align:left; }
+  .pregunta .lead { display:block; font-family:var(--f-sans); font-size:0.7rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--accent); margin-bottom:0.6rem; }
+
+  figure { margin:2rem 0; max-width:100%; }
+  @media (min-width:900px) { figure { margin-left:var(--gutter); } }
+  .fig-frame { background:var(--panel); border:1px solid var(--rule-soft); padding:1.4rem 1rem; overflow-x:auto; }
+  figure svg { display:block; width:100%; max-width:100%; height:auto; color:var(--ink); }
+  figcaption { font-family:var(--f-sans); font-size:0.78rem; line-height:1.5; color:var(--ink-soft); margin-top:0.7rem; padding-top:0.6rem; border-top:1px solid var(--rule); }
+  figcaption b { color:var(--ink); font-weight:600; letter-spacing:0.03em; }
+
+  .table-wrap { overflow-x:auto; margin:1.8rem 0; }
+  @media (min-width:900px) { .table-wrap { margin-left:var(--gutter); } }
+  .tbl-cap { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); text-align:center; margin-bottom:0.6rem; }
+  .tbl-cap b { color:var(--accent); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-family:var(--f-sans); font-size:0.8rem; line-height:1.45; }
+  thead th { text-align:left; font-weight:600; color:var(--ink); padding:0.55rem 0.7rem; border-top:1.5px solid var(--ink); border-bottom:1px solid var(--ink); }
+  thead th.c { text-align:center; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--rule-soft); color:var(--ink-soft); vertical-align:top; }
+  tbody td.c { text-align:center; }
+  tbody tr:last-child td { border-bottom:1.5px solid var(--ink); }
+  td.name { color:var(--ink); font-weight:500; }
+  td.id { font-family:var(--f-mono); color:var(--accent); font-weight:500; white-space:nowrap; }
+  .mono { font-family:var(--f-mono); font-size:0.94em; }
+  .listo { color:var(--accent-2); font-weight:600; }
+  .pend { color:var(--ink-faint); }
+
+  .keywords { font-family:var(--f-sans); font-size:0.9rem; line-height:1.7; }
+  .kw { display:inline-block; background:var(--panel); border:1px solid var(--rule); border-radius:4px; padding:0.15rem 0.55rem; margin:0 0.3rem 0.45rem 0; font-size:0.82rem; color:var(--ink-soft); }
+
+  .callout { margin:1.6rem 0; padding:1rem 1.2rem; background:var(--panel); border-left:3px solid var(--accent-2); font-size:0.95rem; }
+  @media (min-width:900px) { .callout { margin-left:var(--gutter); } }
+  .callout p { margin:0; }
+  .callout p + p { margin-top:0.7rem; }
+  .callout .lead { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-2); display:block; margin-bottom:0.35rem; }
+  .callout.warn { border-left-color:var(--accent-warn); }
+  .callout.warn .lead { color:var(--accent-warn); }
+
+  .colophon { margin-top:4rem; padding-top:1.2rem; border-top:1px solid var(--rule); font-family:var(--f-sans); font-size:0.74rem; color:var(--ink-faint); line-height:1.6; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+
+<div class="sheet">
+
+  <!-- ============ 1 y 2: TÍTULO Y AUTORES ============ -->
+  <header class="cover">
+    <p class="institucion">Universidad de San Buenaventura · Ingeniería de Sistemas</p>
+    <p class="asignatura">Optativa II — Desarrollo Móvil · Proyecto Integrador · Sexto semestre, 2026</p>
+
+    <h1>Nexcode: control de gastos personales en Android con arquitectura en capas verificable y recordatorio activo de pagos fijos</h1>
+    <p class="sub">Aplicación nativa desarrollada en Kotlin, con dominio multiplataforma, persistencia local y asistente financiero</p>
+
+    <div class="autores">
+      <div>
+        <span class="nombre">Jeferson Wilderman González Tenjo</span>
+        <span class="dato">Ingeniería de Sistemas</span>
+        <span class="dato">Universidad de San Buenaventura</span>
+        <span class="correo">jwgonzalezt@academia.usbbog.edu.co</span>
+      </div>
+      <div>
+        <span class="nombre">José Leandro Ocampo Camacho</span>
+        <span class="dato">Ingeniería de Sistemas</span>
+        <span class="dato">Universidad de San Buenaventura</span>
+        <span class="correo">[correo institucional]</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ 3: RESUMEN ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">3</span>
+      <h2>Resumen</h2>
+    </div>
+
+    <div class="resumen">
+      <p><span class="label">Resumen —</span> Este trabajo presenta el diseño, la construcción y la verificación de <em>Nexcode</em>, una aplicación Android nativa para el control de gastos personales dirigida a estudiantes universitarios colombianos. El problema abordado no es la ausencia de soluciones —el mercado es maduro— sino que las alternativas disponibles imponen compromisos que no compensan en el contexto local: las que automatizan el registro exigen cuenta de usuario y almacenamiento en servidores de terceros a cambio de una agregación bancaria que en Colombia funciona de forma parcial, y las gratuitas que operan sin cuenta carecen de recordatorio de pagos fijos. La solución propuesta opera íntegramente en el dispositivo, incorpora un bolsillo de pagos recurrentes con notificaciones del sistema operativo, y añade un asistente financiero, consultable por voz o por escrito, que analiza el gasto del mes. Metodológicamente, el proyecto adopta Clean Architecture materializada en tres módulos Gradle independientes, de modo que la separación entre capas no depende de la disciplina del equipo sino que la impone el compilador. La capa de dominio se implementó como módulo Kotlin Multiplatform y se compila para JVM y JavaScript, lo que permitió detectar dos acoplamientos a la biblioteca de Java que la revisión manual no había advertido. El resultado son 9 892 líneas de Kotlin distribuidas en 92 archivos, verificadas mediante 41 pruebas unitarias que se ejecutan en dos plataformas y 17 casos de prueba de sistema ejecutados sobre dos dispositivos con versiones distintas de Android.</p>
+    </div>
+
+    <div class="resumen en">
+      <p><span class="label">Abstract —</span> This work presents the design, construction and verification of <em>Nexcode</em>, a native Android application for personal expense tracking aimed at Colombian university students. The problem addressed is not the absence of solutions —the market is mature— but that available alternatives impose trade-offs that do not pay off in the local context: those that automate data entry require a user account and third-party storage in exchange for bank aggregation that works only partially in Colombia, while free offline alternatives lack recurring-payment reminders. The proposed solution runs entirely on the device, includes a recurring-payment pocket with operating-system notifications, and adds a financial assistant, available by voice or text, that analyses monthly spending. Methodologically, the project adopts Clean Architecture materialised as three independent Gradle modules, so that layer separation is enforced by the compiler rather than by team discipline. The domain layer was implemented as a Kotlin Multiplatform module targeting both the JVM and JavaScript, which revealed two couplings to the Java standard library that manual review had missed. The result comprises 9 892 lines of Kotlin across 92 files, verified through 41 unit tests running on two platforms and 17 system test cases executed on two devices running different Android versions.</p>
+    </div>
+  </section>
+
+  <!-- ============ 4: PALABRAS CLAVE ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">4</span>
+      <h2>Palabras clave</h2>
+    </div>
+
+    <div class="body keywords">
+      <p>
+        <span class="kw">arquitectura en capas</span>
+        <span class="kw">Clean Architecture</span>
+        <span class="kw">Kotlin</span>
+        <span class="kw">Kotlin Multiplatform</span>
+        <span class="kw">Android</span>
+        <span class="kw">Jetpack Compose</span>
+        <span class="kw">MVVM</span>
+        <span class="kw">Room</span>
+        <span class="kw">SQLite</span>
+        <span class="kw">inversión de dependencias</span>
+        <span class="kw">finanzas personales</span>
+        <span class="kw">pagos recurrentes</span>
+        <span class="kw">trabajo en segundo plano</span>
+        <span class="kw">pruebas unitarias</span>
+        <span class="kw">asistente conversacional</span>
+      </p>
+      <p style="font-family:var(--f-serif); font-size:0.92rem; color:var(--ink-soft); font-style:italic; margin-top:1rem;">
+        <span style="font-family:var(--f-sans); font-style:normal; font-weight:600;">Index terms —</span> layered architecture, Clean Architecture, Kotlin, Kotlin Multiplatform, Android, Jetpack Compose, MVVM, Room, SQLite, dependency inversion, personal finance, recurring payments, background work, unit testing, conversational assistant.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 5: INTRODUCCIÓN ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">5</span>
+      <h2>Introducción</h2>
+    </div>
+
+    <div class="body">
+      <p>Llevar la cuenta de los gastos propios es una tarea que casi todo el mundo intenta y casi nadie sostiene. La dificultad no es conceptual —sumar y restar— sino de constancia: cualquier aplicación que exija quince segundos por movimiento se abandona en pocos días, y una que exija menos pero no aporte información útil se abandona en pocas semanas. El diseño de una herramienta de este tipo es, por tanto, un problema de ingeniería tanto como de comportamiento.</p>
+
+      <p>El estudiante universitario colombiano añade dos condiciones al problema. La primera es que sus ingresos suelen ser irregulares y de baja cuantía —una quincena, una mesada, un trabajo ocasional—, de modo que la diferencia entre llegar o no a fin de mes se juega en cantidades pequeñas que solo se ven al agregarlas. La segunda, y más determinante, es que <strong>una parte considerable de su gasto es fija y previsible</strong>: el arriendo, los servicios, el plan del celular, las suscripciones. Ese gasto no requiere análisis; requiere memoria. Olvidar el pago del arriendo no es un problema de presupuesto sino de recordatorio.</p>
+
+      <p>Este proyecto desarrolla <em>Nexcode</em>, una aplicación Android nativa escrita en Kotlin que atiende ese conjunto de necesidades. Se desarrolla en el marco de la asignatura Optativa II — Desarrollo Móvil, lo que impone una condición adicional que conviene declarar desde el principio: el producto no solo debe funcionar, debe <strong>demostrar</strong> el dominio de un conjunto de fundamentos —programación orientada a objetos, estructuras de datos, manejo de excepciones, seguridad ante nulos y arquitectura en capas— de forma que un tercero pueda verificarlo leyendo el código.</p>
+
+      <p>Esa doble exigencia condicionó las decisiones técnicas. Una aplicación puede resolver el problema del usuario con una arquitectura monolítica, pero entonces la separación entre lógica de negocio e infraestructura queda como una afirmación del informe que nadie puede comprobar. Por eso la arquitectura se materializó en módulos independientes cuya separación verifica el compilador, y por eso se documenta cada verificación con el comando que la reproduce.</p>
+    </div>
+
+    <h3>A. Objetivo general</h3>
+    <div class="body">
+      <p>Desarrollar una aplicación móvil nativa para Android, escrita en Kotlin, que permita a un estudiante universitario registrar y analizar sus gastos personales sin necesidad de cuenta ni conexión a internet, que le recuerde activamente sus pagos fijos, y cuya arquitectura en capas pueda verificarse de forma objetiva.</p>
+    </div>
+
+    <h3>B. Objetivos específicos</h3>
+    <div class="body">
+      <p>Los objetivos específicos se formularon de modo que cada uno produzca un resultado comprobable, no una afirmación. La Tabla XXIX los relaciona con su evidencia y con la sección del informe que la documenta.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXIX.</b> Objetivos específicos y su verificación</p>
+      <table>
+        <thead>
+          <tr><th>N.º</th><th>Objetivo</th><th>Resultado verificable</th><th class="c">Sección</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id">O-1</td>
+            <td class="name">Diseñar una arquitectura en tres capas independientes</td>
+            <td>Una violación deliberada de la regla de dependencias es rechazada por el compilador</td>
+            <td class="c">11</td>
+          </tr>
+          <tr>
+            <td class="id">O-2</td>
+            <td class="name">Implementar el registro, la edición y la consulta de movimientos con persistencia local</td>
+            <td>Casos de sistema S-02 a S-07 superados sobre dispositivo</td>
+            <td class="c">19</td>
+          </tr>
+          <tr>
+            <td class="id">O-3</td>
+            <td class="name">Construir un bolsillo de pagos recurrentes con aviso del sistema operativo</td>
+            <td>Notificación publicada con la aplicación cerrada y navegación desde ella</td>
+            <td class="c">19</td>
+          </tr>
+          <tr>
+            <td class="id">O-4</td>
+            <td class="name">Incorporar un asistente que analice el gasto del mes</td>
+            <td>Respuesta por voz y por escrito generada a partir de datos reales del usuario</td>
+            <td class="c">18</td>
+          </tr>
+          <tr>
+            <td class="id">O-5</td>
+            <td class="name">Evidenciar los pilares de programación exigidos por el plan de estudios</td>
+            <td>Fragmentos de código citados literalmente con su archivo de origen</td>
+            <td class="c">12–16</td>
+          </tr>
+          <tr>
+            <td class="id">O-6</td>
+            <td class="name">Verificar el resultado con pruebas automatizadas</td>
+            <td>41 pruebas unitarias ejecutadas en dos plataformas y 17 casos de sistema</td>
+            <td class="c">19</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>C. Alcance y limitaciones</h3>
+    <div class="body">
+      <p>El proyecto abarca una aplicación funcional para Android con persistencia local, y una capa de dominio portable verificada en una segunda plataforma. <strong>Quedan fuera del alcance</strong>: la sincronización entre dispositivos, la conexión automática con entidades financieras, la exportación de datos, el presupuesto por categoría y la publicación en tienda. Estas ausencias no son omisiones sino recortes conscientes, y se justifican en las secciones correspondientes.</p>
+    </div>
+
+    <h3>D. Estructura del documento</h3>
+    <div class="body">
+      <p>El informe se organiza en veintidós secciones. Las secciones 5 a 9 plantean el problema y su contexto; las secciones 10 y 11 documentan el diseño y la arquitectura; las secciones 12 a 16 evidencian los fundamentos de programación aplicados; las secciones 17 y 18 describen la portabilidad y la asistencia mediante inteligencia artificial; y las secciones 19 a 22 recogen la verificación, los resultados y las conclusiones.</p>
+    </div>
+  </section>
+
+  <!-- ============ 6: PREGUNTA PROBLEMA ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">6</span>
+      <h2>Pregunta problema</h2>
+    </div>
+
+    <div class="pregunta">
+      <span class="lead">Pregunta de investigación</span>
+      <p>¿Cómo ayudar a una persona a registrar, controlar y analizar sus gastos diarios para mejorar la administración de su dinero, mediante una aplicación móvil que funcione sin cuenta de usuario ni conexión a internet, que le recuerde activamente sus pagos fijos, y cuya separación entre lógica de negocio e infraestructura pueda verificarse de forma objetiva y no solo afirmarse?</p>
+    </div>
+
+    <div class="body">
+      <p>El enunciado nombra primero el fin —que una persona administre mejor su dinero— y solo después los medios, porque el orden inverso produce preguntas que se responden entregando una aplicación que funciona sin que nadie la use. Los tres verbos del fin se reparten el sistema: <em>registrar</em> exige un alta sin fricción, <em>controlar</em> exige que los pagos fijos no dependan de la memoria del usuario, y <em>analizar</em> exige agregar el gasto por categoría y compararlo con los meses anteriores.</p>
+      <p>Los tres componentes que siguen al fin no son casuales: cada uno responde a una limitación concreta identificada en el estado del arte y se traduce en una parte distinta de la solución. La Fig. 11 muestra esa correspondencia.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 320" role="img" aria-label="Correspondencia entre los tres componentes de la pregunta problema, las limitaciones que los originan y las partes de la solución que los atienden: operar sin cuenta ni conexión se resuelve con persistencia local; recordar los pagos fijos con el bolsillo y las notificaciones; y la verificación de la arquitectura con los módulos independientes.">
+          <defs>
+            <marker id="pq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <text x="24" y="30" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.7">LIMITACIÓN IDENTIFICADA</text>
+          <text x="290" y="30" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="#104080" opacity="0.9">COMPONENTE DE LA PREGUNTA</text>
+          <text x="574" y="30" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="currentColor" opacity="0.7">RESPUESTA CONSTRUIDA</text>
+
+          <!-- fila 1 -->
+          <rect x="24" y="48" width="236" height="62" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.65"/>
+          <text x="38" y="72" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">La agregación bancaria no</text>
+          <text x="38" y="88" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">funciona bien en Colombia,</text>
+          <text x="38" y="104" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">pero exige cuenta y nube</text>
+
+          <rect x="290" y="48" width="230" height="62" rx="6" fill="none" stroke="#104080" stroke-width="1.8"/>
+          <text x="304" y="76" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="#104080">Sin cuenta ni conexión</text>
+          <text x="304" y="94" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">autonomía del usuario</text>
+
+          <rect x="550" y="48" width="186" height="62" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.65"/>
+          <text x="564" y="76" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">Room / SQLite</text>
+          <text x="564" y="94" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">solo en el dispositivo</text>
+
+          <line x1="260" y1="79" x2="284" y2="79" stroke="currentColor" stroke-width="1.3" marker-end="url(#pq)"/>
+          <line x1="520" y1="79" x2="544" y2="79" stroke="currentColor" stroke-width="1.3" marker-end="url(#pq)"/>
+
+          <!-- fila 2 -->
+          <rect x="24" y="128" width="236" height="62" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.65"/>
+          <text x="38" y="152" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">Las alternativas gratuitas</text>
+          <text x="38" y="168" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">y locales no recuerdan</text>
+          <text x="38" y="184" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">los pagos fijos</text>
+
+          <rect x="290" y="128" width="230" height="62" rx="6" fill="none" stroke="#104080" stroke-width="1.8"/>
+          <text x="304" y="156" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="#104080">Recordar activamente</text>
+          <text x="304" y="174" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">avisar sin abrir la app</text>
+
+          <rect x="550" y="128" width="186" height="62" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.65"/>
+          <text x="564" y="156" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">Bolsillo + WorkManager</text>
+          <text x="564" y="174" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">y notificaciones</text>
+
+          <line x1="260" y1="159" x2="284" y2="159" stroke="currentColor" stroke-width="1.3" marker-end="url(#pq)"/>
+          <line x1="520" y1="159" x2="544" y2="159" stroke="currentColor" stroke-width="1.3" marker-end="url(#pq)"/>
+
+          <!-- fila 3 -->
+          <rect x="24" y="208" width="236" height="62" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.65"/>
+          <text x="38" y="232" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">Ninguna app revisada fue</text>
+          <text x="38" y="248" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">concebida como objeto</text>
+          <text x="38" y="264" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">de estudio</text>
+
+          <rect x="290" y="208" width="230" height="62" rx="6" fill="none" stroke="#104080" stroke-width="1.8"/>
+          <text x="304" y="236" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="#104080">Verificable, no afirmada</text>
+          <text x="304" y="254" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">que lo compruebe un tercero</text>
+
+          <rect x="550" y="208" width="186" height="62" rx="6" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.65"/>
+          <text x="564" y="236" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">Tres módulos Gradle</text>
+          <text x="564" y="254" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">que vigila el compilador</text>
+
+          <line x1="260" y1="239" x2="284" y2="239" stroke="currentColor" stroke-width="1.3" marker-end="url(#pq)"/>
+          <line x1="520" y1="239" x2="544" y2="239" stroke="currentColor" stroke-width="1.3" marker-end="url(#pq)"/>
+
+          <text x="24" y="300" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">Cada componente de la pregunta nace de una limitación concreta y se responde con una parte concreta del sistema.</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 11.</b> Descomposición de la pregunta problema. La columna izquierda recoge las limitaciones identificadas en la Sección 8; la central, los componentes de la pregunta; la derecha, la parte del sistema que los atiende. Ningún componente queda sin respuesta y ninguna parte del sistema existe sin justificación.</figcaption>
+    </figure>
+
+    <div class="callout">
+      <span class="lead">Nota sobre la formulación</span>
+      <p>El tercer componente —que la arquitectura sea verificable y no solo afirmada— es inusual en un enunciado de problema de una aplicación, y responde a la naturaleza académica del proyecto. En un desarrollo comercial bastaría con que el sistema funcionara; aquí debe además poder demostrarse cómo está construido, lo que convierte la verificabilidad en un requisito y no en una virtud opcional.</p>
+    </div>
+  </section>
+
+  <!-- ============ 7: DESCRIPCIÓN DE LA NECESIDAD ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">7</span>
+      <h2>Descripción de la necesidad</h2>
+    </div>
+
+    <div class="body">
+      <p>La necesidad atendida se describe a partir de un usuario concreto y no de un perfil abstracto: un estudiante de pregrado que vive con ingresos irregulares, comparte arriendo, se desplaza a diario a la universidad y sostiene un puñado de pagos fijos mensuales. Sobre ese caso se identificaron cuatro necesidades funcionales y dos restricciones de contexto.</p>
+    </div>
+
+    <h3>A. Necesidades identificadas</h3>
+    <div class="body">
+      <p><strong>Registrar sin fricción.</strong> El momento en que se produce un gasto es el único en que el usuario lo recuerda con exactitud, y suele ser un momento incómodo: de pie, con una mano ocupada, saliendo de un local. Si el registro no cabe en ese instante, no ocurre. De aquí se deriva el requisito de que el alta exija un solo dato obligatorio, el monto, y se alcance con un toque desde la pantalla principal.</p>
+
+      <p><strong>Entender en qué se va el dinero.</strong> Una lista de movimientos responde «qué compré» pero no «en qué se me fue el mes». La segunda pregunta requiere agregación por categoría, y es la que produce un cambio de comportamiento: nadie reduce un gasto que no sabe que está haciendo. Hay además una tercera, «¿voy peor que el mes pasado?», que ninguna foto de un solo mes puede responder: exige comparar el mes en curso con los que lo precedieron, y es la que convierte el registro en analítica.</p>
+
+      <p><strong>No olvidar los pagos fijos.</strong> Es la necesidad de mayor impacto económico y la peor atendida por las alternativas gratuitas. Un olvido no cuesta el valor del gasto sino el recargo por mora, y a diferencia de los gastos variables, los fijos son enteramente previsibles: la información para avisar ya existe en el sistema desde el momento en que el pago se registra.</p>
+
+      <p><strong>Recibir una lectura de la situación.</strong> Entre tener los datos y entenderlos hay una distancia que muchos usuarios no recorren. Una interpretación en lenguaje natural —«estás gastando más de lo que ingresas», «esta categoría concentra el 40 % de tus gastos»— convierte una tabla en una conclusión.</p>
+    </div>
+
+    <h3>B. Restricciones de contexto</h3>
+    <div class="body">
+      <p><strong>Conectividad y datos no garantizados.</strong> El usuario objetivo no siempre tiene datos móviles disponibles, y el registro debe funcionar igual sin conexión. Esto descarta cualquier arquitectura que dependa de un servidor para la operación básica.</p>
+
+      <p><strong>Sensibilidad de la información.</strong> Los movimientos de gasto revelan hábitos, ubicaciones y relaciones personales. Almacenarlos en un servidor de terceros es un costo real que en este caso no se compensa con ninguna ventaja, dado que la agregación bancaria —la única razón de peso para hacerlo— no opera de forma fiable en el país.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXX.</b> De la necesidad al requisito y a su implementación</p>
+      <table>
+        <thead>
+          <tr><th>N.º</th><th>Necesidad</th><th>Requisito derivado</th><th>Implementación</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id">N-1</td>
+            <td class="name">Registrar sin fricción</td>
+            <td>Alta con un solo campo obligatorio, a un toque</td>
+            <td>Botón flotante y título deducido de la categoría</td>
+          </tr>
+          <tr>
+            <td class="id">N-2</td>
+            <td class="name">Entender el gasto</td>
+            <td>Agregación por categoría y saldo del mes</td>
+            <td>Gráfico de dona, serie de los últimos seis meses y encabezado de saldo</td>
+          </tr>
+          <tr>
+            <td class="id">N-3</td>
+            <td class="name">No olvidar pagos fijos</td>
+            <td>Aviso con la aplicación cerrada</td>
+            <td>Bolsillo de recordatorios y notificación diaria</td>
+          </tr>
+          <tr>
+            <td class="id">N-4</td>
+            <td class="name">Recibir una lectura</td>
+            <td>Interpretación en lenguaje natural</td>
+            <td>Asistente financiero</td>
+          </tr>
+          <tr>
+            <td class="id">R-1</td>
+            <td class="name">Operar sin conexión</td>
+            <td>Ninguna función esencial depende de la red</td>
+            <td>Persistencia local con Room</td>
+          </tr>
+          <tr>
+            <td class="id">R-2</td>
+            <td class="name">Datos sensibles</td>
+            <td>Sin cuenta de usuario ni envío a terceros</td>
+            <td>Todo permanece en el dispositivo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>C. Necesidad académica</h3>
+    <div class="body">
+      <p>Junto a la necesidad del usuario existe la del contexto en que el proyecto se desarrolla, y no reconocerla sería deshonesto. El plan de estudios exige evidenciar el uso de estructuras de datos y ciclos, programación orientada a objetos, manejo de excepciones y seguridad ante nulos. Esa exigencia influyó en el diseño, aunque conviene precisar en qué sentido.</p>
+
+      <p>No se forzó ninguna construcción artificial para «cumplir un requisito». Las jerarquías selladas de la Sección 13 existen porque el tipo de movimiento y los errores de negocio son conjuntos cerrados y conocidos; el manejo de excepciones de la Sección 14 existe porque el usuario escribe texto libre en un campo numérico; la seguridad ante nulos de la Sección 15 existe porque la base de datos anula la categoría de un movimiento cuando esa categoría se elimina. En todos los casos el pilar académico coincidió con la solución técnica correcta, y donde no habría coincidido se habría documentado la discrepancia.</p>
+    </div>
+
+    <div class="callout warn">
+      <span class="lead">Delimitación honesta</span>
+      <p>Nexcode no resuelve el problema del control de gastos mejor que las aplicaciones consolidadas del mercado, y la Sección 8 lo demuestra con una tabla comparativa desfavorable en varias características. Lo que ofrece es una combinación —operar sin cuenta, recordar los pagos fijos y exponer una construcción auditable— que ninguna de las alternativas revisadas reúne para este caso de uso concreto.</p>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Secciones 1 a 7 del informe del Proyecto Integrador — Título, autores, resumen, palabras clave, introducción, pregunta problema y descripción de la necesidad · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Continúa la numeración de figuras y tablas de las secciones 8, 10, 11, 12–16, 17 y 19. Las cifras citadas en el resumen proceden del repositorio del proyecto en el estado de la entrega.
+  </p>
+
+</div>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desde Android 12 el sistema dibuja SIEMPRE su propia pantalla de
+         arranque antes de que la Activity exista, y no se puede desactivar.
+         Si no se configura, muestra el icono del lanzador —el simbolo sobre
+         su disco azul— y al aparecer la pantalla de carga propia el logotipo
+         cambia de forma de golpe.
+
+         Aqui se le indica que use el mismo simbolo y el mismo fondo blanco
+         que la pantalla siguiente, de modo que las dos encadenan sin salto:
+         el usuario percibe una sola secuencia de arranque, no dos. -->
+    <style name="Theme.Nexcode" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/nexcode_background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <item name="android:windowSplashScreenBackground">@color/nexcode_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_simbolo</item>
+    </style>
+</resources>

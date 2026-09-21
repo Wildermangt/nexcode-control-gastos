@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- El simbolo del logo, recortado con fondo transparente, dentro de la zona
+     segura del icono adaptativo. -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/simbolo_nexcode"
+    android:insetLeft="22%"
+    android:insetTop="24%"
+    android:insetRight="22%"
+    android:insetBottom="24%" />

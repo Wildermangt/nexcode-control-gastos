@@ -1,0 +1,416 @@
+<title>Resultados de Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:#FBFCFE; --panel:#F2F5FA; --ink:#101A2B; --ink-soft:#4A5B72; --ink-faint:#7C8CA3;
+    --rule:#D6DEE9; --rule-soft:#E6ECF4; --accent:#104080; --accent-2:#0C8A5E; --accent-warn:#B05A00;
+    --code-bg:#F1F4F9;
+    --measure:68ch; --gutter:5.5rem;
+    --f-serif:"Source Serif 4","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --f-sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif;
+    --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+      --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+      --code-bg:#111A27;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+    --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+    --code-bg:#111A27;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-serif); font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased; }
+  .sheet { max-width:calc(var(--measure) + var(--gutter) + 4rem); margin:0 auto; padding:4rem 2rem 6rem; }
+  .masthead { border-bottom:2px solid var(--ink); padding-bottom:1.6rem; }
+  .eyebrow { font-family:var(--f-sans); font-size:0.7rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin:0 0 0.9rem; }
+  h1 { font-size:clamp(1.9rem,4.2vw,2.7rem); line-height:1.14; font-weight:700; letter-spacing:-0.015em; margin:0 0 0.5rem; text-wrap:balance; }
+  .subtitle { font-size:1.12rem; color:var(--ink-soft); font-style:italic; margin:0 0 1.8rem; max-width:56ch; }
+  .byline { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1.1rem 2rem; font-family:var(--f-sans); font-size:0.82rem; line-height:1.5; color:var(--ink-soft); }
+  .byline strong { display:block; color:var(--ink); font-weight:600; }
+  .byline span { display:block; }
+  .abstract { margin:2.6rem 0 0; padding:1.4rem 1.6rem; background:var(--panel); border-left:3px solid var(--accent); }
+  .abstract p { margin:0; font-size:0.96rem; line-height:1.6; }
+  .abstract .label { font-family:var(--f-sans); font-weight:600; letter-spacing:0.04em; }
+  section { margin-top:3.4rem; }
+  .sec-head { display:grid; grid-template-columns:var(--gutter) minmax(0,1fr); align-items:baseline; border-top:1px solid var(--rule); padding-top:1rem; margin-bottom:1.4rem; }
+  .sec-num { font-family:var(--f-sans); font-size:0.76rem; font-weight:600; letter-spacing:0.12em; color:var(--accent); padding-top:0.35rem; }
+  .sec-head h2 { font-size:1.28rem; font-weight:600; letter-spacing:0.03em; text-transform:uppercase; margin:0; text-wrap:balance; }
+  h3 { font-family:var(--f-serif); font-size:1.04rem; font-weight:600; font-style:italic; margin:2rem 0 0.6rem; }
+  .body { max-width:var(--measure); }
+  @media (min-width:900px) { .body { margin-left:var(--gutter); } }
+  p { margin:0 0 1rem; }
+  .body > p { text-align:justify; hyphens:auto; }
+  strong { font-weight:600; }
+  code { font-family:var(--f-mono); font-size:0.85em; background:var(--code-bg); padding:0.1em 0.35em; border-radius:3px; }
+  ul, ol { margin:0 0 1rem; padding-left:1.3rem; }
+  li { margin-bottom:0.5rem; }
+  li::marker { color:var(--ink-faint); }
+  .table-wrap { overflow-x:auto; margin:1.8rem 0; }
+  @media (min-width:900px) { .table-wrap { margin-left:var(--gutter); } }
+  .tbl-cap { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); text-align:center; margin-bottom:0.6rem; }
+  .tbl-cap b { color:var(--accent); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-family:var(--f-sans); font-size:0.8rem; line-height:1.45; }
+  thead th { text-align:left; font-weight:600; color:var(--ink); padding:0.55rem 0.7rem; border-top:1.5px solid var(--ink); border-bottom:1px solid var(--ink); }
+  thead th.c { text-align:center; }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--rule-soft); color:var(--ink-soft); vertical-align:top; }
+  tbody td.c { text-align:center; }
+  tbody tr:last-child td { border-bottom:1.5px solid var(--ink); }
+  td.name { color:var(--ink); font-weight:500; }
+  td.id { font-family:var(--f-mono); color:var(--accent); font-weight:500; white-space:nowrap; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; color:var(--ink); font-weight:500; }
+  .mono { font-family:var(--f-mono); font-size:0.94em; }
+  .cumplido { color:var(--accent-2); font-weight:600; }
+  .parcial { color:var(--accent-warn); font-weight:600; }
+
+  /* métricas destacadas */
+  .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:1px; background:var(--rule); border:1px solid var(--rule); margin:1.8rem 0; }
+  @media (min-width:900px) { .metrics { margin-left:var(--gutter); } }
+  .metric { background:var(--paper); padding:1rem 1.1rem; }
+  .metric .cifra { display:block; font-family:var(--f-sans); font-size:1.5rem; font-weight:600; color:var(--accent); line-height:1.1; font-variant-numeric:tabular-nums; }
+  .metric .etiqueta { display:block; font-family:var(--f-sans); font-size:0.74rem; color:var(--ink-soft); margin-top:0.25rem; line-height:1.35; }
+
+  .callout { margin:1.6rem 0; padding:1rem 1.2rem; background:var(--panel); border-left:3px solid var(--accent-2); font-size:0.95rem; }
+  @media (min-width:900px) { .callout { margin-left:var(--gutter); } }
+  .callout p { margin:0; }
+  .callout p + p { margin-top:0.7rem; }
+  .callout .lead { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-2); display:block; margin-bottom:0.35rem; }
+  .callout.warn { border-left-color:var(--accent-warn); }
+  .callout.warn .lead { color:var(--accent-warn); }
+
+  .refs { font-size:0.86rem; }
+  .refs ol { padding-left:0; list-style:none; counter-reset:ref; }
+  .refs li { counter-increment:ref; padding-left:2.8rem; position:relative; margin-bottom:0.7rem; color:var(--ink-soft); line-height:1.5; word-break:break-word; }
+  .refs li::before { content:"[" counter(ref) "]"; position:absolute; left:0; font-family:var(--f-sans); font-size:0.78rem; color:var(--accent); }
+  .refs h3 { margin-top:1.8rem; }
+
+  .colophon { margin-top:4rem; padding-top:1.2rem; border-top:1px solid var(--rule); font-family:var(--f-sans); font-size:0.74rem; color:var(--ink-faint); line-height:1.6; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Proyecto Integrador · Secciones 20 a 22</p>
+    <h1>Resultados de Nexcode</h1>
+    <p class="subtitle">Qué se construyó, qué se cumplió de lo propuesto, qué quedó pendiente y bibliografía consolidada</p>
+
+    <div class="byline">
+      <div>
+        <strong>Autores</strong>
+        <span>Jeferson Wilderman González Tenjo</span>
+        <span>José Leandro Ocampo Camacho</span>
+      </div>
+      <div>
+        <strong>Programa</strong>
+        <span>Ingeniería de Sistemas</span>
+        <span>Universidad de San Buenaventura</span>
+      </div>
+      <div>
+        <strong>Asignatura</strong>
+        <span>Optativa II — Desarrollo Móvil</span>
+        <span>Sexto semestre, 2026</span>
+      </div>
+      <div>
+        <strong>Cierre</strong>
+        <span>6 de 6 objetivos cumplidos</span>
+        <span>3 limitaciones de alcance declaradas</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="abstract">
+    <p><span class="label">Nota metodológica —</span> Las cifras de la Sección 20 se obtuvieron por conteo directo sobre el repositorio y por lectura de los informes de ejecución de las tareas de construcción, en el estado de la entrega. Los objetivos se declaran cumplidos únicamente cuando existe una evidencia reproducible que lo sostenga; en caso contrario se declaran parciales y se detalla qué falta.</p>
+  </div>
+
+  <!-- ============ 20 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">20</span>
+      <h2>Resultados</h2>
+    </div>
+
+    <div class="body">
+      <p>El resultado del proyecto es una aplicación Android funcional, instalada y verificada sobre dispositivo, cuya capa de lógica de negocio compila además para una segunda plataforma. Esta sección presenta primero las magnitudes del producto, después el cumplimiento de los objetivos planteados en la Sección 5, y por último los hallazgos que no se esperaban al iniciar.</p>
+    </div>
+
+    <h3>A. Magnitudes del producto</h3>
+
+    <div class="metrics">
+      <div class="metric"><span class="cifra">9 892</span><span class="etiqueta">líneas de Kotlin</span></div>
+      <div class="metric"><span class="cifra">92</span><span class="etiqueta">archivos fuente</span></div>
+      <div class="metric"><span class="cifra">3</span><span class="etiqueta">módulos independientes</span></div>
+      <div class="metric"><span class="cifra">20</span><span class="etiqueta">casos de uso</span></div>
+      <div class="metric"><span class="cifra">41</span><span class="etiqueta">pruebas unitarias</span></div>
+      <div class="metric"><span class="cifra">2</span><span class="etiqueta">plataformas de ejecución</span></div>
+      <div class="metric"><span class="cifra">17</span><span class="etiqueta">casos de sistema</span></div>
+      <div class="metric"><span class="cifra">6</span><span class="etiqueta">pantallas</span></div>
+      <div class="metric"><span class="cifra">0</span><span class="etiqueta">servicios externos de pago</span></div>
+      <div class="metric"><span class="cifra">2</span><span class="etiqueta">versiones de Android verificadas</span></div>
+      <div class="metric"><span class="cifra">1,7 <span style="font-size:0.55em;font-weight:600;">MB</span></span><span class="etiqueta">APK de publicación</span></div>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXXV.</b> Composición del producto entregado</p>
+      <table>
+        <thead>
+          <tr><th>Elemento</th><th class="c">Cantidad</th><th>Detalle</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Módulos Gradle</td><td class="num">3</td><td><span class="mono">:app</span> · <span class="mono">:domain</span> · <span class="mono">:data</span></td></tr>
+          <tr><td class="name">Archivos por capa</td><td class="num">29 / 18 / 33</td><td>Dominio / Datos / Presentación</td></tr>
+          <tr><td class="name">Modelos de dominio</td><td class="num">8</td><td>Incluye dos jerarquías selladas</td></tr>
+          <tr><td class="name">Casos de uso</td><td class="num">17</td><td>Transacciones, análisis, bolsillo, catálogo e IA</td></tr>
+          <tr><td class="name">Contratos de repositorio</td><td class="num">5</td><td>Cuatro de datos y uno de asistencia</td></tr>
+          <tr><td class="name">Tablas de la base</td><td class="num">4</td><td>Esquema en versión 2 con migración escrita</td></tr>
+          <tr><td class="name">Pantallas</td><td class="num">6</td><td>Cuatro destinos y dos pantallas completas</td></tr>
+          <tr><td class="name">Componentes propios</td><td class="num">8</td><td>Reutilizados en varias pantallas</td></tr>
+          <tr><td class="name">Animaciones</td><td class="num">12</td><td>Cada una con una función comunicativa</td></tr>
+          <tr><td class="name">Modalidades del asistente</td><td class="num">2</td><td>Voz y texto sobre el mismo caso de uso</td></tr>
+          <tr><td class="name">Datos de demostración</td><td class="num">40</td><td>10 por cada una de las cuatro secciones</td></tr>
+          <tr><td class="name">Tamaño del APK firmado</td><td class="num">1,7 MB</td><td>Con R8 y recorte de recursos; 11,9 MB sin optimizar</td></tr>
+          <tr><td class="name">Reglas de conservación</td><td class="num">4</td><td>Bloques en <span class="mono">proguard-rules.pro</span>, cada uno justificado</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>B. Cumplimiento de los objetivos</h3>
+    <div class="body">
+      <p>La Tabla XXXVI contrasta cada objetivo específico de la Sección 5 con la evidencia obtenida. Los seis se cumplieron. Ello no significa que el producto esté acabado: el apartado C de la Sección 21 recoge siete limitaciones de alcance, y ninguna de ellas contradice un objetivo planteado.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXXVI.</b> Cumplimiento de los objetivos específicos</p>
+      <table>
+        <thead>
+          <tr><th>N.º</th><th>Objetivo</th><th>Evidencia obtenida</th><th class="c">Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id">O-1</td>
+            <td class="name">Arquitectura en tres capas independientes</td>
+            <td>La violación deliberada produjo <span class="mono">BUILD FAILED</span>; cero imports de Android en el dominio; un único acceso de la presentación a la capa de datos</td>
+            <td class="c cumplido">Cumplido</td>
+          </tr>
+          <tr>
+            <td class="id">O-2</td>
+            <td class="name">Registro, edición y consulta con persistencia local</td>
+            <td>Casos S-02 a S-07 superados; recálculo en cadena verificado sobre dispositivo</td>
+            <td class="c cumplido">Cumplido</td>
+          </tr>
+          <tr>
+            <td class="id">O-3</td>
+            <td class="name">Bolsillo con aviso del sistema operativo</td>
+            <td>Notificación publicada con la app cerrada; navegación desde ella al Bolsillo; retirada automática al tocarla</td>
+            <td class="c cumplido">Cumplido</td>
+          </tr>
+          <tr>
+            <td class="id">O-4</td>
+            <td class="name">Asistente que analice el gasto</td>
+            <td>Asistente operativo <strong>por voz y por texto</strong> sobre datos reales (casos S-12 y S-13). El agente conversacional remoto queda preparado y no conectado, lo que se declara como limitación de alcance y no como incumplimiento: el objetivo no lo exigía</td>
+            <td class="c cumplido">Cumplido</td>
+          </tr>
+          <tr>
+            <td class="id">O-5</td>
+            <td class="name">Evidenciar los pilares de programación</td>
+            <td>15 fragmentos citados literalmente con su archivo de origen en las secciones 12 a 16</td>
+            <td class="c cumplido">Cumplido</td>
+          </tr>
+          <tr>
+            <td class="id">O-6</td>
+            <td class="name">Verificar con pruebas automatizadas</td>
+            <td>41 pruebas en JVM y las mismas 24 en Node.js, sin fallos; 17 casos de sistema con evidencia instrumentada sobre dos versiones de Android</td>
+            <td class="c cumplido">Cumplido</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>C. Resultados no previstos</h3>
+    <div class="body">
+      <p>Cuatro resultados no figuraban entre los objetivos y merecen registro porque tuvieron consecuencias sobre el producto.</p>
+
+      <p><strong>La portabilidad del dominio.</strong> La migración a Kotlin Multiplatform no estaba planteada al inicio; se emprendió para poder responder con evidencia a la pregunta de si la capa de dominio era realmente independiente. El resultado fue afirmativo, pero solo después de corregir dos acoplamientos a la biblioteca de Java que la revisión manual no había detectado. La verificación produjo, además de la respuesta, una mejora del código.</p>
+
+      <p><strong>Un defecto de lógica silencioso.</strong> El análisis del texto <code>"25.000"</code> almacenaba veinticinco pesos en lugar de veinticinco mil. No producía error alguno: la aplicación funcionaba y guardaba un dato incorrecto. Lo detectó una prueba unitaria antes de que ningún usuario lo encontrara, lo que justifica por sí solo la inversión en la batería de pruebas del dominio.</p>
+
+      <p><strong>Lo que el optimizador no puede ver.</strong> Al preparar la compilación de publicación se activó R8, que elimina el código no alcanzado y renombra el resto: el paquete instalable pasó de 11,9 MB a <strong>1,7 MB</strong>, algo menos de la séptima parte. La reducción no fue el hallazgo. Lo fue advertir que el análisis de R8 sigue llamadas explícitas y, por tanto, <strong>es ciego a todo lo que se instancia por reflexión</strong>. En esta aplicación había un caso: WorkManager guarda el nombre de la clase del trabajador en su propia base de datos y la construye al despertar, de modo que R8 no ve ninguna llamada a su constructor y lo habría renombrado. El fallo resultante no aparece al compilar —la construcción termina con éxito— sino en el dispositivo, y de forma silenciosa: la notificación sencillamente deja de publicarse. La regla de conservación escrita para ese constructor se verificó comprobando que el registro del sistema imprime el nombre completo sin ofuscar, seguido de <span class="mono">Worker result SUCCESS</span>. El caso ilustra una asimetría útil: una herramienta de análisis estático solo protege aquello cuyo uso puede demostrar, y el resto queda a cargo de quien conoce el código.</p>
+
+      <p><strong>El compilador como revisor de arquitectura.</strong> Durante la integración, el error <code>Cannot access 'androidx.room.RoomDatabase'</code> señaló que la capa de presentación estaba construyendo la base de datos. La solución correcta no era añadir la dependencia que faltaba —lo que habría hecho desaparecer el error y también la separación de capas— sino mover el ensamblaje a la capa que lo posee. La arquitectura quedó más estricta después del error que antes.</p>
+    </div>
+  </section>
+
+  <!-- ============ 21 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">21</span>
+      <h2>Conclusiones</h2>
+    </div>
+
+    <h3>A. Sobre la pregunta problema</h3>
+    <div class="body">
+      <p>La pregunta planteada en la Sección 6 tenía tres componentes y admite hoy una respuesta diferenciada.</p>
+
+      <p><strong>Operar sin cuenta ni conexión</strong> quedó resuelto sin reservas: la totalidad de las funciones opera contra una base de datos local, no existe registro de usuario y ningún dato abandona el dispositivo. La contrapartida —ausencia de respaldo y de sincronización— es real y se documenta como limitación.</p>
+
+      <p>El asistente financiero, por su parte, terminó admitiendo <strong>voz además de texto</strong> sin tocar la capa de dominio: el reconocimiento y la síntesis del sistema operativo se conectaron al mismo caso de uso que ya atendía la entrada escrita. Es la prueba más práctica de que la separación de capas rinde: una modalidad de interacción nueva no obligó a modificar una sola regla de negocio.</p>
+
+      <p><strong>Recordar activamente los pagos fijos</strong> quedó resuelto en el sentido pleno del verbo: la aplicación avisa aunque esté cerrada, mediante un trabajo programado que consulta el dominio y publica una notificación del sistema. Antes de esa incorporación, el bolsillo mostraba estado pero no recordaba nada, y un recordatorio que exige ser consultado no es un recordatorio.</p>
+
+      <p><strong>Que la arquitectura sea verificable y no solo afirmada</strong> es el componente que produjo el aprendizaje más sólido. Se dispuso de cinco verificaciones reproducibles, y la más concluyente resultó ser también la más incómoda: compilar la capa de dominio para JavaScript reveló dos dependencias de Java que ninguna revisión manual había advertido. La conclusión que se extrae excede el proyecto: <strong>una propiedad arquitectónica que no se comprueba de forma automática tiende a degradarse sin que nadie lo note</strong>.</p>
+    </div>
+
+    <h3>B. Sobre las decisiones técnicas</h3>
+    <div class="body">
+      <p>Cinco decisiones se confirmaron acertadas al ponerlas a prueba.</p>
+
+      <p><strong>Un módulo por capa</strong> en lugar de paquetes dentro de un módulo único. El costo —más configuración de construcción, una operación que atraviesa más capas— se pagó una sola vez, mientras que el beneficio se cobró en cada verificación posterior. Con paquetes, la violación de la Sección 11 habría compilado sin protestar.</p>
+
+      <p><strong>Resultados sellados en lugar de excepciones</strong> hacia la capa de presentación. La interfaz nunca envuelve una llamada en un bloque <code>try</code>: recibe un estado exhaustivo que el compilador la obliga a cubrir por completo.</p>
+
+      <p><strong>Importes en enteros</strong> dentro de un tipo propio. Evitó por diseño los errores de coma flotante, y el tipo específico impidió operaciones que no tienen sentido sobre dinero. La decisión mostró además su valor cuando la aplicación pasó a operar en pesos enteros: como todo importe atraviesa un único tipo, el cambio se aplicó en dos funciones del dominio y se comprobó con dos pruebas, sin tocar una sola pantalla ni migrar la base de datos.</p>
+
+      <p><strong>Inyectar el reloj</strong> en lugar de consultarlo directamente. Nació como requisito de portabilidad y terminó habilitando una prueba que antes era imposible: verificar la fecha con la que se guarda un movimiento.</p>
+
+      <p><strong>Verificar sobre dos versiones de Android</strong> y no solo sobre el emulador de desarrollo. El teléfono con API 30 confirmó el único caso que el emulador no podía ejecutar —la transcripción de voz real— y ejercitó un camino de código distinto en las notificaciones, donde el permiso que Android 13 exige sencillamente no existe. Probar en un solo dispositivo habría dejado ambos sin comprobar.</p>
+
+      <p>Una decisión, en cambio, resultó equivocada y hubo que rehacerla. La primera versión de la navegación desde la notificación leía el destino solamente en <code>onCreate</code>, lo que funcionaba con la aplicación cerrada y fallaba con la aplicación abierta, porque en ese caso Android entrega el nuevo intento a <code>onNewIntent</code>. El error enseña que el ciclo de vida de Android obliga a considerar los dos caminos de entrada a una pantalla, no solo el más frecuente.</p>
+    </div>
+
+    <h3>C. Limitaciones reconocidas</h3>
+    <div class="body">
+      <p>Se declaran de forma explícita, ordenadas por su impacto sobre un usuario real.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXXVII.</b> Limitaciones del entregable</p>
+      <table>
+        <thead>
+          <tr><th>Limitación</th><th>Consecuencia para el usuario</th><th>Causa</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Sin respaldo ni exportación</td>
+            <td>Desinstalar la aplicación borra el historial</td>
+            <td>Recorte de alcance</td>
+          </tr>
+          <tr>
+            <td class="name">Sin presupuesto por categoría</td>
+            <td>No hay alerta al aproximarse a un límite</td>
+            <td>Recorte de alcance; el modelo de dominio ya lo soporta</td>
+          </tr>
+          <tr>
+            <td class="name">Agente conversacional sin conectar</td>
+            <td>El análisis es local y no conversacional</td>
+            <td>Requiere contratar el servicio externo</td>
+          </tr>
+          <tr>
+            <td class="name">Sin objetivo iOS</td>
+            <td>No hay versión para iPhone</td>
+            <td>Compilar para iOS exige un equipo con macOS</td>
+          </tr>
+          <tr>
+            <td class="name">Interfaz no compartida</td>
+            <td>Una eventual versión web exigiría rehacer la interfaz</td>
+            <td>Compose Multiplatform quedó fuera de alcance</td>
+          </tr>
+          <tr>
+            <td class="name">Pruebas de sistema manuales</td>
+            <td>Los 17 casos deben repetirse a mano en cada entrega</td>
+            <td>No se incorporó Espresso ni Compose UI Test</td>
+          </tr>
+          <tr>
+            <td class="name">Solo tema claro</td>
+            <td>No hay modo oscuro</td>
+            <td>Decisión de producto; el sistema de color lo permitiría</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>D. Trabajo futuro</h3>
+    <div class="body">
+      <p>Las líneas de continuación se ordenan por la relación entre esfuerzo e impacto, evaluada sobre el estado actual del código.</p>
+
+      <ol>
+        <li><strong>Presupuesto por categoría con alerta.</strong> Es la de mejor relación esfuerzo/impacto: el modelo <code>Category</code> ya declara el presupuesto mensual y la función que calcula su consumo está implementada y probada. Falta la pantalla y enlazarlo con el asistente, que podría avisar al superarse el límite.</li>
+        <li><strong>Exportación a CSV.</strong> Elimina la limitación de mayor impacto —la pérdida del historial— con un esfuerzo reducido, ya que la consulta por rango de fechas existe.</li>
+        <li><strong>Conectar el agente conversacional.</strong> No requiere cambios de código: crear el agente y proporcionar la dirección del webhook.</li>
+        <li><strong>Automatizar los casos de sistema</strong> con Compose UI Test, y añadir pruebas de la capa de datos con una base en memoria para verificar la migración de esquema sin dispositivo.</li>
+        <li><strong>Añadir el objetivo iOS</strong> al módulo de dominio. El código común no lo impide; la restricción es de infraestructura.</li>
+      </ol>
+    </div>
+
+    <h3>E. Conclusión general</h3>
+    <div class="body">
+      <p>El proyecto entrega una aplicación funcional que resuelve el problema planteado dentro del alcance definido, y lo hace con una arquitectura cuya corrección no depende de la palabra de sus autores. Esa es, en última instancia, la aportación que distingue este trabajo: no que la aplicación funcione —muchas funcionan— sino que cada afirmación técnica del informe va acompañada del comando que permite comprobarla.</p>
+
+      <p>Frente a las soluciones consolidadas del mercado, Nexcode no ofrece mayor cobertura funcional, y la Sección 8 lo documenta con una comparación desfavorable en varias características. Ofrece, en cambio, una combinación que ninguna de las alternativas revisadas reúne para este caso de uso: operar sin cuenta ni servidor, recordar activamente los pagos fijos y exponer una construcción auditable. Para el contexto académico en que se desarrolla, la última propiedad no es la menos importante: es el objeto mismo del ejercicio.</p>
+    </div>
+  </section>
+
+  <!-- ============ 22 ============ -->
+  <section class="refs">
+    <div class="sec-head">
+      <span class="sec-num">22</span>
+      <h2>Referencias bibliográficas</h2>
+    </div>
+
+    <div class="body">
+      <h3 style="margin-top:0.4rem;">A. Arquitectura y diseño de software</h3>
+      <ol>
+        <li>R. C. Martin, <em>Clean Architecture: A Craftsman's Guide to Software Structure and Design</em>. Boston, MA, EE. UU.: Prentice Hall, 2017.</li>
+        <li>E. Evans, <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em>. Boston, MA, EE. UU.: Addison-Wesley, 2003.</li>
+        <li>M. Fowler, <em>Patterns of Enterprise Application Architecture</em>. Boston, MA, EE. UU.: Addison-Wesley, 2002.</li>
+      </ol>
+
+      <h3>B. Plataforma y bibliotecas</h3>
+      <ol start="4">
+        <li>Google, «Guide to app architecture», <em>Android Developers</em>. [En línea]. Disponible en: https://developer.android.com/topic/architecture</li>
+        <li>Google, «Save data in a local database using Room», <em>Android Developers</em>. [En línea]. Disponible en: https://developer.android.com/training/data-storage/room</li>
+        <li>Google, «Schedule tasks with WorkManager», <em>Android Developers</em>. [En línea]. Disponible en: https://developer.android.com/topic/libraries/architecture/workmanager</li>
+        <li>Google, «Jetpack Compose», <em>Android Developers</em>. [En línea]. Disponible en: https://developer.android.com/jetpack/compose</li>
+        <li>JetBrains, «Kotlin Multiplatform documentation». [En línea]. Disponible en: https://kotlinlang.org/docs/multiplatform.html</li>
+        <li>JetBrains, «Kotlin coroutines and Flow documentation». [En línea]. Disponible en: https://kotlinlang.org/docs/flow.html</li>
+        <li>JetBrains, «kotlinx-datetime». [En línea]. Disponible en: https://github.com/Kotlin/kotlinx-datetime</li>
+      </ol>
+
+      <h3>C. Aplicaciones revisadas en el estado del arte</h3>
+      <ol start="11">
+        <li>Aimlogic, «Monefy — Budget &amp; Expense Manager». [En línea]. Disponible en: https://monefy.me</li>
+        <li>Realbyte Inc., «Money Manager Expense &amp; Budget». [En línea]. Disponible en: https://www.realbyteapps.com</li>
+        <li>Rammig Software, «Bluecoins Finance &amp; Budget». [En línea]. Disponible en: https://www.bluecoinsapp.com</li>
+        <li>Mobills, «Mobills — Control financiero». [En línea]. Disponible en: https://www.mobills.com.co</li>
+        <li>BudgetBakers, «Wallet by BudgetBakers». [En línea]. Disponible en: https://budgetbakers.com</li>
+        <li>Spendee, «Spendee — Money Tracker». [En línea]. Disponible en: https://www.spendee.com</li>
+        <li>You Need A Budget LLC, «YNAB — You Need A Budget». [En línea]. Disponible en: https://www.ynab.com</li>
+        <li>Actual Budget, «Actual — A local-first personal finance app». [En línea]. Disponible en: https://actualbudget.org</li>
+        <li>J. F. Grigg, «Firefly III — A free and open source personal finance manager». [En línea]. Disponible en: https://www.firefly-iii.org</li>
+        <li>Ivy Apps, «Ivy Wallet — Open source money manager». [En línea]. Disponible en: https://github.com/Ivy-Apps/ivy-wallet</li>
+      </ol>
+
+      <h3>D. Servicios de asistencia conversacional</h3>
+      <ol start="21">
+        <li>Retell AI, «Retell AI — Voice agents platform». [En línea]. Disponible en: https://www.retellai.com</li>
+      </ol>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Criterio de citación</span>
+      <p>Se citan únicamente las fuentes efectivamente consultadas durante el desarrollo. La documentación oficial de cada biblioteca se referencia una sola vez aunque se haya consultado en varias secciones. Las aplicaciones del estado del arte se referencian por su sitio oficial y no por su ficha de tienda, porque aquel documenta las características que la Sección 8 compara.</p>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Secciones 20 a 22 del informe del Proyecto Integrador — Resultados, conclusiones y referencias bibliográficas · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Con esta sección se cierra el informe. Las cifras proceden del repositorio del proyecto en el estado de la entrega y son reproducibles mediante los comandos indicados en cada sección.
+  </p>
+
+</div>

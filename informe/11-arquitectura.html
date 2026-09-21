@@ -1,0 +1,1107 @@
+<title>Arquitectura de Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:      #FBFCFE;
+    --panel:      #F2F5FA;
+    --ink:        #101A2B;
+    --ink-soft:   #4A5B72;
+    --ink-faint:  #7C8CA3;
+    --rule:       #D6DEE9;
+    --rule-soft:  #E6ECF4;
+    --accent:     #104080;
+    --accent-2:   #0C8A5E;
+    --accent-warn:#B05A00;
+    --code-bg:    #F1F4F9;
+
+    --measure: 68ch;
+    --gutter: 5.5rem;
+
+    --f-serif: "Source Serif 4", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --f-sans:  "IBM Plex Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+    --f-mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0B121D;
+      --panel:      #141D2B;
+      --ink:        #E4EBF5;
+      --ink-soft:   #A3B2C6;
+      --ink-faint:  #74849A;
+      --rule:       #24334A;
+      --rule-soft:  #1B2739;
+      --accent:     #6FB2EC;
+      --accent-2:   #45CF9C;
+      --accent-warn:#E0A55A;
+      --code-bg:    #111A27;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0B121D;
+    --panel:      #141D2B;
+    --ink:        #E4EBF5;
+    --ink-soft:   #A3B2C6;
+    --ink-faint:  #74849A;
+    --rule:       #24334A;
+    --rule-soft:  #1B2739;
+    --accent:     #6FB2EC;
+    --accent-2:   #45CF9C;
+    --accent-warn:#E0A55A;
+    --code-bg:    #111A27;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-serif);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: calc(var(--measure) + var(--gutter) + 4rem);
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  /* ---------- Cabecera del capítulo ---------- */
+
+  .masthead { border-bottom: 2px solid var(--ink); padding-bottom: 1.6rem; }
+
+  .eyebrow {
+    font-family: var(--f-sans);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9rem;
+  }
+
+  h1 {
+    font-size: clamp(1.9rem, 4.2vw, 2.7rem);
+    line-height: 1.14;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.5rem;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    font-size: 1.12rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 1.8rem;
+    max-width: 54ch;
+  }
+
+  .byline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.1rem 2rem;
+    font-family: var(--f-sans);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .byline strong { display: block; color: var(--ink); font-weight: 600; }
+  .byline span { display: block; }
+
+  /* ---------- Resumen ---------- */
+
+  .abstract {
+    margin: 2.6rem 0 0;
+    padding: 1.4rem 1.6rem;
+    background: var(--panel);
+    border-left: 3px solid var(--accent);
+  }
+  .abstract p { margin: 0; font-size: 0.96rem; line-height: 1.6; }
+  .abstract p + p { margin-top: 0.8rem; }
+  .abstract .label {
+    font-family: var(--f-sans);
+    font-weight: 600;
+    font-style: normal;
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- Secciones numeradas (IEEE) ---------- */
+
+  section { margin-top: 3.4rem; }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: var(--gutter) minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+    margin-bottom: 1.4rem;
+  }
+  .sec-num {
+    font-family: var(--f-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    padding-top: 0.35rem;
+  }
+  .sec-head h2 {
+    font-size: 1.28rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  h3 {
+    font-family: var(--f-serif);
+    font-size: 1.04rem;
+    font-weight: 600;
+    font-style: italic;
+    margin: 2rem 0 0.6rem;
+    color: var(--ink);
+  }
+
+  .body { max-width: var(--measure); }
+  .sec-head + .body, .body + .body { margin-left: 0; }
+
+  @media (min-width: 900px) {
+    .body { margin-left: var(--gutter); }
+  }
+
+  p { margin: 0 0 1rem; }
+  .body > p { text-align: justify; hyphens: auto; }
+
+  strong { font-weight: 600; }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 0.85em;
+    background: var(--code-bg);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+
+  pre {
+    font-family: var(--f-mono);
+    font-size: 0.78rem;
+    line-height: 1.6;
+    background: var(--code-bg);
+    border: 1px solid var(--rule-soft);
+    border-left: 3px solid var(--accent-warn);
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    margin: 1.2rem 0;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  .term-ok { color: var(--accent-2); }
+  .term-err { color: var(--accent-warn); }
+
+  ul, ol { margin: 0 0 1rem; padding-left: 1.3rem; }
+  li { margin-bottom: 0.45rem; }
+  li::marker { color: var(--ink-faint); }
+
+  /* ---------- Figuras ---------- */
+
+  figure {
+    margin: 2rem 0;
+    max-width: 100%;
+  }
+  @media (min-width: 900px) {
+    figure { margin-left: var(--gutter); }
+  }
+  .fig-frame {
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    padding: 1.4rem 1rem;
+    overflow-x: auto;
+  }
+  figure svg {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    color: var(--ink);
+  }
+  figcaption {
+    font-family: var(--f-sans);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-top: 0.7rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  figcaption b {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- Tablas ---------- */
+
+  .table-wrap { overflow-x: auto; margin: 1.8rem 0; }
+  @media (min-width: 900px) {
+    .table-wrap { margin-left: var(--gutter); }
+  }
+  .tbl-cap {
+    font-family: var(--f-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    margin-bottom: 0.6rem;
+  }
+  .tbl-cap b { color: var(--accent); font-weight: 600; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--f-sans);
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+  thead th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 0.55rem 0.7rem;
+    border-top: 1.5px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 0.52rem 0.7rem;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: 1.5px solid var(--ink); }
+  td.name, td strong { color: var(--ink); }
+  td.mono, .mono { font-family: var(--f-mono); font-size: 0.94em; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .ok { color: var(--accent-2); font-weight: 600; }
+
+  /* ---------- Marcas de evidencia ---------- */
+
+  .evidence {
+    margin: 1.6rem 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+  @media (min-width: 900px) {
+    .evidence { margin-left: var(--gutter); }
+  }
+  .ev {
+    display: grid;
+    grid-template-columns: 2.1rem minmax(0, 1fr);
+    gap: 0.8rem;
+    align-items: start;
+    background: var(--panel);
+    border: 1px solid var(--rule-soft);
+    padding: 0.9rem 1rem;
+  }
+  .ev-num {
+    font-family: var(--f-sans);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--paper);
+    background: var(--accent);
+    width: 1.55rem;
+    height: 1.55rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+  }
+  .ev h4 {
+    font-family: var(--f-sans);
+    font-size: 0.86rem;
+    font-weight: 600;
+    margin: 0.15rem 0 0.3rem;
+  }
+  .ev p { font-size: 0.9rem; margin: 0; color: var(--ink-soft); }
+  .ev .cmd {
+    font-family: var(--f-mono);
+    font-size: 0.76rem;
+    display: block;
+    margin-top: 0.5rem;
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ---------- Referencias ---------- */
+
+  .refs { font-size: 0.86rem; }
+  .refs ol { padding-left: 0; list-style: none; counter-reset: ref; }
+  .refs li {
+    counter-increment: ref;
+    padding-left: 2.6rem;
+    position: relative;
+    margin-bottom: 0.7rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .refs li::before {
+    content: "[" counter(ref) "]";
+    position: absolute;
+    left: 0;
+    font-family: var(--f-sans);
+    font-size: 0.78rem;
+    color: var(--accent);
+  }
+
+  .colophon {
+    margin-top: 4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--f-sans);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Proyecto Integrador · Sección 11</p>
+    <h1>Arquitectura de Nexcode</h1>
+    <p class="subtitle">Diseño en capas de una aplicación Android de control de gastos personales, con verificación en tiempo de compilación</p>
+
+    <div class="byline">
+      <div>
+        <strong>Autores</strong>
+        <span>Jeferson Wilderman González Tenjo</span>
+        <span>José Leandro Ocampo Camacho</span>
+      </div>
+      <div>
+        <strong>Programa</strong>
+        <span>Ingeniería de Sistemas</span>
+        <span>Universidad de San Buenaventura</span>
+      </div>
+      <div>
+        <strong>Asignatura</strong>
+        <span>Optativa II — Desarrollo Móvil</span>
+        <span>Sexto semestre, 2026</span>
+      </div>
+      <div>
+        <strong>Producto</strong>
+        <span>Nexcode 1.0 · <span class="mono">com.nexcode.gastos</span></span>
+        <span>Kotlin · Android</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="abstract">
+    <p><span class="label">Resumen —</span> Este capítulo documenta la arquitectura de <em>Nexcode</em>, una aplicación Android nativa de control de gastos personales desarrollada en Kotlin. La aplicación se estructura en tres capas —presentación, dominio y datos— materializadas como módulos Gradle independientes, de modo que la regla de dependencias no queda sujeta a la disciplina del equipo sino que la impone el compilador. Se describe la composición de cada capa, el mecanismo de inversión de dependencias que permite que la capa de datos dependa del dominio y no al revés, el recorrido completo de una operación de escritura y el modelo de datos relacional. Finalmente se presentan cuatro verificaciones reproducibles que evidencian el aislamiento efectivo entre capas, incluida una prueba de violación deliberada que el compilador rechaza.</p>
+    <p><span class="label">Palabras clave —</span> arquitectura en capas, Clean Architecture, inversión de dependencias, MVVM, Android, Kotlin, Jetpack Compose, Room.</p>
+  </div>
+
+  <!-- ============ I ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">I.</span>
+      <h2>Introducción</h2>
+    </div>
+
+    <div class="body">
+      <p>El objetivo arquitectónico de Nexcode fue que la lógica de negocio de la aplicación —qué es un gasto válido, cómo se calcula un saldo, cuándo vence un pago fijo— pudiera existir, compilarse y probarse sin ninguna referencia al sistema operativo Android. Esta restricción, aparentemente severa, es la que produce las tres propiedades que se buscaban: pruebas unitarias que corren en la máquina virtual de Java en segundos y no en un emulador; libertad para sustituir la base de datos o el framework de interfaz sin reescribir las reglas del negocio; y un límite explícito y verificable entre lo que es negocio y lo que es infraestructura.</p>
+
+      <p>La solución adoptada combina dos patrones complementarios. <strong>Clean Architecture</strong> [1] organiza el sistema en capas concéntricas donde las dependencias apuntan siempre hacia el centro, ocupado por las reglas de negocio. <strong>MVVM</strong> organiza internamente la capa más externa, separando la vista de su estado observable [2]. Conviene distinguirlos desde el inicio: Clean Architecture describe la estructura global del proyecto; MVVM describe únicamente cómo se organiza la capa de presentación.</p>
+
+      <p>El proyecto comprende 9 892 líneas de Kotlin distribuidas en 92 archivos fuente, y su distribución por capas se muestra en la Tabla I. La capa de dominio se implementó como un módulo <strong>Kotlin Multiplatform</strong>, de modo que la misma lógica de negocio compila para la máquina virtual de Java y para JavaScript; la Sección 17 documenta esa migración en detalle.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla I.</b> Distribución del código fuente por capa</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Módulo Gradle</th>
+            <th>Capa</th>
+            <th>Archivos <span class="mono">.kt</span></th>
+            <th>Naturaleza</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name mono">:domain</td>
+            <td>Dominio</td>
+            <td class="num">35</td>
+            <td>Módulo Kotlin Multiplatform (JVM + JS)</td>
+          </tr>
+          <tr>
+            <td class="name mono">:data</td>
+            <td>Datos</td>
+            <td class="num">18</td>
+            <td>Biblioteca Android</td>
+          </tr>
+          <tr>
+            <td class="name mono">:app</td>
+            <td>Presentación</td>
+            <td class="num">39</td>
+            <td>Aplicación Android</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ II ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">II.</span>
+      <h2>Visión general y regla de dependencias</h2>
+    </div>
+
+    <div class="body">
+      <p>Cada capa se implementó como un módulo Gradle separado en lugar de como un paquete dentro de un módulo único. La diferencia es determinante: con paquetes, cualquier programador puede escribir <code>import androidx.room.Entity</code> dentro de una clase de negocio y nadie se entera hasta la revisión de código; con módulos, ese import no resuelve porque la dependencia no está declarada, y la compilación falla. La regla de dependencias deja de ser una convención documentada y pasa a ser una restricción del sistema de construcción.</p>
+
+      <p>La Fig. 1 muestra los tres módulos y la única dirección permitida para las dependencias.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 400" role="img" aria-label="Diagrama de las tres capas de Nexcode: el módulo app depende de domain, el módulo data también depende de domain, y domain no depende de ninguno.">
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="ah-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0C8A5E"/>
+            </marker>
+          </defs>
+
+          <!-- :app -->
+          <rect x="180" y="24" width="400" height="88" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="200" y="52" font-family="IBM Plex Mono, monospace" font-size="15" font-weight="500" fill="currentColor">:app</text>
+          <text x="200" y="72" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor" opacity="0.7">Capa de presentación</text>
+          <text x="200" y="92" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.55">Compose · ViewModel · StateFlow · Navegación</text>
+
+          <!-- :domain -->
+          <rect x="180" y="156" width="400" height="88" rx="6" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <text x="200" y="184" font-family="IBM Plex Mono, monospace" font-size="15" font-weight="500" fill="#0C8A5E">:domain</text>
+          <text x="200" y="204" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor" opacity="0.7">Capa de dominio — Kotlin Multiplatform</text>
+          <text x="200" y="224" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.55">Modelos · Casos de uso · Interfaces de repositorio</text>
+
+          <!-- :data -->
+          <rect x="180" y="288" width="400" height="88" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="200" y="316" font-family="IBM Plex Mono, monospace" font-size="15" font-weight="500" fill="currentColor">:data</text>
+          <text x="200" y="336" font-family="IBM Plex Sans, sans-serif" font-size="12" fill="currentColor" opacity="0.7">Capa de datos</text>
+          <text x="200" y="356" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.55">Room/SQLite · DAO · Entidades · Mappers · Servicio IA</text>
+
+          <!-- flecha app -> domain -->
+          <line x1="300" y1="112" x2="300" y2="150" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah)"/>
+          <text x="312" y="136" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.8">depende de</text>
+
+          <!-- flecha data -> domain -->
+          <line x1="300" y1="288" x2="300" y2="250" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah)"/>
+          <text x="312" y="272" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.8">depende de</text>
+
+          <!-- anotación de pureza -->
+          <line x1="600" y1="200" x2="640" y2="200" stroke="#0C8A5E" stroke-width="1.5" marker-end="url(#ah-a)"/>
+          <text x="648" y="196" font-family="IBM Plex Sans, sans-serif" font-size="11.5" font-weight="600" fill="#0C8A5E">0 imports</text>
+          <text x="648" y="211" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="#0C8A5E">ni de Java</text>
+
+          <!-- anotación app -> data -->
+          <path d="M 180 68 L 120 68 L 120 332 L 180 332" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#ah)"/>
+          <text x="16" y="196" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.75">solo para</text>
+          <text x="16" y="211" font-family="IBM Plex Sans, sans-serif" font-size="11.5" fill="currentColor" opacity="0.75">inyectar (1 clase)</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 1.</b> Los tres módulos y la dirección de sus dependencias. <span class="mono">:domain</span> no depende de ningún otro módulo, por lo que puede compilarse y probarse de forma aislada. La flecha punteada indica el único acceso de <span class="mono">:app</span> a <span class="mono">:data</span>: el contenedor de dependencias, que inyecta las implementaciones concretas.</figcaption>
+    </figure>
+
+    <div class="body">
+      <p>La declaración efectiva de estas dependencias, tomada de los archivos <code>build.gradle.kts</code>, es la siguiente:</p>
+    </div>
+
+    <pre><code>:domain  →  (ninguna dependencia de módulo)
+:data    →  implementation(project(":domain"))
+:app     →  implementation(project(":domain"))
+            implementation(project(":data"))</code></pre>
+  </section>
+
+  <!-- ============ III ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">III.</span>
+      <h2>Inversión de dependencias</h2>
+    </div>
+
+    <div class="body">
+      <p>La Fig. 1 plantea una aparente paradoja: si <span class="mono">:data</span> depende de <span class="mono">:domain</span>, ¿cómo puede el dominio guardar información en una base de datos que no conoce? La respuesta es el principio de inversión de dependencias [1]: el dominio no depende de la base de datos, sino que <em>declara el contrato</em> que cualquier mecanismo de persistencia debe cumplir, y la capa de datos lo implementa.</p>
+
+      <p>En Nexcode ese contrato es la interfaz <code>TransactionRepository</code>, declarada en el dominio. La clase <code>TransactionRepositoryImpl</code>, que vive en la capa de datos y sí conoce Room, la implementa. El resultado es que la dirección de la dependencia en tiempo de compilación (hacia arriba, del detalle a la abstracción) es opuesta al flujo de control en tiempo de ejecución (hacia abajo, de la abstracción al detalle). La Fig. 2 muestra ambos sentidos.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 340" role="img" aria-label="Diagrama de inversión de dependencias: el caso de uso llama a la interfaz TransactionRepository declarada en el dominio, y la clase TransactionRepositoryImpl de la capa de datos implementa esa interfaz, invirtiendo el sentido de la dependencia respecto del flujo de control.">
+          <defs>
+            <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="tri" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="11" markerHeight="11" orient="auto-start-reverse">
+              <path d="M 0 0 L 12 6 L 0 12 z" fill="none" stroke="#0C8A5E" stroke-width="1.5"/>
+            </marker>
+          </defs>
+
+          <!-- banda dominio -->
+          <rect x="40" y="20" width="680" height="140" rx="4" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.35"/>
+          <text x="52" y="40" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor" opacity="0.6">:domain</text>
+
+          <!-- banda datos -->
+          <rect x="40" y="196" width="680" height="118" rx="4" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="3 4" opacity="0.35"/>
+          <text x="52" y="216" font-family="IBM Plex Mono, monospace" font-size="11.5" fill="currentColor" opacity="0.6">:data</text>
+
+          <!-- caso de uso -->
+          <rect x="80" y="56" width="230" height="70" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="96" y="82" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">AddTransactionUseCase</text>
+          <text x="96" y="102" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.6">valida y construye el modelo</text>
+
+          <!-- interfaz -->
+          <rect x="420" y="56" width="250" height="70" rx="5" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <text x="436" y="80" font-family="IBM Plex Sans, sans-serif" font-size="11" font-style="italic" fill="#0C8A5E">«interface»</text>
+          <text x="436" y="100" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="#0C8A5E">TransactionRepository</text>
+          <text x="436" y="117" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">add · update · delete · observeAll</text>
+
+          <!-- implementación -->
+          <rect x="420" y="232" width="250" height="62" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="436" y="258" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">TransactionRepositoryImpl</text>
+          <text x="436" y="277" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">traduce a entidades y llama al DAO</text>
+
+          <!-- room -->
+          <rect x="80" y="232" width="230" height="62" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="96" y="258" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">Room / SQLite</text>
+          <text x="96" y="277" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">nexcode.db</text>
+
+          <!-- flujo de control: caso de uso -> interfaz -->
+          <line x1="310" y1="91" x2="414" y2="91" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah2)"/>
+          <text x="316" y="82" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">llama a</text>
+
+          <!-- implementación -> interfaz (dependencia invertida) -->
+          <line x1="545" y1="232" x2="545" y2="132" stroke="#0C8A5E" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#tri)"/>
+          <text x="556" y="188" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="#0C8A5E">implementa</text>
+          <text x="556" y="203" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#0C8A5E">(la dependencia sube)</text>
+
+          <!-- impl -> room -->
+          <line x1="414" y1="263" x2="316" y2="263" stroke="currentColor" stroke-width="1.5" marker-end="url(#ah2)"/>
+          <text x="330" y="254" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">escribe en</text>
+
+          <!-- flecha de control descendente -->
+          <path d="M 195 126 L 195 232" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 5" opacity="0.55"/>
+          <text x="60" y="180" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">flujo de control</text>
+          <text x="60" y="194" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.6">en ejecución ↓</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 2.</b> Inversión de dependencias. En tiempo de ejecución el control desciende del caso de uso hacia SQLite; en tiempo de compilación la dependencia asciende, porque es la implementación la que conoce el contrato y no al revés. Sustituir Room por otro motor solo obliga a reescribir la caja inferior derecha.</figcaption>
+    </figure>
+
+    <div class="body">
+      <p>La Tabla II enumera los cinco contratos declarados en el dominio y las clases que los cumplen. Obsérvese que <code>FinancialAdvisor</code> sigue el mismo patrón aplicado a un servicio remoto: el dominio pide consejo financiero sin saber si lo produce un motor de reglas local o un agente conversacional externo.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla II.</b> Contratos del dominio y sus implementaciones</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Contrato (en <span class="mono">:domain</span>)</th>
+            <th>Implementación (en <span class="mono">:data</span>)</th>
+            <th>Mecanismo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="name mono">TransactionRepository</td><td class="mono">TransactionRepositoryImpl</td><td>Room · <span class="mono">TransactionDao</span></td></tr>
+          <tr><td class="name mono">AccountRepository</td><td class="mono">AccountRepositoryImpl</td><td>Room · <span class="mono">AccountDao</span></td></tr>
+          <tr><td class="name mono">CategoryRepository</td><td class="mono">CategoryRepositoryImpl</td><td>Room · <span class="mono">CategoryDao</span></td></tr>
+          <tr><td class="name mono">RecurringPaymentRepository</td><td class="mono">RecurringPaymentRepositoryImpl</td><td>Room · <span class="mono">RecurringPaymentDao</span></td></tr>
+          <tr><td class="name mono">FinancialAdvisor</td><td class="mono">NexcodeAIService</td><td>Motor de reglas local o webhook HTTP</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ IV ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">IV.</span>
+      <h2>Composición de cada capa</h2>
+    </div>
+
+    <h3>A. Capa de dominio</h3>
+    <div class="body">
+      <p>Es el centro del sistema y el único módulo que no depende de nada. Contiene tres tipos de elementos. Los <strong>modelos</strong> representan los conceptos del negocio y protegen sus propias invariantes: <code>Transaction</code> rechaza en su bloque <code>init</code> un monto no positivo o un título vacío, de modo que es imposible que exista en memoria una transacción inválida. El valor monetario se modela con <code>Money</code>, una <em>value class</em> que almacena centavos en un <code>Long</code> para evitar los errores de redondeo del punto flotante binario.</p>
+
+      <p>Las fechas se manejan con <strong>kotlinx-datetime</strong> y no con <code>java.time</code>, y la hora actual llega por la interfaz inyectable <code>RelojDominio</code> en lugar de leerse de un reloj estático: conocer la hora es una dependencia del entorno, no una regla de negocio, y esa inyección es la que hace deterministas las pruebas.</p>
+
+      <p>Los <strong>contratos</strong> son las interfaces de repositorio ya descritas. Los <strong>casos de uso</strong> son clases con una única responsabilidad, invocables como funciones gracias al operador <code>invoke</code>. La Tabla III los agrupa por paquete.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla III.</b> Casos de uso implementados, por paquete</p>
+      <table>
+        <thead>
+          <tr><th>Paquete</th><th>Casos de uso</th><th>N.º</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name mono">usecase.transaction</td>
+            <td class="mono">AddTransactionUseCase · UpdateTransactionUseCase · DeleteTransactionUseCase · GetTransactionsUseCase · GetTransactionByIdUseCase</td>
+            <td class="num">5</td>
+          </tr>
+          <tr>
+            <td class="name mono">usecase.analytics</td>
+            <td class="mono">CalculateBalanceUseCase · GetCategorySummaryUseCase · ObserveMonthlyReportUseCase · AnalizarTendenciaUseCase</td>
+            <td class="num">4</td>
+          </tr>
+          <tr>
+            <td class="name mono">usecase.recurring</td>
+            <td class="mono">AddRecurringPaymentUseCase · PayRecurringPaymentUseCase · ObserveRecurringPocketUseCase · ToggleRecurringPaymentUseCase · DeleteRecurringPaymentUseCase · GetPagosPorAvisarUseCase</td>
+            <td class="num">6</td>
+          </tr>
+          <tr>
+            <td class="name mono">usecase.catalog</td>
+            <td class="mono">ObserveCategoriesUseCase · ObserveAccountsUseCase · ObserveAccountsSummaryUseCase · UpdateAccountBalanceUseCase</td>
+            <td class="num">4</td>
+          </tr>
+          <tr>
+            <td class="name mono">usecase.ai</td>
+            <td class="mono">RequestFinancialAdviceUseCase</td>
+            <td class="num">1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="body">
+      <p>Un caso de uso puede componer otros. <code>ObserveMonthlyReportUseCase</code> combina <code>CalculateBalanceUseCase</code> y <code>GetCategorySummaryUseCase</code> sobre el mismo conjunto de movimientos filtrado por mes, lo que garantiza que el saldo mostrado en el encabezado y el gráfico de reparto por categoría no puedan contradecirse: ambos provienen del mismo cálculo.</p>
+
+      <p>Una decisión que conviene explicitar es el <strong>tratamiento de errores</strong>. Los casos de uso no propagan excepciones hacia la interfaz: las atrapan y las traducen a un tipo sellado de resultado. <code>AddTransactionUseCase</code> devuelve <code>AddTransactionResult</code>, cuyas variantes son <code>Success</code>, <code>InvalidAmount</code>, <code>MissingField</code>, <code>NotFound</code> y <code>Failure</code>. La capa de presentación no maneja excepciones: maneja estados. Esto elimina toda una clase de fallos en tiempo de ejecución y hace exhaustiva la expresión <code>when</code> que los procesa.</p>
+    </div>
+
+    <h3>B. Capa de datos</h3>
+    <div class="body">
+      <p>Implementa la persistencia con Room sobre SQLite y encapsula por completo ese hecho. Contiene las <strong>entidades</strong> anotadas con <code>@Entity</code>, los <strong>DAO</strong> con las consultas, los <strong>conversores</strong> de tipos de <code>java.time</code>, los <strong>mappers</strong> que traducen entre entidades y modelos de dominio, y las <strong>implementaciones</strong> de los repositorios.</p>
+
+      <p>El módulo expone al exterior una sola clase pública, <code>DataProvider</code>, que construye las implementaciones y las devuelve tipadas como los contratos del dominio. Esta fábrica no es un adorno: durante el desarrollo, una versión anterior del contenedor de dependencias construía la base de datos directamente desde <span class="mono">:app</span> y el proyecto dejó de compilar con el error <code>Cannot access 'androidx.room.RoomDatabase'</code>, porque Room está declarado como <code>implementation</code> y no se propaga transitivamente. El error del compilador señaló correctamente una fuga arquitectónica, y la solución fue mover el ensamblaje al interior de la capa que lo posee.</p>
+
+      <p>La base de datos se versiona explícitamente. La incorporación del bolsillo de pagos recurrentes elevó el esquema de la versión 1 a la 2 mediante una migración escrita a mano (<code>MIGRATION_1_2</code>) en lugar de una recreación destructiva, para no perder los movimientos ya registrados por el usuario al actualizar la aplicación.</p>
+    </div>
+
+    <h3>C. Capa de presentación</h3>
+    <div class="body">
+      <p>Construida con Jetpack Compose y organizada según MVVM. Cada pantalla tiene un <code>ViewModel</code> que expone un único <code>StateFlow</code> de solo lectura con una <em>data class</em> inmutable de estado —por ejemplo <code>HomeUiState</code>—. La vista observa ese estado y emite eventos; nunca lo modifica directamente ni conoce los repositorios.</p>
+
+      <p>Esta capa aloja además todo lo que depende del sistema operativo y que por definición no puede compartirse: el trabajo en segundo plano con <strong>WorkManager</strong> que revisa a diario el bolsillo y publica la notificación de los pagos vencidos, el canal de notificaciones y la solicitud del permiso <code>POST_NOTIFICATIONS</code>. El trabajador consulta el dominio a través del contenedor y no conoce Room ni la base de datos.</p>
+
+      <p>El ensamblaje corre por cuenta de <code>AppContainer</code>, un localizador de servicios explícito que crea los casos de uso a partir de las implementaciones que le entrega <code>DataProvider</code>, y de <code>NexcodeViewModelFactory</code>, que inyecta esos casos de uso en cada <code>ViewModel</code>. Se descartó Hilt de forma deliberada: en un proyecto de este tamaño, un contenedor escrito a mano hace visible en un solo archivo toda la cadena de dependencias, lo que resulta más defendible en una sustentación académica que un grafo generado por anotaciones.</p>
+    </div>
+  </section>
+
+  <!-- ============ V ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">V.</span>
+      <h2>Recorrido de una operación</h2>
+    </div>
+
+    <div class="body">
+      <p>Para hacer tangible la separación descrita, la Fig. 3 sigue el registro de un gasto desde que el usuario escribe el monto hasta que la lista de movimientos se actualiza en pantalla. Es relevante que el dato cambie de forma en cada frontera: la interfaz maneja texto crudo, el dominio maneja modelos validados y la capa de datos maneja filas.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 470" role="img" aria-label="Flujo de registro de un gasto: la pantalla envía texto crudo al ViewModel, este lo pasa al caso de uso, que valida y construye un modelo Transaction, lo entrega a la interfaz de repositorio, cuya implementación lo convierte en entidad y lo escribe en SQLite; el resultado vuelve como estado y la lista se actualiza por un Flow reactivo.">
+          <defs>
+            <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="ah3g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0C8A5E"/>
+            </marker>
+          </defs>
+
+          <!-- bandas de capa -->
+          <text x="14" y="52" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.55">:app</text>
+          <line x1="12" y1="60" x2="12" y2="150" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+          <text x="14" y="196" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.55">:domain</text>
+          <line x1="12" y1="204" x2="12" y2="308" stroke="#0C8A5E" stroke-width="2" opacity="0.5"/>
+          <text x="14" y="352" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.55">:data</text>
+          <line x1="12" y1="360" x2="12" y2="450" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+
+          <!-- nodos -->
+          <rect x="120" y="24" width="290" height="46" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="136" y="53" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">AddTransactionScreen</text>
+
+          <rect x="120" y="112" width="290" height="46" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="136" y="141" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">AddTransactionViewModel</text>
+
+          <rect x="120" y="200" width="290" height="46" rx="5" fill="none" stroke="#0C8A5E" stroke-width="1.8"/>
+          <text x="136" y="229" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="#0C8A5E">AddTransactionUseCase</text>
+
+          <rect x="120" y="276" width="290" height="46" rx="5" fill="none" stroke="#0C8A5E" stroke-width="1.8" stroke-dasharray="5 3"/>
+          <text x="136" y="298" font-family="IBM Plex Sans, sans-serif" font-size="10" font-style="italic" fill="#0C8A5E">«interface»</text>
+          <text x="136" y="313" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="#0C8A5E">TransactionRepository</text>
+
+          <rect x="120" y="352" width="290" height="46" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="136" y="381" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">TransactionRepositoryImpl</text>
+
+          <rect x="120" y="418" width="290" height="40" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="136" y="444" font-family="IBM Plex Mono, monospace" font-size="12.5" fill="currentColor">Room · nexcode.db</text>
+
+          <!-- flechas descendentes -->
+          <line x1="265" y1="70" x2="265" y2="106" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah3)"/>
+          <text x="276" y="93" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">texto crudo: "25.000"</text>
+
+          <line x1="265" y1="158" x2="265" y2="194" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah3)"/>
+          <text x="276" y="181" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">NewTransactionInput</text>
+
+          <line x1="265" y1="246" x2="265" y2="270" stroke="#0C8A5E" stroke-width="1.4" marker-end="url(#ah3g)"/>
+          <text x="276" y="264" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="#0C8A5E">Transaction validada</text>
+
+          <line x1="265" y1="322" x2="265" y2="346" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah3)"/>
+          <text x="276" y="340" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">resuelto en ejecución</text>
+
+          <line x1="265" y1="398" x2="265" y2="412" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah3)"/>
+          <text x="276" y="412" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">TransactionEntity</text>
+
+          <!-- retorno resultado -->
+          <path d="M 120 223 L 78 223 L 78 135 L 120 135" fill="none" stroke="#0C8A5E" stroke-width="1.4" marker-end="url(#ah3g)"/>
+          <text x="82" y="112" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#0C8A5E">AddTransactionResult</text>
+
+          <!-- flow reactivo -->
+          <path d="M 410 438 L 700 438 L 700 47 L 410 47" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#ah3)"/>
+          <text x="560" y="256" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="currentColor">Flow reactivo</text>
+          <text x="560" y="272" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">Room reemite la lista</text>
+          <text x="560" y="287" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">y la pantalla se redibuja</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 3.</b> Registro de un gasto a través de las tres capas. El texto que escribe el usuario solo se convierte en un modelo de dominio después de validarse en el caso de uso; el error, si lo hay, regresa como estado y no como excepción. La ruta punteada de la derecha es la actualización reactiva: escribir en la base de datos hace que Room reemita la lista y la pantalla se redibuje sin intervención explícita.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ VI ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">VI.</span>
+      <h2>Modelo de datos</h2>
+    </div>
+
+    <div class="body">
+      <p>El esquema relacional consta de cuatro tablas. Las claves foráneas declaran políticas de borrado distintas según la semántica del negocio: eliminar una cuenta arrastra sus movimientos (<code>CASCADE</code>), mientras que eliminar una categoría deja los movimientos sin categoría (<code>SET NULL</code>). Esta segunda decisión es la que obliga a que <code>categoryId</code> sea de tipo <code>Long?</code> en el modelo de dominio, y por tanto la que justifica el uso sistemático de operadores de seguridad ante nulos en las capas superiores.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 430" role="img" aria-label="Modelo entidad-relación con cuatro tablas: accounts y categories se relacionan uno a muchos con transactions y con recurring_payments; las relaciones con accounts borran en cascada y las relaciones con categories anulan la clave foránea.">
+          <defs>
+            <marker id="ah4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <!-- accounts -->
+          <rect x="40" y="24" width="250" height="126" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="40" y1="52" x2="290" y2="52" stroke="currentColor" stroke-width="1"/>
+          <text x="56" y="44" font-family="IBM Plex Mono, monospace" font-size="12.5" font-weight="500" fill="currentColor">accounts</text>
+          <text x="56" y="72" font-family="IBM Plex Mono, monospace" font-size="11" fill="#0C8A5E">PK  id</text>
+          <text x="56" y="90" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    name</text>
+          <text x="56" y="108" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    initial_balance_cents</text>
+          <text x="56" y="126" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    color_argb</text>
+          <text x="56" y="144" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    is_archived</text>
+
+          <!-- categories -->
+          <rect x="470" y="24" width="250" height="126" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="470" y1="52" x2="720" y2="52" stroke="currentColor" stroke-width="1"/>
+          <text x="486" y="44" font-family="IBM Plex Mono, monospace" font-size="12.5" font-weight="500" fill="currentColor">categories</text>
+          <text x="486" y="72" font-family="IBM Plex Mono, monospace" font-size="11" fill="#0C8A5E">PK  id</text>
+          <text x="486" y="90" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    name</text>
+          <text x="486" y="108" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    parent_id  (nullable)</text>
+          <text x="486" y="126" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    monthly_budget_cents</text>
+          <text x="486" y="144" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    applies_to</text>
+
+          <!-- transactions -->
+          <rect x="40" y="272" width="250" height="144" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="40" y1="300" x2="290" y2="300" stroke="currentColor" stroke-width="1"/>
+          <text x="56" y="292" font-family="IBM Plex Mono, monospace" font-size="12.5" font-weight="500" fill="currentColor">transactions</text>
+          <text x="56" y="320" font-family="IBM Plex Mono, monospace" font-size="11" fill="#0C8A5E">PK  id</text>
+          <text x="56" y="338" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.9">FK  account_id</text>
+          <text x="56" y="356" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.9">FK  category_id  (null)</text>
+          <text x="56" y="374" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    type_code</text>
+          <text x="56" y="392" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    amount_cents</text>
+          <text x="56" y="410" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    date_time · title · note</text>
+
+          <!-- recurring -->
+          <rect x="470" y="272" width="250" height="144" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="470" y1="300" x2="720" y2="300" stroke="currentColor" stroke-width="1"/>
+          <text x="486" y="292" font-family="IBM Plex Mono, monospace" font-size="12.5" font-weight="500" fill="currentColor">recurring_payments</text>
+          <text x="486" y="320" font-family="IBM Plex Mono, monospace" font-size="11" fill="#0C8A5E">PK  id</text>
+          <text x="486" y="338" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.9">FK  account_id</text>
+          <text x="486" y="356" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.9">FK  category_id  (null)</text>
+          <text x="486" y="374" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    frequency_code · value1/2</text>
+          <text x="486" y="392" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    next_due_date</text>
+          <text x="486" y="410" font-family="IBM Plex Mono, monospace" font-size="11" fill="currentColor" opacity="0.75">    is_active · last_paid_date</text>
+
+          <!-- accounts -> transactions -->
+          <line x1="120" y1="150" x2="120" y2="266" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah4)"/>
+          <text x="128" y="196" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">1 : N</text>
+          <text x="128" y="212" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.6">ON DELETE CASCADE</text>
+
+          <!-- categories -> transactions -->
+          <path d="M 500 150 L 500 196 L 230 196 L 230 266" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah4)"/>
+          <text x="300" y="188" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.6">ON DELETE SET NULL</text>
+
+          <!-- accounts -> recurring -->
+          <path d="M 210 150 L 210 232 L 560 232 L 560 266" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah4)"/>
+          <text x="330" y="226" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.6">ON DELETE CASCADE</text>
+
+          <!-- categories -> recurring -->
+          <line x1="650" y1="150" x2="650" y2="266" stroke="currentColor" stroke-width="1.4" marker-end="url(#ah4)"/>
+          <text x="560" y="196" font-family="IBM Plex Sans, sans-serif" font-size="11" fill="currentColor" opacity="0.85">1 : N</text>
+          <text x="470" y="212" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="currentColor" opacity="0.6">ON DELETE SET NULL</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 4.</b> Modelo entidad-relación de <span class="mono">nexcode.db</span> (versión 2 del esquema). Los importes se almacenan como enteros en centavos; las fechas, como texto ISO o milisegundos según el tipo. La política <code>SET NULL</code> sobre <span class="mono">category_id</span> es la razón de que ese campo sea opcional en todo el dominio.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ VII ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">VII.</span>
+      <h2>Verificación de la arquitectura</h2>
+    </div>
+
+    <div class="body">
+      <p>Una arquitectura documentada no es necesariamente una arquitectura vigente. Para comprobar que la separación descrita se sostiene en el código entregado, se definieron cinco verificaciones reproducibles sobre el repositorio.</p>
+    </div>
+
+    <div class="evidence">
+      <div class="ev">
+        <span class="ev-num">1</span>
+        <div>
+          <h4>El dominio no conoce Android</h4>
+          <p>Se cuentan los <em>imports</em> de <code>android</code> y <code>androidx</code> en toda la capa de dominio. Resultado: <span class="ok">0 coincidencias</span> sobre 27 archivos.</p>
+          <code class="cmd">grep -rn "^import android\|^import androidx" domain/src/main --include="*.kt" | wc -l</code>
+        </div>
+      </div>
+
+      <div class="ev">
+        <span class="ev-num">2</span>
+        <div>
+          <h4>La capa de datos no se filtra a la presentación</h4>
+          <p>De los 26 archivos del módulo <span class="mono">:app</span>, <span class="ok">uno solo</span> importa algo del paquete <code>data</code>: el contenedor de dependencias, cuya función es precisamente inyectar implementaciones. Ninguna pantalla ni ningún <code>ViewModel</code> conoce Room.</p>
+          <code class="cmd">grep -rn "^import com.nexcode.gastos.data" app/src --include="*.kt"</code>
+        </div>
+      </div>
+
+      <div class="ev">
+        <span class="ev-num">3</span>
+        <div>
+          <h4>Las reglas de negocio se prueban sin emulador</h4>
+          <p>Las <span class="ok">41 pruebas unitarias</span> del dominio se ejecutan en la máquina virtual de Java. Solo es posible porque la capa no arrastra dependencias de Android.</p>
+          <code class="cmd">./gradlew :domain:jvmTest</code>
+        </div>
+      </div>
+
+      <div class="ev">
+        <span class="ev-num">4</span>
+        <div>
+          <h4>El dominio compila fuera de la JVM</h4>
+          <p>Las <span class="ok">mismas 41 pruebas</span> se ejecutan también en Node.js sobre el objetivo JavaScript del módulo. Una capa que compila para dos plataformas distintas no puede estar acoplada a ninguna de ellas.</p>
+          <code class="cmd">./gradlew :domain:jsNodeTest</code>
+        </div>
+      </div>
+
+      <div class="ev">
+        <span class="ev-num">5</span>
+        <div>
+          <h4>El compilador rechaza una violación deliberada</h4>
+          <p>Se introdujo en <span class="mono">:domain</span> una clase que intenta usar una anotación de Room. La compilación falla, lo que demuestra que la regla de dependencias no depende de la disciplina del equipo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+      <p>El código de la prueba 4 y la salida obtenida son los siguientes:</p>
+    </div>
+
+    <pre><code>// domain/src/main/kotlin/com/nexcode/gastos/domain/PruebaDeCapa.kt
+package com.nexcode.gastos.domain
+
+import androidx.room.Entity          // intento de acoplar el dominio a Room
+
+@Entity class PruebaDeCapa</code></pre>
+
+    <pre><code>$ ./gradlew :domain:compileKotlin
+
+<span class="term-err">e: PruebaDeCapa.kt:3:8  Unresolved reference 'androidx'.</span>
+<span class="term-err">e: PruebaDeCapa.kt:5:2  Unresolved reference 'Entity'.</span>
+
+BUILD FAILED in 1s</code></pre>
+
+    <div class="body">
+      <p>El archivo fue eliminado tras la comprobación y el proyecto vuelve a construirse sin errores. La Tabla IV resume las cuatro verificaciones.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla IV.</b> Verificaciones de aislamiento entre capas</p>
+      <table>
+        <thead>
+          <tr><th>N.º</th><th>Propiedad verificada</th><th>Resultado esperado</th><th>Obtenido</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="num">1</td><td class="name">Dominio libre de Android</td><td>0 imports</td><td class="ok">0</td></tr>
+          <tr><td class="num">2</td><td class="name">Datos encapsulados</td><td>≤ 1 import en <span class="mono">:app</span></td><td class="ok">1 (contenedor)</td></tr>
+          <tr><td class="num">3</td><td class="name">Pruebas en JVM</td><td>Ejecución sin emulador</td><td class="ok">24/24</td></tr>
+          <tr><td class="num">4</td><td class="name">Portabilidad del dominio</td><td>Las mismas pruebas en JS</td><td class="ok">24/24</td></tr>
+          <tr><td class="num">5</td><td class="name">Regla impuesta por el compilador</td><td>Compilación fallida</td><td class="ok">BUILD FAILED</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ VIII ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">VIII.</span>
+      <h2>Decisiones de diseño</h2>
+    </div>
+
+    <div class="body">
+      <p>La Tabla V documenta las decisiones arquitectónicas que no se deducen de la lectura del código, junto con la alternativa descartada en cada caso. La Tabla VI recoge el entorno de construcción con el que se verificó todo lo anterior.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla V.</b> Decisiones arquitectónicas y alternativas descartadas</p>
+      <table>
+        <thead>
+          <tr><th>Decisión</th><th>Alternativa descartada</th><th>Motivo</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Una capa, un módulo Gradle</td>
+            <td>Paquetes dentro de un módulo único</td>
+            <td>Con paquetes la regla depende de la disciplina; con módulos la impone el compilador</td>
+          </tr>
+          <tr>
+            <td class="name">Contenedor de dependencias manual</td>
+            <td>Hilt / Dagger</td>
+            <td>Toda la cadena de dependencias queda visible en un archivo; menos complejidad de construcción</td>
+          </tr>
+          <tr>
+            <td class="name">Importes en centavos (<span class="mono">Long</span>)</td>
+            <td><span class="mono">Double</span> o <span class="mono">Float</span></td>
+            <td>El punto flotante binario no representa exactamente los decimales: <span class="mono">0.1 + 0.2 ≠ 0.3</span></td>
+          </tr>
+          <tr>
+            <td class="name">Resultados sellados en vez de excepciones</td>
+            <td>Propagar excepciones a la interfaz</td>
+            <td>La UI maneja estados exhaustivos; se elimina una clase de fallos en ejecución</td>
+          </tr>
+          <tr>
+            <td class="name">Migración escrita a mano</td>
+            <td>Recreación destructiva del esquema</td>
+            <td>Actualizar la aplicación no debe borrar los movimientos del usuario</td>
+          </tr>
+          <tr>
+            <td class="name">Reloj inyectado (<span class="mono">RelojDominio</span>)</td>
+            <td>Llamar a <span class="mono">now()</span> dentro del caso de uso</td>
+            <td>La hora es una dependencia del entorno; inyectarla hace deterministas las pruebas y portable el dominio</td>
+          </tr>
+          <tr>
+            <td class="name">WorkManager para los recordatorios</td>
+            <td><span class="mono">AlarmManager</span> con alarma exacta</td>
+            <td>Avisar dentro de la ventana del día basta; la alarma exacta gasta batería y su permiso está restringido</td>
+          </tr>
+          <tr>
+            <td class="name">Signo contable en el tipo, no en el monto</td>
+            <td>Guardar montos negativos para gastos</td>
+            <td>Evita errores de cuadre; el monto es siempre positivo y el tipo aporta el signo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla VI.</b> Entorno de construcción verificado</p>
+      <table>
+        <thead>
+          <tr><th>Componente</th><th>Versión</th><th>Componente</th><th>Versión</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Kotlin</td><td class="mono">2.3.21</td><td class="name">Room</td><td class="mono">2.8.4</td></tr>
+          <tr><td class="name">Android Gradle Plugin</td><td class="mono">8.7.3</td><td class="name">Compose BOM</td><td class="mono">2025.01.00</td></tr>
+          <tr><td class="name">Gradle</td><td class="mono">8.14.5</td><td class="name">compileSdk</td><td class="mono">35</td></tr>
+          <tr><td class="name">JDK / JVM target</td><td class="mono">21</td><td class="name">minSdk</td><td class="mono">26</td></tr>
+          <tr><td class="name">kotlinx-datetime</td><td class="mono">0.8.0</td><td class="name">WorkManager</td><td class="mono">2.10.5</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="body">
+      <p>Cabe registrar una restricción encontrada durante la integración: el procesador de anotaciones de Room no admite los metadatos generados por Kotlin 2.4, lo que obliga a fijar la versión 2.3.21 del lenguaje. El error, <code>Provided Metadata instance has version 2.4.0, while maximum supported version is 2.3.0</code>, se reprodujo con las versiones 2.6.1, 2.7.2 y 2.8.4 de Room.</p>
+    </div>
+  </section>
+
+  <!-- ============ IX ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">IX.</span>
+      <h2>Conclusiones</h2>
+    </div>
+
+    <div class="body">
+      <p>La estructura en tres módulos cumplió los tres objetivos planteados, y uno más que no estaba previsto. El dominio quedó libre de dependencias del framework, lo que permitió que sus 41 pruebas unitarias se ejecuten en la máquina virtual de Java sin emulador, y más tarde que esa misma capa se compilara para JavaScript sin reescribir su lógica. La sustitución del motor de persistencia quedó acotada a un único módulo, ya que ni la presentación ni el dominio nombran a Room. Y la regla de dependencias resultó verificable: la violación deliberada de la Sección VII fue rechazada por el compilador, no por una revisión manual.</p>
+
+      <p>El costo de esta organización es real y conviene declararlo: tres módulos exigen más configuración de construcción que uno solo, y una operación sencilla atraviesa más capas que en un diseño monolítico. En un proyecto de esta escala ese costo se paga una sola vez, mientras que el beneficio —poder razonar sobre las reglas de negocio de forma aislada— se cobra en cada cambio posterior.</p>
+    </div>
+  </section>
+
+  <!-- ============ REFERENCIAS ============ -->
+  <section class="refs">
+    <div class="sec-head">
+      <span class="sec-num"></span>
+      <h2>Referencias</h2>
+    </div>
+
+    <div class="body">
+      <ol>
+        <li>R. C. Martin, <em>Clean Architecture: A Craftsman's Guide to Software Structure and Design</em>. Boston, MA, EE. UU.: Prentice Hall, 2017.</li>
+        <li>Google, "Guide to app architecture", <em>Android Developers</em>. [En línea]. Disponible en: https://developer.android.com/topic/architecture</li>
+        <li>E. Evans, <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em>. Boston, MA, EE. UU.: Addison-Wesley, 2003.</li>
+        <li>M. Fowler, <em>Patterns of Enterprise Application Architecture</em>. Boston, MA, EE. UU.: Addison-Wesley, 2002.</li>
+        <li>Google, "Save data in a local database using Room", <em>Android Developers</em>. [En línea]. Disponible en: https://developer.android.com/training/data-storage/room</li>
+        <li>JetBrains, "Kotlin coroutines and Flow documentation". [En línea]. Disponible en: https://kotlinlang.org/docs/flow.html</li>
+      </ol>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Sección 11 del informe del Proyecto Integrador — Arquitectura de la solución · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Todas las cifras, salidas de consola y nombres de clase citados fueron obtenidos del repositorio del proyecto en el estado de la entrega.
+  </p>
+
+</div>

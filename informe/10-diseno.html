@@ -1,0 +1,513 @@
+<title>Diseño de Nexcode</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    --paper:#FBFCFE; --panel:#F2F5FA; --ink:#101A2B; --ink-soft:#4A5B72; --ink-faint:#7C8CA3;
+    --rule:#D6DEE9; --rule-soft:#E6ECF4; --accent:#104080; --accent-2:#0C8A5E; --accent-warn:#B05A00;
+    --code-bg:#F1F4F9;
+    --measure:68ch; --gutter:5.5rem;
+    --f-serif:"Source Serif 4","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --f-sans:"IBM Plex Sans",-apple-system,"Segoe UI",system-ui,sans-serif;
+    --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+      --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+      --code-bg:#111A27;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#0B121D; --panel:#141D2B; --ink:#E4EBF5; --ink-soft:#A3B2C6; --ink-faint:#74849A;
+    --rule:#24334A; --rule-soft:#1B2739; --accent:#6FB2EC; --accent-2:#45CF9C; --accent-warn:#E0A55A;
+    --code-bg:#111A27;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-serif); font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased; }
+  .sheet { max-width:calc(var(--measure) + var(--gutter) + 4rem); margin:0 auto; padding:4rem 2rem 6rem; }
+  .masthead { border-bottom:2px solid var(--ink); padding-bottom:1.6rem; }
+  .eyebrow { font-family:var(--f-sans); font-size:0.7rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); margin:0 0 0.9rem; }
+  h1 { font-size:clamp(1.9rem,4.2vw,2.7rem); line-height:1.14; font-weight:700; letter-spacing:-0.015em; margin:0 0 0.5rem; text-wrap:balance; }
+  .subtitle { font-size:1.12rem; color:var(--ink-soft); font-style:italic; margin:0 0 1.8rem; max-width:56ch; }
+  .byline { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1.1rem 2rem; font-family:var(--f-sans); font-size:0.82rem; line-height:1.5; color:var(--ink-soft); }
+  .byline strong { display:block; color:var(--ink); font-weight:600; }
+  .byline span { display:block; }
+  .abstract { margin:2.6rem 0 0; padding:1.4rem 1.6rem; background:var(--panel); border-left:3px solid var(--accent); }
+  .abstract p { margin:0; font-size:0.96rem; line-height:1.6; }
+  .abstract .label { font-family:var(--f-sans); font-weight:600; letter-spacing:0.04em; }
+  section { margin-top:3.4rem; }
+  .sec-head { display:grid; grid-template-columns:var(--gutter) minmax(0,1fr); align-items:baseline; border-top:1px solid var(--rule); padding-top:1rem; margin-bottom:1.4rem; }
+  .sec-num { font-family:var(--f-sans); font-size:0.76rem; font-weight:600; letter-spacing:0.12em; color:var(--accent); padding-top:0.35rem; }
+  .sec-head h2 { font-size:1.28rem; font-weight:600; letter-spacing:0.03em; text-transform:uppercase; margin:0; text-wrap:balance; }
+  h3 { font-family:var(--f-serif); font-size:1.04rem; font-weight:600; font-style:italic; margin:2rem 0 0.6rem; }
+  .body { max-width:var(--measure); }
+  @media (min-width:900px) { .body { margin-left:var(--gutter); } }
+  p { margin:0 0 1rem; }
+  .body > p { text-align:justify; hyphens:auto; }
+  strong { font-weight:600; }
+  code { font-family:var(--f-mono); font-size:0.85em; background:var(--code-bg); padding:0.1em 0.35em; border-radius:3px; }
+  ul { margin:0 0 1rem; padding-left:1.3rem; }
+  li { margin-bottom:0.45rem; }
+  li::marker { color:var(--ink-faint); }
+  figure { margin:2rem 0; max-width:100%; }
+  @media (min-width:900px) { figure { margin-left:var(--gutter); } }
+  .fig-frame { background:var(--panel); border:1px solid var(--rule-soft); padding:1.4rem 1rem; overflow-x:auto; }
+  figure svg { display:block; width:100%; max-width:100%; height:auto; color:var(--ink); }
+  figcaption { font-family:var(--f-sans); font-size:0.78rem; line-height:1.5; color:var(--ink-soft); margin-top:0.7rem; padding-top:0.6rem; border-top:1px solid var(--rule); }
+  figcaption b { color:var(--ink); font-weight:600; letter-spacing:0.03em; }
+  .table-wrap { overflow-x:auto; margin:1.8rem 0; }
+  @media (min-width:900px) { .table-wrap { margin-left:var(--gutter); } }
+  .tbl-cap { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-soft); text-align:center; margin-bottom:0.6rem; }
+  .tbl-cap b { color:var(--accent); font-weight:600; }
+  table { width:100%; border-collapse:collapse; font-family:var(--f-sans); font-size:0.8rem; line-height:1.45; }
+  thead th { text-align:left; font-weight:600; color:var(--ink); padding:0.55rem 0.7rem; border-top:1.5px solid var(--ink); border-bottom:1px solid var(--ink); }
+  tbody td { padding:0.5rem 0.7rem; border-bottom:1px solid var(--rule-soft); color:var(--ink-soft); vertical-align:middle; }
+  tbody tr:last-child td { border-bottom:1.5px solid var(--ink); }
+  td.name { color:var(--ink); font-weight:500; }
+  .mono { font-family:var(--f-mono); font-size:0.94em; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; color:var(--ink); }
+
+  /* muestras de color */
+  .swatch { display:inline-block; width:2.6rem; height:1.5rem; border-radius:4px; border:1px solid var(--rule); vertical-align:middle; }
+  .grad { display:block; width:100%; height:2.6rem; border-radius:6px; border:1px solid var(--rule); }
+
+  .callout { margin:1.6rem 0; padding:1rem 1.2rem; background:var(--panel); border-left:3px solid var(--accent-2); font-size:0.95rem; }
+  @media (min-width:900px) { .callout { margin-left:var(--gutter); } }
+  .callout p { margin:0; }
+  .callout p + p { margin-top:0.7rem; }
+  .callout .lead { font-family:var(--f-sans); font-size:0.72rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent-2); display:block; margin-bottom:0.35rem; }
+  .callout.warn { border-left-color:var(--accent-warn); }
+  .callout.warn .lead { color:var(--accent-warn); }
+  .colophon { margin-top:4rem; padding-top:1.2rem; border-top:1px solid var(--rule); font-family:var(--f-sans); font-size:0.74rem; color:var(--ink-faint); line-height:1.6; }
+  a { color:var(--accent); }
+  a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <p class="eyebrow">Proyecto Integrador · Sección 10</p>
+    <h1>Diseño de Nexcode</h1>
+    <p class="subtitle">Identidad visual derivada del logotipo, lenguaje compartido con NEXCODE Banca digital y estructura de la interfaz</p>
+
+    <div class="byline">
+      <div>
+        <strong>Autores</strong>
+        <span>Jeferson Wilderman González Tenjo</span>
+        <span>José Leandro Ocampo Camacho</span>
+      </div>
+      <div>
+        <strong>Programa</strong>
+        <span>Ingeniería de Sistemas</span>
+        <span>Universidad de San Buenaventura</span>
+      </div>
+      <div>
+        <strong>Tecnología de interfaz</strong>
+        <span>Jetpack Compose · Material 3</span>
+        <span>Tema claro, fondo blanco</span>
+      </div>
+      <div>
+        <strong>Alcance</strong>
+        <span>6 pantallas · 4 destinos</span>
+        <span>12 animaciones · 3 gestos</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="abstract">
+    <p><span class="label">Resumen —</span> La identidad visual de Nexcode no se eligió: se midió. Los colores de la aplicación se obtuvieron muestreando los píxeles del logotipo NEXCODE CORPORATION, y el lenguaje de formas —radios, degradados y elevaciones— se tomó de los recursos gráficos de <em>NEXCODE Banca digital</em>, el otro producto desarrollado por el equipo, para que ambas aplicaciones se reconozcan como parte de una misma familia. Esta sección documenta la paleta resultante, la corrección de contraste que impuso el fondo blanco, la estructura de navegación, los componentes reutilizables y las doce animaciones implementadas.</p>
+  </div>
+
+  <!-- ============ 10 ============ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">10</span>
+      <h2>Diseño de la aplicación</h2>
+    </div>
+
+    <h3>A. Del logotipo a la paleta</h3>
+    <div class="body">
+      <p>El punto de partida no fue una guía de estilo abstracta sino el archivo del logotipo. Se analizaron los píxeles del símbolo —la letra X formada por dos flechas— descartando los tonos neutros del fondo y agrupando el resto por frecuencia. El resultado fueron cuatro colores dominantes que constituyen la paleta de marca de la Tabla XXIII.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXIII.</b> Paleta de marca medida sobre el logotipo</p>
+      <table>
+        <thead>
+          <tr><th>Muestra</th><th>Nombre</th><th>Valor</th><th>Origen en el logotipo</th><th>Uso en la aplicación</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="swatch" style="background:#104080"></span></td>
+            <td class="name">Azul profundo</td>
+            <td class="mono">#104080</td>
+            <td>Texto «NEXCODE»</td>
+            <td>Inicio de los degradados, sombras</td>
+          </tr>
+          <tr>
+            <td><span class="swatch" style="background:#1080D0"></span></td>
+            <td class="name">Azul de marca</td>
+            <td class="mono">#1080D0</td>
+            <td>Brazo izquierdo de la X</td>
+            <td>Color primario, acciones, selección</td>
+          </tr>
+          <tr>
+            <td><span class="swatch" style="background:#5FD8E8"></span></td>
+            <td class="name">Cian</td>
+            <td class="mono">#5FD8E8</td>
+            <td>Cruce de las dos flechas</td>
+            <td>Estados intermedios, acentos</td>
+          </tr>
+          <tr>
+            <td><span class="swatch" style="background:#40E0A0"></span></td>
+            <td class="name">Verde menta</td>
+            <td class="mono">#40E0A0</td>
+            <td>Brazo derecho de la X</td>
+            <td>Ingresos, cierre de los degradados</td>
+          </tr>
+          <tr>
+            <td><span class="swatch" style="background:#17A97B"></span></td>
+            <td class="name">Verde profundo</td>
+            <td class="mono">#17A97B</td>
+            <td><em>Derivado</em> del verde menta</td>
+            <td>Ingresos en texto sobre blanco</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="body">
+      <p>El logotipo se incorporó además como recurso gráfico. El archivo original tiene fondo blanco opaco, lo que impedía usarlo sobre cualquier superficie de color, así que se procesó por programa para volver transparente el fondo: se recortó al contenido real y se calculó el canal alfa a partir de la luminosidad de los píxeles neutros. De ahí salieron dos activos: el símbolo aislado, que sirve como icono de lanzador adaptativo y encabeza la pantalla de Perfil, y el logotipo completo con su texto.</p>
+    </div>
+
+    <h3>B. El fondo blanco y el problema de contraste</h3>
+    <div class="body">
+      <p>La aplicación se diseñó con fondo blanco. Esa decisión, aparentemente inocua, invalidó uno de los colores de marca para el uso más frecuente: el verde menta <code>#40E0A0</code> sobre blanco no alcanza contraste suficiente para texto pequeño, y los ingresos son precisamente texto pequeño que el usuario debe poder leer de un vistazo.</p>
+
+      <p>La solución no fue abandonar el verde de la marca sino derivar una segunda variante. El verde menta se conserva para <strong>rellenos</strong> —el cierre del degradado de la tarjeta de saldo, los puntos indicadores sobre fondo azul—, donde su claridad es una virtud; y el verde profundo <code>#17A97B</code> se usa para <strong>texto</strong> sobre blanco. Son el mismo color de marca en dos densidades, no dos colores distintos.</p>
+    </div>
+
+    <div class="callout">
+      <span class="lead">Criterio</span>
+      <p>Cada color de la interfaz existe en la densidad que su fondo exige. Un tono que funciona sobre azul no tiene por qué funcionar sobre blanco, y forzarlo produce texto que se lee mal aunque la paleta sea «la correcta».</p>
+    </div>
+
+    <h3>C. Lenguaje visual heredado de la banca</h3>
+    <div class="body">
+      <p>El equipo desarrolló en la misma asignatura la aplicación <em>NEXCODE Banca digital</em>. Para que ambos productos se reconozcan como una familia, Nexcode adoptó su lenguaje de formas leyendo directamente sus recursos gráficos: los degradados, los radios de esquina y las elevaciones no se aproximaron a ojo, se copiaron de los archivos originales. La Tabla XXIV establece la correspondencia.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXIV.</b> Correspondencia con los recursos de NEXCODE Banca digital</p>
+      <table>
+        <thead>
+          <tr><th>Recurso del banco</th><th>Especificación</th><th>Componente en Nexcode</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name mono">fondo_encabezado</td>
+            <td>Degradado azul, esquinas inferiores de 34 dp</td>
+            <td>Encabezado de la pantalla principal</td>
+          </tr>
+          <tr>
+            <td class="name mono">fondo_tarjeta_saldo</td>
+            <td>Tres tonos del logotipo, radio 26 dp, sombra 10 dp</td>
+            <td>Tarjeta del bolsillo de recordatorios</td>
+          </tr>
+          <tr>
+            <td class="name mono">forma_boton_degradado</td>
+            <td>Azul profundo → azul → verde, radio 18 dp</td>
+            <td>Botones principales de toda la app</td>
+          </tr>
+          <tr>
+            <td class="name mono">nex_borde</td>
+            <td>Borde <span class="mono">#E2E9F2</span> de 1 dp</td>
+            <td>Tarjetas y filas de movimientos</td>
+          </tr>
+          <tr>
+            <td class="name mono">nex_texto</td>
+            <td><span class="mono">#0E1C33</span> · <span class="mono">#4A5B72</span> · <span class="mono">#8494A8</span></td>
+            <td>Jerarquía tipográfica en tres niveles</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="body">
+      <p>Los tres degradados del sistema, todos derivados de la misma paleta, cumplen funciones distintas:</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXV.</b> Degradados del sistema y su función</p>
+      <table>
+        <thead>
+          <tr><th style="width:34%">Muestra</th><th>Función</th><th>Composición</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="grad" style="background:linear-gradient(135deg,#104080,#1568B4,#1080D0)"></span></td>
+            <td class="name">Encabezado</td>
+            <td>Solo azules: el saldo debe leerse en blanco sobre él</td>
+          </tr>
+          <tr>
+            <td><span class="grad" style="background:linear-gradient(135deg,#104080,#1080D0,#40E0A0)"></span></td>
+            <td class="name">Tarjeta de saldo</td>
+            <td>Los tres tonos del logotipo, de extremo a extremo</td>
+          </tr>
+          <tr>
+            <td><span class="grad" style="background:linear-gradient(90deg,#104080,#1080D0,#17A97B)"></span></td>
+            <td class="name">Botones</td>
+            <td>Cierra en verde profundo para que el texto blanco resalte</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>D. Estructura de navegación</h3>
+    <div class="body">
+      <p>La aplicación tiene seis pantallas organizadas en dos niveles. Cuatro son destinos permanentes, accesibles desde la barra inferior con iconos vectoriales propios; las otras dos son pantallas completas que ocultan la barra porque exigen atención exclusiva. La Fig. 9 muestra el mapa.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 400" role="img" aria-label="Mapa de navegación: cuatro destinos en la barra inferior —Gastos, Bolsillo, Mensajes y Perfil— y dos pantallas completas, Nuevo movimiento y Todos los movimientos, a las que se llega desde Gastos.">
+          <defs>
+            <marker id="nv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+            </marker>
+            <marker id="nvg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#0C8A5E"/>
+            </marker>
+          </defs>
+
+          <text x="30" y="34" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="currentColor" opacity="0.7">DESTINOS DE LA BARRA INFERIOR</text>
+
+          <rect x="30" y="52" width="160" height="70" rx="6" fill="none" stroke="#0C8A5E" stroke-width="2"/>
+          <text x="46" y="78" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="#0C8A5E">Gastos</text>
+          <text x="46" y="96" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">saldo · dona · recientes</text>
+          <text x="46" y="112" font-family="IBM Plex Sans, sans-serif" font-size="10" fill="#0C8A5E">inicio</text>
+
+          <rect x="212" y="52" width="160" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="228" y="78" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="currentColor">Bolsillo</text>
+          <text x="228" y="96" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">pagos fijos · insignia</text>
+
+          <rect x="394" y="52" width="160" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="410" y="78" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="currentColor">Mensajes</text>
+          <text x="410" y="96" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">asistente financiero</text>
+
+          <rect x="576" y="52" width="154" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="592" y="78" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="currentColor">Perfil</text>
+          <text x="592" y="96" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">equipo · arquitectura</text>
+
+          <line x1="30" y1="140" x2="730" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="3 5" opacity="0.3"/>
+          <text x="30" y="166" font-family="IBM Plex Sans, sans-serif" font-size="11" font-weight="600" fill="currentColor" opacity="0.7">PANTALLAS COMPLETAS (ocultan la barra)</text>
+
+          <rect x="120" y="216" width="220" height="72" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="138" y="242" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="currentColor">Nuevo movimiento</text>
+          <text x="138" y="260" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">el mismo formulario edita</text>
+          <text x="138" y="278" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">entra desde abajo</text>
+
+          <rect x="400" y="216" width="220" height="72" rx="6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="418" y="242" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600" fill="currentColor">Todos los movimientos</text>
+          <text x="418" y="260" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">histórico completo</text>
+          <text x="418" y="278" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.65">entra desde la derecha</text>
+
+          <path d="M 90 122 L 90 180 L 180 180 L 180 210" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#nv)"/>
+          <text x="96" y="176" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.8">botón flotante</text>
+
+          <path d="M 150 122 L 150 196 L 470 196 L 470 210" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#nv)"/>
+          <text x="290" y="192" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.8">«Ver todos»</text>
+
+          <path d="M 340 252 L 384 252" fill="none" stroke="currentColor" stroke-width="1.4" marker-end="url(#nv)" stroke-dasharray="4 3"/>
+          <text x="330" y="304" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">tocar una fila abre el formulario en modo edición</text>
+
+          <!-- notificacion -->
+          <rect x="212" y="330" width="330" height="52" rx="6" fill="none" stroke="#0C8A5E" stroke-width="1.6" stroke-dasharray="5 3"/>
+          <text x="230" y="352" font-family="IBM Plex Sans, sans-serif" font-size="12" font-weight="600" fill="#0C8A5E">Notificación del sistema</text>
+          <text x="230" y="370" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="currentColor" opacity="0.7">pagos vencidos o que vencen hoy</text>
+          <path d="M 292 330 L 292 132" fill="none" stroke="#0C8A5E" stroke-width="1.6" marker-end="url(#nvg)"/>
+          <text x="300" y="318" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#0C8A5E">abre el Bolsillo</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 9.</b> Mapa de navegación. Las cuatro pestañas conservan su estado al alternar entre ellas. El formulario es único: sin argumento crea un movimiento, con identificador lo edita. La notificación del sistema constituye una cuarta vía de entrada que lleva directamente al Bolsillo.</figcaption>
+    </figure>
+
+    <h3>E. Anatomía de la pantalla principal</h3>
+    <div class="body">
+      <p>La pantalla de Gastos concentra las decisiones de composición del proyecto y sigue la estructura del inicio del banco: un bloque de marca de ancho completo en la parte superior y contenido en tarjetas debajo. La Fig. 10 identifica sus regiones y el porqué de cada una.</p>
+    </div>
+
+    <figure>
+      <div class="fig-frame">
+        <svg viewBox="0 0 760 430" role="img" aria-label="Anatomía de la pantalla principal: encabezado azul con saldo, tarjeta del gráfico de dona, encabezado de sección, filas de movimientos agrupadas por fecha, botón flotante y barra inferior.">
+          <!-- telefono -->
+          <rect x="240" y="16" width="280" height="398" rx="18" fill="none" stroke="currentColor" stroke-width="1.6"/>
+
+          <!-- encabezado -->
+          <path d="M 240 34 L 520 34 L 520 140 Q 520 158 502 158 L 258 158 Q 240 158 240 140 Z" fill="none" stroke="#0C8A5E" stroke-width="1.8"/>
+          <text x="258" y="58" font-family="IBM Plex Sans, sans-serif" font-size="10.5" fill="#0C8A5E">Hola, Jeferson</text>
+          <text x="258" y="86" font-family="IBM Plex Sans, sans-serif" font-size="15" font-weight="700" fill="currentColor">$ 1.105.400</text>
+          <rect x="258" y="98" width="244" height="6" rx="3" fill="none" stroke="currentColor" stroke-width="1" opacity="0.6"/>
+          <text x="258" y="124" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.65">Ingresos          Gastos</text>
+          <text x="258" y="142" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.65">Tasa de ahorro: 78%</text>
+
+          <!-- dona -->
+          <rect x="256" y="172" width="248" height="86" rx="8" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <circle cx="292" cy="216" r="22" fill="none" stroke="currentColor" stroke-width="7" opacity="0.55"/>
+          <text x="328" y="200" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.75">Mercado    29%</text>
+          <text x="328" y="216" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.75">Ropa           18%</text>
+          <text x="328" y="232" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.75">Comida       15%</text>
+
+          <!-- seccion -->
+          <text x="258" y="286" font-family="IBM Plex Sans, sans-serif" font-size="10" font-weight="600" fill="currentColor">Movimientos recientes</text>
+          <text x="452" y="286" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.7">Ver todos</text>
+
+          <!-- filas -->
+          <text x="258" y="306" font-family="IBM Plex Sans, sans-serif" font-size="9" fill="currentColor" opacity="0.6">Hoy</text>
+          <rect x="256" y="314" width="248" height="34" rx="7" fill="none" stroke="currentColor" stroke-width="1.1"/>
+          <circle cx="276" cy="331" r="9" fill="none" stroke="currentColor" stroke-width="1.1"/>
+          <rect x="294" y="323" width="90" height="6" rx="3" fill="currentColor" opacity="0.35"/>
+          <rect x="294" y="335" width="60" height="5" rx="2.5" fill="currentColor" opacity="0.2"/>
+          <rect x="430" y="327" width="60" height="7" rx="3.5" fill="currentColor" opacity="0.35"/>
+
+          <rect x="256" y="354" width="248" height="34" rx="7" fill="none" stroke="currentColor" stroke-width="1.1"/>
+          <circle cx="276" cy="371" r="9" fill="none" stroke="currentColor" stroke-width="1.1"/>
+          <rect x="294" y="363" width="76" height="6" rx="3" fill="currentColor" opacity="0.35"/>
+          <rect x="294" y="375" width="52" height="5" rx="2.5" fill="currentColor" opacity="0.2"/>
+          <rect x="430" y="367" width="60" height="7" rx="3.5" fill="currentColor" opacity="0.35"/>
+
+          <!-- FAB -->
+          <rect x="466" y="342" width="34" height="34" rx="11" fill="none" stroke="#0C8A5E" stroke-width="1.8"/>
+          <text x="479" y="364" font-family="IBM Plex Sans, sans-serif" font-size="15" fill="#0C8A5E">+</text>
+
+          <!-- barra inferior -->
+          <line x1="240" y1="392" x2="520" y2="392" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+          <text x="258" y="406" font-family="IBM Plex Sans, sans-serif" font-size="8.5" fill="currentColor" opacity="0.7">Gastos   Bolsillo   Mensajes   Perfil</text>
+
+          <!-- anotaciones izquierda -->
+          <line x1="120" y1="96" x2="236" y2="96" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+          <text x="16" y="86" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="currentColor">Encabezado de marca</text>
+          <text x="16" y="101" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.65">degradado, esquinas 34 dp</text>
+          <text x="16" y="115" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.65">el dato más importante primero</text>
+
+          <line x1="150" y1="215" x2="252" y2="215" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+          <text x="16" y="205" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="currentColor">Reparto por categoría</text>
+          <text x="16" y="220" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.65">responde «en qué se me fue»</text>
+
+          <line x1="150" y1="331" x2="252" y2="331" stroke="currentColor" stroke-width="1" opacity="0.45"/>
+          <text x="16" y="321" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="currentColor">Filas deslizables</text>
+          <text x="16" y="336" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="currentColor" opacity="0.65">agrupadas por fecha</text>
+
+          <!-- anotaciones derecha -->
+          <line x1="504" y1="359" x2="600" y2="359" stroke="#0C8A5E" stroke-width="1" opacity="0.6"/>
+          <text x="608" y="354" font-family="IBM Plex Sans, sans-serif" font-size="10.5" font-weight="600" fill="#0C8A5E">Un solo toque</text>
+          <text x="608" y="369" font-family="IBM Plex Sans, sans-serif" font-size="9.5" fill="#0C8A5E" opacity="0.85">para registrar</text>
+        </svg>
+      </div>
+      <figcaption><b>Fig. 10.</b> Anatomía de la pantalla principal. El orden vertical responde a tres preguntas en secuencia: cuánto tengo, en qué se me fue, y qué hice últimamente. El botón de registro permanece accesible sobre el contenido porque es la acción que más veces se repite.</figcaption>
+    </figure>
+
+    <h3>F. Componentes reutilizables</h3>
+    <div class="body">
+      <p>La interfaz se construyó sobre un conjunto reducido de componentes propios, de modo que un cambio de estilo se aplica en un solo lugar. La Tabla XXVI los enumera.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXVI.</b> Componentes propios de la interfaz</p>
+      <table>
+        <thead>
+          <tr><th>Componente</th><th>Responsabilidad</th><th>Dónde se usa</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name mono">BalanceHeader</td><td>Encabezado con degradado y saldo</td><td>Gastos</td></tr>
+          <tr><td class="name mono">CategoryDonutChart</td><td>Gráfico de dona con leyenda</td><td>Gastos</td></tr>
+          <tr><td class="name mono">TransactionRow</td><td>Fila de movimiento con inicial, título y monto</td><td>Gastos · Movimientos</td></tr>
+          <tr><td class="name mono">DateHeader</td><td>Encabezado de día con total neto</td><td>Gastos · Movimientos</td></tr>
+          <tr><td class="name mono">SwipeToActionBox</td><td>Contenedor con gestos de deslizamiento</td><td>Gastos · Movimientos · Bolsillo</td></tr>
+          <tr><td class="name mono">AnimatedMoneyText</td><td>Importe con contador animado</td><td>Cuatro pantallas</td></tr>
+          <tr><td class="name mono">GradientButton</td><td>Botón de marca con respuesta al pulsar</td><td>Todas las acciones principales</td></tr>
+          <tr><td class="name mono">NexcodeCard</td><td>Tarjeta blanca con borde suave</td><td>Mensajes · Perfil</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>G. Movimiento</h3>
+    <div class="body">
+      <p>Las animaciones no se añadieron como adorno: cada una comunica algo que de otro modo el usuario tendría que deducir. Un saldo que salta de una cifra a otra no dice si subió o bajó; un saldo que recorre el camino sí. Una fila que desaparece de golpe no explica qué pasó con las de abajo; una lista que se reacomoda sí. La Tabla XXVII documenta las doce implementadas.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXVII.</b> Animaciones implementadas</p>
+      <table>
+        <thead>
+          <tr><th>Elemento</th><th>Tipo</th><th>Duración</th><th>Qué comunica</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name">Saldo y montos</td><td>Contador interpolado</td><td class="num">700 ms</td><td>La dirección y magnitud del cambio</td></tr>
+          <tr><td class="name">Barra de proporción</td><td>Interpolación de peso</td><td class="num">800 ms</td><td>Cómo se desplaza el equilibrio ingresos/gastos</td></tr>
+          <tr><td class="name">Gráfico de dona</td><td>Barrido de arcos</td><td class="num">900 ms</td><td>Que los sectores son partes de un total</td></tr>
+          <tr><td class="name">Cambio de pestaña</td><td>Fundido y desplazamiento</td><td class="num">320 ms</td><td>Continuidad entre secciones hermanas</td></tr>
+          <tr><td class="name">Nuevo movimiento</td><td>Entrada desde abajo</td><td class="num">320 ms</td><td>Que es una hoja sobre el contenido, no otra sección</td></tr>
+          <tr><td class="name">Histórico</td><td>Entrada desde la derecha</td><td class="num">320 ms</td><td>Profundidad: se entra y se vuelve</td></tr>
+          <tr><td class="name">Botón flotante</td><td>Resorte al aparecer</td><td>Resorte</td><td>Presencia sin brusquedad</td></tr>
+          <tr><td class="name">Icono de pestaña activa</td><td>Escala 1,15 con rebote</td><td>Resorte</td><td>Confirmación del destino elegido</td></tr>
+          <tr><td class="name">Botones</td><td>Compresión al 0,97</td><td>Resorte</td><td>Respuesta táctil inmediata</td></tr>
+          <tr><td class="name">Pago vencido</td><td>Latido del indicador</td><td class="num">900 ms ↔</td><td>Urgencia sin recurrir a un diálogo</td></tr>
+          <tr><td class="name">Formulario del bolsillo</td><td>Despliegue en altura</td><td class="num">300 ms</td><td>De dónde sale y a dónde vuelve</td></tr>
+          <tr><td class="name">Mensajes de error</td><td>Desvanecido con expansión</td><td class="num">200 ms</td><td>Aparición sin salto del resto del formulario</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>H. Gestos de deslizamiento</h3>
+    <div class="body">
+      <p>Las listas admiten acciones por deslizamiento, con dos criterios de diseño. Primero, <strong>el fondo anticipa la acción</strong>: al arrastrar aparece un color y un icono que crecen conforme avanza el gesto, de modo que el usuario ve qué va a ocurrir antes de soltar. Segundo, <strong>el umbral es del 35 % del ancho</strong>, lo bastante alto para que desplazar la lista no dispare un borrado accidental.</p>
+    </div>
+
+    <div class="table-wrap">
+      <p class="tbl-cap"><b>Tabla XXVIII.</b> Acciones por deslizamiento</p>
+      <table>
+        <thead>
+          <tr><th>Pantalla</th><th>Hacia la derecha</th><th>Hacia la izquierda</th><th>Tras soltar</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="name">Movimientos</td>
+            <td>—</td>
+            <td>Eliminar</td>
+            <td>La fila se descarta y la lista se reacomoda</td>
+          </tr>
+          <tr>
+            <td class="name">Bolsillo</td>
+            <td>Registrar el pago</td>
+            <td>Eliminar el recordatorio</td>
+            <td>Al pagar, la fila vuelve a su sitio con rebote</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="body">
+      <p>La diferencia del comportamiento tras soltar es intencionada. Eliminar retira el elemento, de modo que la fila se descarta. Registrar un pago no lo elimina —el recordatorio sigue existiendo con una fecha nueva—, así que la fila regresa a su posición con una animación de resorte: el movimiento comunica que la acción se ejecutó pero el elemento permanece.</p>
+    </div>
+
+    <h3>I. Accesibilidad</h3>
+    <div class="body">
+      <p>Se atendieron tres aspectos. El <strong>contraste</strong>, mediante la doble densidad del verde descrita en el apartado B, y verificando que el texto secundario mantenga distancia suficiente del fondo blanco. Las <strong>descripciones de contenido</strong>, presentes en todos los iconos de navegación y en el botón de registro, para que un lector de pantalla los anuncie. Y el <strong>color como refuerzo y no como único portador de información</strong>: el estado de un pago fijo se comunica a la vez por color, por etiqueta textual —«Vencido», «Vence hoy», «En 2 días»— y por la posición en la lista, de modo que un usuario con dificultad para distinguir tonos conserva toda la información.</p>
+    </div>
+
+    <div class="callout warn">
+      <span class="lead">Limitación reconocida</span>
+      <p>La aplicación solo ofrece tema claro. Se implementó primero un tema oscuro y se sustituyó por el claro a petición del cliente, pero el sistema de color está construido sobre variables semánticas, de modo que reintroducir el tema oscuro consiste en definir un segundo juego de valores y no en reescribir las pantallas. Tampoco se han probado tamaños de fuente ampliados del sistema.</p>
+    </div>
+  </section>
+
+  <p class="colophon">
+    Sección 10 del informe del Proyecto Integrador — Diseño de la aplicación · Nexcode 1.0 · Optativa II — Desarrollo Móvil · Universidad de San Buenaventura · Agosto de 2026.<br>
+    Continúa la numeración de figuras y tablas de las secciones 8, 11, 12–16, 17 y 19. Los valores de color proceden del análisis del archivo del logotipo y de los recursos de NEXCODE Banca digital.
+  </p>
+
+</div>

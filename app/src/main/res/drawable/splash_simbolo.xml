@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Simbolo para la pantalla de arranque del sistema (Android 12 y superior).
+
+    Android recorta ese icono con una mascara circular y solo deja ver el
+    tercio central del lienzo, igual que con los iconos adaptativos. El PNG
+    de la marca ocupa todo su lienzo, asi que sin margen las flechas quedan
+    cortadas por el borde del circulo.
+
+    Este envoltorio le da el margen que la mascara necesita para que el
+    simbolo se vea completo.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/simbolo_nexcode"
+        android:left="54dp"
+        android:top="54dp"
+        android:right="54dp"
+        android:bottom="54dp" />
+</layer-list>

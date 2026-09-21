@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colores medidos sobre el logo NEXCODE CORPORATION -->
+    <color name="nexcode_blue_deep">#FF104080</color>
+    <color name="nexcode_blue">#FF1080D0</color>
+    <color name="nexcode_cyan">#FF70E0F0</color>
+    <color name="nexcode_mint">#FF40E0A0</color>
+
+    <!-- La app se pinta sobre blanco, igual que el logo -->
+    <color name="nexcode_background">#FFFFFFFF</color>
+    <color name="nexcode_surface">#FFF4F7FB</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
