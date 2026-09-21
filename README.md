@@ -21,7 +21,11 @@ Jeferson Wilderman González Tenjo · José Leandro Ocampo Camacho
 Base de datos Room v3           APK de publicación 1,7 MB (R8)
 ```
 
-## Arquitectura: tres módulos Gradle
+## Arquitectura
+
+![Arquitectura en capas y regla de dependencias](recursos/diagramas/Nexcode-1-Arquitectura.png)
+
+### Tres módulos Gradle
 
 La regla de dependencias es **`app → domain ← data`**, y no es una convención de
 papel: **la verifica el compilador**. El módulo `:domain` no puede importar nada de
@@ -36,6 +40,37 @@ papel: **la verifica el compilador**. El módulo `:domain` no puede importar nad
 `:domain` es un módulo **Kotlin Multiplatform**: compila para JVM *y* JavaScript, y
 sus 51 pruebas se ejecutan en ambos destinos. Mantener la lógica de negocio libre de
 Android no fue decorativo — es lo que permite probarla sin emulador, en segundos.
+
+## Cómo funciona por dentro
+
+| | |
+|---|---|
+| ![Composición](recursos/diagramas/Nexcode-3-Composicion.png) | ![Infraestructura](recursos/diagramas/Nexcode-2-Infraestructura.png) |
+| **Composición de la interfaz** | **Infraestructura y persistencia** |
+
+### Registrar una transacción
+
+![Flujo de registro](recursos/diagramas/Nexcode-4-Flujo-Registrar.png)
+
+### El asistente de voz
+
+![Flujo del agente](recursos/diagramas/Nexcode-6-Flujo-Agente.png)
+
+### Sincronización
+
+![Flujo de sincronización](recursos/diagramas/Nexcode-5-Flujo-Sincronizacion.png)
+
+---
+
+## Una decisión que vale la pena mirar: los errores no viajan como excepciones
+
+![Tres niveles de validación](informe/figuras/fig10.png)
+
+Ninguna excepción llega a la pantalla. `Money.parse()` convierte, el caso de uso
+traduce el fallo a un estado (`AddTransactionResult.InvalidAmount`) y el `init` del
+modelo actúa como última barrera. La interfaz solo recibe estados, nunca excepciones.
+
+---
 
 ## Funcionalidades
 
