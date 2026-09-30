@@ -28,6 +28,8 @@ import com.nexcode.gastos.domain.usecase.transaction.DeleteTransactionUseCase
 import com.nexcode.gastos.domain.usecase.transaction.GetTransactionByIdUseCase
 import com.nexcode.gastos.domain.usecase.transaction.GetTransactionsUseCase
 import com.nexcode.gastos.domain.usecase.transaction.UpdateTransactionUseCase
+import com.nexcode.gastos.automatizacion.AvisoDeMovimiento
+import com.nexcode.gastos.data.auth.CuentaDeUsuario
 import com.nexcode.gastos.presentation.addtransaction.AddTransactionViewModel
 import com.nexcode.gastos.presentation.accounts.AccountsViewModel
 import com.nexcode.gastos.presentation.assistant.AssistantViewModel
@@ -138,6 +140,19 @@ class AppContainer(context: Context) {
     /** Identidad frente a la nube: anonima o enlazada a un correo. */
     val cuentaDeUsuario = data.cuentaDeUsuario
 
+    /**
+     * Correo al que la automatizacion manda la confirmacion del movimiento.
+     *
+     * Si la sesion esta enlazada se usa ese correo; si es anonima —o si el
+     * proyecto se compilo sin `google-services.json`— se cae al de respaldo.
+     * Asi la automatizacion funciona incluso sin nube configurada.
+     */
+    fun correoDeLaSesion(): String {
+        val estado = cuentaDeUsuario?.estado()
+        return if (estado is CuentaDeUsuario.Estado.Enlazada) estado.correo
+        else AvisoDeMovimiento.CORREO_POR_DEFECTO
+    }
+
     /** Deja el telefono con los datos de la cuenta recien abierta. */
     suspend fun reemplazarDatosLocalesPorLaNube() = data.reemplazarDatosLocalesPorLaNube()
 
@@ -174,7 +189,11 @@ class NexcodeViewModelFactory(
             updateTransaction = container.updateTransaction,
             getTransactionById = container.getTransactionById,
             observeCategories = container.observeCategories,
-            observeAccounts = container.observeAccounts
+            observeAccounts = container.observeAccounts,
+            // Aqui se enchufa la automatizacion: el ViewModel solo sabe que
+            // existe una funcion a la que avisar, no que detras hay un webhook.
+            avisarMovimiento = { AvisoDeMovimiento.enviar(it) },
+            correoDestino = { container.correoDeLaSesion() }
         ) as T
 
         modelClass.isAssignableFrom(TransactionsViewModel::class.java) -> TransactionsViewModel(

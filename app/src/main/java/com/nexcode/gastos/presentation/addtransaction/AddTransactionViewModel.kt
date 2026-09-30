@@ -11,7 +11,10 @@ import com.nexcode.gastos.domain.usecase.transaction.AddTransactionResult
 import com.nexcode.gastos.domain.usecase.transaction.AddTransactionUseCase
 import com.nexcode.gastos.domain.usecase.transaction.GetTransactionByIdUseCase
 import com.nexcode.gastos.domain.usecase.transaction.NewTransactionInput
+import com.nexcode.gastos.automatizacion.AvisoDeMovimiento
+import com.nexcode.gastos.automatizacion.MovimientoParaAviso
 import com.nexcode.gastos.exportacion.ValidadorEntrada
+import com.nexcode.gastos.presentation.util.paraBitacora
 import com.nexcode.gastos.domain.usecase.transaction.UpdateTransactionUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -62,7 +65,15 @@ class AddTransactionViewModel(
     private val updateTransaction: UpdateTransactionUseCase,
     private val getTransactionById: GetTransactionByIdUseCase,
     observeCategories: ObserveCategoriesUseCase,
-    observeAccounts: ObserveAccountsUseCase
+    observeAccounts: ObserveAccountsUseCase,
+    /**
+     * Aviso a la automatizacion de Make. Se inyecta como funcion y no como
+     * objeto para que las pruebas del formulario no tengan que tocar la red:
+     * por omision no hace nada.
+     */
+    private val avisarMovimiento: suspend (MovimientoParaAviso) -> Unit = {},
+    /** Correo al que llega la confirmacion. Lo resuelve quien construye. */
+    private val correoDestino: () -> String = { AvisoDeMovimiento.CORREO_POR_DEFECTO }
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AddTransactionUiState())
@@ -174,8 +185,12 @@ class AddTransactionViewModel(
             }
 
             when (result) {
-                is AddTransactionResult.Success ->
+                is AddTransactionResult.Success -> {
                     _uiState.update { it.copy(isSaving = false, saved = true) }
+                    // Solo las altas se avisan: una edicion no es un movimiento
+                    // nuevo y duplicaria la fila en la bitacora de la nube.
+                    if (editingId == null) avisarDeLaAlta(result, state)
+                }
 
                 is AddTransactionResult.InvalidAmount ->
                     _uiState.update { it.copy(isSaving = false, errorMessage = result.message) }
@@ -195,5 +210,44 @@ class AddTransactionViewModel(
                     _uiState.update { it.copy(isSaving = false, errorMessage = result.message) }
             }
         }
+    }
+
+    /**
+     * Manda el movimiento recien creado a la automatizacion.
+     *
+     * Se hace DESPUES de marcar `saved = true`: la pantalla ya se cerro y el
+     * usuario no espera por la red. Si el envio falla no se le dice nada,
+     * porque su gasto si quedo guardado; el fallo solo va al registro.
+     */
+    private suspend fun avisarDeLaAlta(
+        exito: AddTransactionResult.Success,
+        state: AddTransactionUiState
+    ) {
+        val movimiento = exito.transaction
+        val cuenta = state.accounts.firstOrNull { it.id == movimiento.accountId }
+        val categoria = state.categories.firstOrNull { it.id == movimiento.categoryId }
+
+        avisarMovimiento(
+            MovimientoParaAviso(
+                fechaHora = movimiento.dateTime.paraBitacora(),
+                tipo = if (movimiento.type.sign >= 0) "Ingreso" else "Gasto",
+                titulo = movimiento.title,
+                // `format()` devuelve solo los digitos agrupados ("85.000"):
+                // el simbolo lo pone la interfaz. Como este texto va a un
+                // correo, aqui se antepone.
+                monto = "$ " + movimiento.amount.format(),
+                // Pesos enteros: la hoja necesita un numero, no texto con puntos.
+                montoNumero = movimiento.amount.cents / 100,
+                categoria = categoria?.name ?: "Sin categoria",
+                cuenta = cuenta?.name ?: "Sin cuenta",
+                nota = movimiento.note ?: "",
+                // Es el CUPO que el usuario fijo para la cuenta, no el saldo
+                // disponible: el disponible exige combinar los movimientos y
+                // eso vive en otro caso de uso. Se manda por completitud, pero
+                // el correo no lo muestra para no dar una cifra confusa.
+                saldoCuenta = cuenta?.initialBalance?.format() ?: "",
+                correo = correoDestino()
+            )
+        )
     }
 }

@@ -1,0 +1,2 @@
+--------- beginning of main
+09-30 18:23:44.547  4593  4652 I AvisoDeMovimiento: Movimiento enviado a Make: Matricula semestre VII

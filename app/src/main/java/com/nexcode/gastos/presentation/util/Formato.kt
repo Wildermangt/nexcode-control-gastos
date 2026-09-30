@@ -24,3 +24,15 @@ fun LocalDateTime.formatear(patron: DateTimeFormatter): String =
 
 /** Fecha de hoy segun el dispositivo, ya en el tipo del dominio. */
 fun hoy(): LocalDate = java.time.LocalDate.now().toKotlinLocalDate()
+
+/**
+ * Formato de la bitacora en la nube: `2026-09-30 15:20`.
+ *
+ * Va en orden ano-mes-dia a proposito. Es el unico que Google Sheets
+ * interpreta como fecha sin depender del idioma de la hoja, y ademas ordena
+ * bien como texto si alguien lo pega en otra herramienta.
+ */
+private val PATRON_BITACORA: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+
+fun LocalDateTime.paraBitacora(): String = formatear(PATRON_BITACORA)
