@@ -2,6 +2,7 @@ package com.nexcode.gastos.automatizacion
 
 import android.os.Build
 import android.util.Log
+import com.nexcode.gastos.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
@@ -50,9 +51,13 @@ object AvisoDeMovimiento {
 
     /**
      * Disparador del escenario `NEXCODE Gastos - Registro de movimiento`.
-     * Es un webhook publico de Make: no lleva secretos, solo recibe.
+     * Quien conoce la URL puede escribir en la hoja de calculo, por eso viene de
+     * `make.webhookUrl` en local.properties y no esta en el codigo.
      */
-    const val URL_WEBHOOK = "https://hook.us2.make.com/o3hnnopg1muwhx5fgazow0v6da3onnew"
+    private val URL_WEBHOOK: String = BuildConfig.MAKE_WEBHOOK_URL
+
+    /** Sin webhook configurado la app funciona igual; solo no se envia el aviso. */
+    val estaConfigurado: Boolean get() = URL_WEBHOOK.isNotBlank()
 
     /** A donde llega el correo cuando la sesion no esta enlazada a una cuenta. */
     const val CORREO_POR_DEFECTO = "wildermangt@gmail.com"
@@ -61,6 +66,7 @@ object AvisoDeMovimiento {
     private const val ESPERA_MS = 8_000
 
     suspend fun enviar(movimiento: MovimientoParaAviso): Boolean = withContext(Dispatchers.IO) {
+        if (!estaConfigurado) return@withContext false
         try {
             val conexion = (URL(URL_WEBHOOK).openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
