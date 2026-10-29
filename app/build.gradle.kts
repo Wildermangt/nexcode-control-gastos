@@ -33,6 +33,9 @@ val propiedadesLocales = Properties().apply {
     if (archivo.exists()) archivo.inputStream().use { load(it) }
 }
 val claveGemini: String = propiedadesLocales.getProperty("gemini.apiKey").orEmpty().trim()
+// Webhook de Make: quien lo conoce puede escribir en la hoja de calculo, asi
+// que tampoco va en el codigo. Sin el, la app no envia el aviso.
+val webhookMake: String = propiedadesLocales.getProperty("make.webhookUrl").orEmpty().trim()
 
 val archivoDeFirma = rootProject.file("keystore.properties")
 val firmaDisponible = archivoDeFirma.exists()
@@ -54,6 +57,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GEMINI_API_KEY", "\"" + claveGemini + "\"")
+        buildConfigField("String", "MAKE_WEBHOOK_URL", "\"" + webhookMake + "\"")
 
         // Permite que el codigo sepa si la nube esta configurada sin tener que
         // preguntarle a Firebase, que fallaria al inicializarse.
