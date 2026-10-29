@@ -10,6 +10,7 @@ Jeferson Wilderman González Tenjo · José Leandro Ocampo Camacho
 
 > 📘 Manual de uso e instalación: **[`LEEME.md`](LEEME.md)**
 > 📐 Por qué está construido así: **[`CONTEXTO-DEL-PROYECTO.md`](CONTEXTO-DEL-PROYECTO.md)**
+> 📋 Planeación, requisitos, mockups y pruebas: **[`docs/`](docs/01-planeacion-y-requisitos.md)**
 
 ---
 
@@ -97,7 +98,12 @@ Requisitos verificados: **JDK 21**, Android SDK **API 35**, Gradle 8.14.5.
 ```
 
 `local.properties` no se versiona: Android Studio lo regenera apuntando al SDK de
-tu equipo.
+tu equipo. Ahí también van dos valores opcionales que nunca se escriben en el código:
+
+| Clave | Para qué | Si falta |
+|---|---|---|
+| `gemini.apiKey` | Agente de IA con Gemini | El asistente responde con el motor local |
+| `make.webhookUrl` | Aviso de cada movimiento a Make | No se envía el aviso |
 
 ## Descargar el APK
 
