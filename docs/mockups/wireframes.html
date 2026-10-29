@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="es"><meta charset="utf-8"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#333;padding:24px}
+h1{font-size:22px;margin-bottom:4px} .sub{font-size:13px;color:#777;margin-bottom:18px}
+.fila{display:flex;gap:28px}
+.pant{width:300px}
+.nom{font-size:13px;font-weight:bold;margin-bottom:6px;text-align:center}
+.tel{width:300px;height:600px;border:3px solid #444;border-radius:26px;overflow:hidden;display:flex;flex-direction:column;background:#fafafa}
+.barra{height:18px;background:#ddd}
+.app{height:44px;background:#bbb;display:flex;align-items:center;padding:0 12px;font-weight:bold;font-size:14px;gap:8px}
+.cont{flex:1;padding:10px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.nav{height:52px;border-top:1px solid #aaa;display:flex;background:#eee}
+.nav div{flex:1;font-size:9px;text-align:center;padding-top:28px;position:relative;color:#666}
+.nav div:before{content:"";position:absolute;top:9px;left:50%;width:16px;height:16px;margin-left:-8px;border:1.5px solid #888;border-radius:4px}
+.nav .act{color:#000;font-weight:bold}.nav .act:before{background:#888}
+.img{background:#e4e4e4;border:1px solid #aaa;position:relative;overflow:hidden}
+.img:before,.img:after{content:"";position:absolute;top:50%;left:-10%;width:120%;border-top:1px solid #aaa}
+.img:before{transform:rotate(25deg)}.img:after{transform:rotate(-25deg)}
+.txt{font-size:11px;color:#444}.t{font-size:13px;font-weight:bold}.g{font-size:18px;font-weight:bold}
+.lin{height:7px;background:#ccc;border-radius:3px}
+.inp{height:34px;border:1.5px solid #999;border-radius:6px;font-size:11px;color:#888;padding:9px 8px;background:#fff}
+.btn{height:36px;border-radius:18px;background:#777;color:#fff;font-size:12px;font-weight:bold;display:flex;align-items:center;justify-content:center}
+.btn2{height:32px;border-radius:16px;border:1.5px solid #777;font-size:11px;display:flex;align-items:center;justify-content:center}
+.chips{display:flex;gap:5px;flex-wrap:wrap}.chip{font-size:10px;border:1px solid #888;border-radius:12px;padding:3px 9px}.chip.on{background:#888;color:#fff}
+.tarj{border:1px solid #aaa;border-radius:8px;padding:8px;background:#fff;display:flex;flex-direction:column;gap:5px}
+.h{display:flex;gap:8px;align-items:center}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bur{max-width:78%;border-radius:12px;padding:7px 9px;font-size:10.5px;border:1px solid #aaa;background:#fff}
+.bur.yo{align-self:flex-end;background:#ddd}
+.aviso{font-size:10px;border:1.5px dashed #888;border-radius:6px;padding:6px;background:#f2f2f2}
+.fab{position:relative;align-self:flex-end;width:44px;height:44px;border-radius:22px;background:#777;color:#fff;font-size:22px;text-align:center;line-height:42px}
+.dona{width:110px;height:110px;border-radius:55px;border:22px solid #bbb;border-right-color:#888;border-bottom-color:#999;align-self:center}
+.esp{flex:1}
+.h .inp{flex:1}.h .btn2{padding:0 12px;flex:none;min-width:40px}
+</style><body><h1>Nexcode · Control de Gastos · Wireframes</h1><div class="sub">Mockups de baja fidelidad de las pantallas principales · Nexcode · octubre de 2026</div><div class="fila"><div class="pant"><div class="nom">1. Inicio: balance del mes</div><div class="tel"><div class="barra"></div><div class="app">Gastos</div><div class="cont"><div class="tarj"><div class="txt">Saldo total</div><div class="g">$ 1.250.000</div><div class="h"><div class="txt">Ingresos $ 2.000.000</div><div class="esp"></div><div class="txt">Gastos $ 750.000</div></div></div><div class="t">Gastos por categoría</div><div class="dona"></div><div class="chips"><div class="chip">Comida</div><div class="chip">Transporte</div><div class="chip">Ocio</div><div class="chip">Otros</div></div><div class="t">Últimos movimientos</div><div class="tarj"><div class="h"><div class="txt">Almuerzo</div><div class="esp"></div><div class="txt">− $ 15.000</div></div></div><div class="tarj"><div class="h"><div class="txt">Mesada</div><div class="esp"></div><div class="txt">+ $ 400.000</div></div></div><div class="fab">+</div></div><div class="nav"><div class="act">Gastos</div><div class="">Bolsillo</div><div class="">Mensajes</div><div class="">Perfil</div></div></div></div><div class="pant"><div class="nom">2. Registrar movimiento</div><div class="tel"><div class="barra"></div><div class="app">Nuevo movimiento</div><div class="cont"><div class="chips"><div class="chip on">Gasto</div><div class="chip">Ingreso</div></div><div class="inp">Monto  $ 0</div><div class="inp">Título</div><div class="t">Categoría</div><div class="chips"><div class="chip on">Comida</div><div class="chip">Transporte</div><div class="chip">Estudio</div><div class="chip">Ocio</div><div class="chip">Salud</div></div><div class="inp">Cuenta: Nequi ▾</div><div class="inp">Fecha: 28/10/2026</div><div class="inp">Nota (opcional)</div><div class="esp"></div><div class="btn">Guardar</div></div></div></div><div class="pant"><div class="nom">3. Movimientos con búsqueda</div><div class="tel"><div class="barra"></div><div class="app">Movimientos</div><div class="cont"><div class="inp">Buscar movimientos</div><div class="t">Hoy</div><div class="tarj"><div class="h"><div class="txt">Almuerzo · Comida</div><div class="esp"></div><div class="txt">− $ 15.000</div></div></div><div class="tarj"><div class="h"><div class="txt">Bus · Transporte</div><div class="esp"></div><div class="txt">− $ 2.950</div></div></div><div class="t">Ayer</div><div class="tarj"><div class="h"><div class="txt">Fotocopias · Estudio</div><div class="esp"></div><div class="txt">− $ 4.000</div></div></div><div class="tarj"><div class="h"><div class="txt">Monitoría · Ingreso</div><div class="esp"></div><div class="txt">+ $ 120.000</div></div></div><div class="txt">← Deslizar para eliminar</div><div class="esp"></div><div class="btn2">Exportar CSV</div></div></div></div><div class="pant"><div class="nom">4. Asistente con IA y voz</div><div class="tel"><div class="barra"></div><div class="app">Mensajes</div><div class="cont"><div class="bur yo">¿Cuánto gasté en comida este mes?</div><div class="bur">Llevas $ 210.000 en comida, un 18 % más que el mes pasado.</div><div class="bur yo">Registra un gasto de 8 mil en bus</div><div class="bur">Listo: registré un gasto de $ 8.000 en Transporte desde Nequi.</div><div class="esp"></div><div class="h"><div class="inp">Escribe o dicta…</div><div class="btn2">🎤</div></div></div><div class="nav"><div class="">Gastos</div><div class="">Bolsillo</div><div class="act">Mensajes</div><div class="">Perfil</div></div></div></div></div></body></html>
