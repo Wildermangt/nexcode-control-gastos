@@ -30,7 +30,7 @@ funciona sin él usando la entrada de texto.
 **Ejecutado el 29/10/2026 en *Firestore → Rules → Playground*: todos los casos quedaron
 denegados y el control (el dueño lee lo suyo) permitido.** El admin (claim `admin: true`) puede
 leer datos ajenos por diseño (soporte), pero **no** escribirlos. Pasos y resultados completos
-en `04-seguridad/Pruebas-Autorizacion-Firestore-Playground.md` (carpeta del proyecto final, junto a los tres repositorios).
+en `docs/pruebas-autorizacion-firestore.md`.
 
 > Corrección 29/10: la regla de lectura del admin pasó a `request.auth.token.get('admin',
 > false) == true` para que una cuenta sin el claim produzca una denegación limpia (antes daba
