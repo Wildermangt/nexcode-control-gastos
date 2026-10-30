@@ -14,6 +14,11 @@
          de ejecucion, solo cuando el usuario toca el boton de hablar. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- Llamada de voz con el agente Leandro (WebRTC). Sin ACCESS_NETWORK_STATE
+         la app se cierra al empezar la llamada. -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <!-- Visibilidad de paquetes: desde Android 11 una app no puede encontrar
          el servicio de reconocimiento de voz del sistema si no lo declara. -->
     <queries>
