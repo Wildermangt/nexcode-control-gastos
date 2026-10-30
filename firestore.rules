@@ -29,8 +29,10 @@ service cloud.firestore {
     // Es deliberado que sea solo lectura: administrar no deberia poder alterar
     // los movimientos de nadie sin dejar rastro.
     match /{documento=**} {
+      // token.get('admin', false): si la cuenta no tiene el claim, la lectura se
+      // DENIEGA limpiamente (antes daba "Property admin is undefined" en el Playground).
       allow read: if request.auth != null
-                  && request.auth.token.admin == true;
+                  && request.auth.token.get('admin', false) == true;
     }
   }
 }

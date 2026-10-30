@@ -1,0 +1,53 @@
+# Pipeline CI - Control de Gastos Personales (app Android nativa, Kotlin)
+# Compila con Gradle, corre las pruebas unitarias (app + modulo KMP :domain)
+# y publica el APK de depuracion como artefacto.
+#
+# Requiere minutos de agente hospedado (si sale "No hosted parallelism...",
+# solicitarlos gratis en https://aka.ms/azpipelines-parallelism-request).
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+
+  - bash: |
+      set -e
+      export JAVA_HOME=$JAVA_HOME_21_X64
+      echo "Usando JAVA_HOME=$JAVA_HOME"
+      java -version
+      chmod +x ./gradlew
+      ./gradlew --no-daemon testDebugUnitTest :domain:jvmTest assembleDebug
+    displayName: 'Compilar y pruebas unitarias (Gradle, JDK 21)'
+
+  - task: PublishTestResults@2
+    displayName: 'Publicar resultados de pruebas'
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: JUnit
+      testResultsFiles: '**/build/test-results/**/TEST-*.xml'
+      failTaskOnFailedTests: true
+
+  - task: CopyFiles@2
+    displayName: 'Preparar APK de depuracion'
+    inputs:
+      contents: '**/build/outputs/apk/debug/*.apk'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      flattenFolders: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publicar artefacto'
+    inputs:
+      pathToPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: control-gastos-apk

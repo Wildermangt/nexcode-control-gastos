@@ -1,8 +1,10 @@
 # Nexcode · Control de Gastos Personales
 
 Aplicación Android nativa para el control de gastos personales, dirigida a
-estudiantes universitarios colombianos. Opera **íntegramente en el dispositivo**:
-no requiere cuenta de usuario ni envía datos a ningún servidor.
+estudiantes universitarios colombianos. **Funciona primero sin conexión**: todo se
+guarda en la base local (Room) y la app sirve completa sin red. Cuando hay conexión,
+una sesión anónima de Firebase Authentication replica los datos en Cloud Firestore;
+el usuario puede vincular un correo y una contraseña para recuperarlos en otro teléfono.
 
 **Proyecto Integrador** · Optativa II — Desarrollo Móvil
 Universidad de San Buenaventura · Ingeniería de Sistemas
