@@ -36,6 +36,9 @@ val claveGemini: String = propiedadesLocales.getProperty("gemini.apiKey").orEmpt
 // Webhook de Make: quien lo conoce puede escribir en la hoja de calculo, asi
 // que tampoco va en el codigo. Sin el, la app no envia el aviso.
 val webhookMake: String = propiedadesLocales.getProperty("make.webhookUrl").orEmpty().trim()
+// Servidor leandro-voz (Cloudflare Worker) que abre la llamada con el agente de
+// Retell. Sin el, el boton "Hablar con Leandro" avisa que falta configurarlo.
+val servidorLeandro: String = propiedadesLocales.getProperty("leandro.servidorUrl").orEmpty().trim()
 
 val archivoDeFirma = rootProject.file("keystore.properties")
 val firmaDisponible = archivoDeFirma.exists()
@@ -58,6 +61,7 @@ android {
 
         buildConfigField("String", "GEMINI_API_KEY", "\"" + claveGemini + "\"")
         buildConfigField("String", "MAKE_WEBHOOK_URL", "\"" + webhookMake + "\"")
+        buildConfigField("String", "LEANDRO_URL", "\"" + servidorLeandro + "\"")
 
         // Permite que el codigo sepa si la nube esta configurada sin tener que
         // preguntarle a Firebase, que fallaria al inicializarse.
@@ -117,6 +121,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.android)
+
+    // Llamada de voz con el agente Leandro (Retell AI)
+    implementation(libs.stream.webrtc)
+    implementation(libs.okhttp)
 
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)

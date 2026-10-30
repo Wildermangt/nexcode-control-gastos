@@ -42,3 +42,10 @@
 # y org.json, ambas de la plataforma: no hay reflexion ni serializadores
 # generados que R8 pueda borrar sin darse cuenta. Es la ventaja practica de
 # haber prescindido del SDK.
+
+# --- Llamada con Leandro (WebRTC) ---------------------------------------------
+# WebRTC llama a sus clases Java desde codigo nativo (JNI). R8 no ve esas
+# llamadas y, sin estas reglas, las borraria o renombraria: la llamada fallaria
+# solo en la version de publicacion.
+-keep class org.webrtc.** { *; }
+-dontwarn org.webrtc.**

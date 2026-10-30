@@ -1,0 +1,11 @@
+name = "leandro-voz"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# El agente "Leandro - Agente Nexcode" de la cuenta TellerUniversitario.
+# No es secreto: sin la API key no sirve para nada.
+[vars]
+RETELL_AGENT_ID = "agent_ce97d34b520dbd79d899b14b82"
+
+# La API key de Retell NO va aquí. Se carga una sola vez con:
+#   npx wrangler secret put RETELL_API_KEY

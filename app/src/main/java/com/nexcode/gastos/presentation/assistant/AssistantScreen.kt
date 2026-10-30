@@ -66,6 +66,7 @@ import com.nexcode.gastos.presentation.theme.NexcodeSurfaceElevated
 import com.nexcode.gastos.presentation.theme.TextMedium
 import com.nexcode.gastos.presentation.theme.TextOnBrand
 import com.nexcode.gastos.presentation.voz.rememberAsistenteDeVoz
+import com.nexcode.gastos.presentation.voz.retell.BotonLlamadaLeandro
 import com.nexcode.gastos.presentation.theme.NexcodeSurface
 import com.nexcode.gastos.presentation.theme.TextPrimary
 import com.nexcode.gastos.presentation.theme.TextSecondary
@@ -126,6 +127,9 @@ fun AssistantScreen(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
+
+        // Llamada de voz con Leandro, el agente de Retell AI de Nexcode.
+        BotonLlamadaLeandro()
 
         // Quien respondio. Se muestra siempre: el usuario tiene derecho a saber
         // si esta leyendo al agente o al analisis local de respaldo.
