@@ -94,8 +94,23 @@ class GeminiAdvisor(
         // vuelta porque la API no guarda estado entre peticiones.
         val contenidos = JSONArray().put(turno(ROL_USUARIO, mensajeInicial(request)))
 
+        // Gastos que ya quedaron guardados en esta conversacion. Si despues
+        // falla la API, no se puede lanzar la excepcion: requestAdvice
+        // probaria otro modelo desde cero (y registraria el gasto otra vez) o
+        // degradaria al analisis local, que diria que no hay movimientos.
+        val registrados = mutableListOf<String>()
+
         repeat(MAX_VUELTAS) {
-            val respuesta = pedir(modelo, contenidos)
+            val respuesta = try {
+                pedir(modelo, contenidos)
+            } catch (e: Exception) {
+                if (registrados.isEmpty()) throw e
+                Log.w(ETIQUETA, "Fallo tras registrar con " + modelo + ": " + e.message?.take(200))
+                return AdviceResponse(
+                    message = "Listo, registre: " + registrados.joinToString("; ") + ".",
+                    source = AdviceResponse.Source.REMOTE_AGENT
+                )
+            }
             val contenido = contenidoDe(respuesta)
                 ?: return AdviceResponse(
                     message = SIN_TEXTO,
@@ -119,7 +134,13 @@ class GeminiAdvisor(
             // Todas las respuestas viajan en un unico turno. Partirlas en
             // varios hace que el modelo deje de pedir funciones en paralelo.
             val respuestas = JSONArray()
-            llamadas.forEach { respuestas.put(ejecutar(it)) }
+            llamadas.forEach { llamada ->
+                val ejecutada = ejecutar(llamada)
+                ejecutada.optJSONObject("functionResponse")?.optJSONObject("response")
+                    ?.takeIf { it.optBoolean("registrado") }
+                    ?.let { registrados += it.optString("detalle") }
+                respuestas.put(ejecutada)
+            }
             contenidos.put(
                 JSONObject().put("role", ROL_USUARIO).put("parts", respuestas)
             )

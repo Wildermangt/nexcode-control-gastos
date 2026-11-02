@@ -127,6 +127,14 @@ fun AssistantScreen(
             fontWeight = FontWeight.Bold
         )
 
+        // Aviso obligatorio: el usuario interactua con un sistema de IA.
+        Text(
+            text = "🤖 Estas hablando con un asistente de inteligencia artificial. " +
+                "Sus respuestas pueden contener errores; revisa tus finanzas antes de decidir.",
+            color = TextSecondary,
+            fontSize = 12.sp
+        )
+
         // Quien respondio. Se muestra siempre: el usuario tiene derecho a saber
         // si esta leyendo al agente o al analisis local de respaldo.
         state.etiquetaDeOrigen?.let { etiqueta ->

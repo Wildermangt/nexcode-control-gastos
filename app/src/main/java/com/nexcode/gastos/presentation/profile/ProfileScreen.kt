@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.draw.clip
+import com.nexcode.gastos.BuildConfig
 import com.nexcode.gastos.R
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -168,7 +169,7 @@ fun ProfileScreen(
 
         InfoCard(
             title = "Version",
-            lines = listOf("Nexcode 1.0", "minSdk 26 - compileSdk 35")
+            lines = listOf("Nexcode " + BuildConfig.VERSION_NAME, "minSdk 26 - compileSdk 35")
         )
 
         NexcodeCard(padding = PaddingValues(18.dp)) {

@@ -74,6 +74,12 @@ object AvisoDeMovimiento {
                 connectTimeout = ESPERA_MS
                 readTimeout = ESPERA_MS
                 setRequestProperty("Content-Type", "application/json; charset=utf-8")
+                // Autenticacion por cabecera: el gateway de Make rechaza con 401
+                // (sin gastar operaciones) si la clave no coincide. Es mas fuerte
+                // que el filtro, que consume una operacion por peticion falsa.
+                if (BuildConfig.MAKE_WEBHOOK_SECRET.isNotBlank()) {
+                    setRequestProperty("x-make-apikey", BuildConfig.MAKE_WEBHOOK_SECRET)
+                }
             }
 
             OutputStreamWriter(conexion.outputStream, Charsets.UTF_8).use { salida ->
@@ -106,6 +112,8 @@ object AvisoDeMovimiento {
      */
     private fun aJson(m: MovimientoParaAviso): String = buildString {
         append('{')
+        // Secreto compartido: Make descarta la peticion si no coincide.
+        campo("secreto", BuildConfig.MAKE_WEBHOOK_SECRET); append(',')
         campo("fechaHora", m.fechaHora); append(',')
         campo("tipo", m.tipo); append(',')
         campo("titulo", m.titulo); append(',')
