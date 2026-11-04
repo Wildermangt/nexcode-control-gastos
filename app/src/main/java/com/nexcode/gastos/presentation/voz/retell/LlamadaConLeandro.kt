@@ -1,7 +1,9 @@
 package com.nexcode.gastos.presentation.voz.retell
 
 import android.content.Context
+import android.media.AudioDeviceInfo
 import android.media.AudioManager
+import android.os.Build
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -26,6 +28,7 @@ import org.webrtc.RtpReceiver
 import org.webrtc.SdpObserver
 import org.webrtc.SessionDescription
 import org.webrtc.audio.JavaAudioDeviceModule
+import kotlin.math.roundToInt
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -127,7 +130,7 @@ class LlamadaConLeandro(
 
     private suspend fun conectar(datos: DatosDeLlamada) {
         tokenDeAcceso = datos.token
-        audio().mode = AudioManager.MODE_IN_COMMUNICATION // activa la cancelación de eco
+        activarAltavoz()
 
         PeerConnectionFactory.initialize(
             PeerConnectionFactory.InitializationOptions.builder(context.applicationContext)
@@ -166,13 +169,62 @@ class LlamadaConLeandro(
     }
 
     private fun cerrarLocal() {
+        restaurarAudio() // también si la llamada falló antes de crear la conexión
         val pc = conexion ?: return // se limpia primero: close() puede volver a entrar
         conexion = null
         idSesion = ""
         pc.close()
         fabrica?.dispose()
         fabrica = null
-        audio().mode = AudioManager.MODE_NORMAL
+    }
+
+    // ---------------------------------------------------------- altavoz
+
+    private var audioActivo = false
+    private var volumenPrevio = -1
+
+    /**
+     * Leandro funciona como un asistente de voz: se le habla con el teléfono en la mano,
+     * así que la respuesta sale por el altavoz y no por el auricular de oreja. El volumen
+     * de llamada suele estar muy bajo (1 de 8 en las pruebas): si está por debajo del
+     * 70 % se sube y al colgar se devuelve como estaba.
+     */
+    private fun activarAltavoz() {
+        val a = audio()
+        a.mode = AudioManager.MODE_IN_COMMUNICATION // activa la cancelación de eco
+        audioActivo = true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            a.availableCommunicationDevices
+                .firstOrNull { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
+                ?.let { a.setCommunicationDevice(it) }
+        } else {
+            @Suppress("DEPRECATION")
+            a.isSpeakerphoneOn = true
+        }
+        val maximo = a.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)
+        val actual = a.getStreamVolume(AudioManager.STREAM_VOICE_CALL)
+        val deseado = (maximo * 0.7).roundToInt()
+        if (actual < deseado) {
+            runCatching { a.setStreamVolume(AudioManager.STREAM_VOICE_CALL, deseado, 0) }
+                .onSuccess { volumenPrevio = actual }
+        }
+    }
+
+    private fun restaurarAudio() {
+        if (!audioActivo) return
+        audioActivo = false
+        val a = audio()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            a.clearCommunicationDevice()
+        } else {
+            @Suppress("DEPRECATION")
+            a.isSpeakerphoneOn = false
+        }
+        if (volumenPrevio >= 0) {
+            runCatching { a.setStreamVolume(AudioManager.STREAM_VOICE_CALL, volumenPrevio, 0) }
+            volumenPrevio = -1
+        }
+        a.mode = AudioManager.MODE_NORMAL
     }
 
     private suspend fun enviar(url: String, metodo: String, json: String?): String =
